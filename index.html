@@ -1,0 +1,513 @@
+ <!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crystal Ball Mini V2 - HOS Tracker</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    body {
+      padding: 16px;
+      background: #1a1a2e;
+      color: #eee;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 1.4em;
+      margin-bottom: 4px;
+      color: #9d4edd;
+    }
+    .version {
+      font-size: 0.75em;
+      color: #9d4edd;
+      margin-bottom: 4px;
+    }
+    .subtitle {
+      font-size: 0.85em;
+      color: #888;
+      margin-bottom: 16px;
+    }
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: all 0.2s;
+    }
+    .btn-export { background: #3a86ff; color: white; }
+    .btn-import { background: #8338ec; color: white; }
+    .btn-add { background: #06d6a0; color: #1a1a2e; }
+    .btn-clear { background: #ef4444; color: white; }
+    button:hover {
+      opacity: 0.85;
+      transform: translateY(-1px);
+    }
+    .autosave-indicator {
+      font-size: 0.75em;
+      color: #06d6a0;
+      margin-left: auto;
+      align-self: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #16213e;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th {
+      background: #0f3460;
+      color: #e94560;
+      padding: 12px 8px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.85em;
+    }
+    td {
+      padding: 10px 8px;
+      border-bottom: 1px solid #0f3460;
+    }
+    input {
+      width: 100%;
+      padding: 6px;
+      border: 1px solid #0f3460;
+      border-radius: 4px;
+      background: #1a1a2e;
+      color: #eee;
+      font-size: 0.9em;
+    }
+    input:focus {
+      outline: none;
+      border-color: #9d4edd;
+    }
+    input[readonly] {
+      background: #0d1b2a;
+      color: #06d6a0;
+      font-weight: 600;
+    }
+    /* Today's row highlight */
+    .today-row {
+      background: #1e3a5f;
+    }
+    .today-row td {
+      border-bottom: 2px solid #3a86ff;
+    }
+    /* Validation states */
+    .warning { background: #78350f; border-color: #f59e0b; }
+    .violation { background: #7f1d1d; border-color: #ef4444; }
+    .status-cell { font-size: 0.8em; font-weight: 600; }
+    .status-ok { color: #06d6a0; }
+    .status-warning { color: #f59e0b; }
+    .status-violation { color: #ef4444; }
+    .status-rest { color: #888; }
+    /* Summary panel */
+    .summary {
+      margin-top: 16px;
+      padding: 16px;
+      background: #16213e;
+      border-radius: 8px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+    .summary-item { text-align: center; }
+    .summary-label { font-size: 0.75em; color: #888; margin-bottom: 4px; }
+    .summary-value { font-size: 1.4em; font-weight: 700; }
+    .summary-value.good { color: #06d6a0; }
+    .summary-value.tight { color: #f59e0b; }
+    .summary-value.danger { color: #ef4444; }
+    /* Hidden file input */
+    #fileInput { display: none; }
+    /* Footer & Disclaimer */
+    .footer {
+      margin-top: 20px;
+      font-size: 0.75em;
+      color: #555;
+      text-align: center;
+    }
+    .disclaimer {
+      margin-top: 12px;
+      padding: 10px;
+      background: #0d1b2a;
+      border-left: 3px solid #f59e0b;
+      font-size: 0.75em;
+      color: #f59e0b;
+      border-radius: 0 4px 4px 0;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🔮 Crystal Ball Mini</h1>
+<div class="version">V2.0 — AI Family Collaboration Build</div>
+<p class="subtitle">HOS Tracker • 70hr/8-day Rule • Built by Emil + Claude + Vale + Grok + Lyra</p>
+
+<div class="toolbar">
+  <button class="btn-export" onclick="exportJSON()">📤 Export JSON</button>
+  <button class="btn-import" onclick="document.getElementById('fileInput').click()">📥 Import JSON</button>
+  <button class="btn-add" onclick="addRow()">➕ Add Day</button>
+  <button class="btn-clear" onclick="clearData()">🗑️ Clear All</button>
+  <input type="file" id="fileInput" accept=".json" onchange="importJSON(event)">
+  <span class="autosave-indicator" id="saveIndicator">💾 Auto-saved</span>
+</div>
+
+<table id="hosTable">
+  <thead>
+    <tr>
+      <th style="width:110px">Date</th>
+      <th style="width:80px">Drive</th>
+      <th style="width:80px">On-Duty</th>
+      <th style="width:80px">Total</th>
+      <th style="width:90px">Status</th>
+      <th style="width:40px">🗑️</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody"></tbody>
+</table>
+
+<div class="summary">
+  <div class="summary-item">
+    <div class="summary-label">8-Day Cycle Used</div>
+    <div class="summary-value" id="cycleUsed">0.00</div>
+  </div>
+  <div class="summary-item">
+    <div class="summary-label">Cycle Available</div>
+    <div class="summary-value good" id="cycleAvail">70.00</div>
+  </div>
+  <div class="summary-item">
+    <div class="summary-label">Tomorrow's Recap</div>
+    <div class="summary-value" id="tomorrowRecap">+0.00</div>
+  </div>
+</div>
+
+<div class="disclaimer">
+  ⚠️ <strong>Planning Tool Only:</strong> This models the 70hr/8-day cycle + daily drive heuristic. 
+  It does NOT enforce 14-hour windows, 30-min breaks, or sleeper berth rules. 
+  Not compliance-complete — use official ELD for regulatory purposes.
+</div>
+
+<p class="footer">
+  Sparked Matter • Code with Soul and Spirit • Connection over Protection<br>
+  <span style="color:#666">V2 Peer Review: Vale (architecture) • Grok (stress test) • Lyra (validation) • Claude (build)</span>
+</p>
+
+<script>
+// ==============================================
+// SCHEMA: The rules that govern our data
+// ==============================================
+const SCHEMA = {
+  cycleLimit: 70.0,
+  cycleDays: 8,
+  driveLimit: 11.0,
+  driveWarning: 10.0,
+  dutyLimit: 14.0,  // Not enforced yet - future V3
+  version: '2.0'
+};
+
+// ==============================================
+// STATE: Our data (raw inputs only!)
+// Derived fields computed on render, not stored
+// ==============================================
+let data = [];
+
+// Default seed data (matches Emil's ELD)
+const DEFAULT_DATA = [
+  { date: '2025-12-31', drive: 4.20, onDuty: 0.56 },
+  { date: '2025-12-30', drive: 8.50, onDuty: 0.54 },
+  { date: '2025-12-29', drive: 10.18, onDuty: 0.30 },
+  { date: '2025-12-28', drive: 9.44, onDuty: 0.24 },
+  { date: '2025-12-27', drive: 8.21, onDuty: 0.24 },
+  { date: '2025-12-26', drive: 7.86, onDuty: 0.18 },
+  { date: '2025-12-25', drive: 8.82, onDuty: 0.19 },
+  { date: '2025-12-24', drive: 5.78, onDuty: 0.19 }
+];
+
+// ==============================================
+// LOCALSTORAGE: Persistence across sessions
+// ==============================================
+const STORAGE_KEY = 'crystalBallMini_v2';
+
+function saveToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    flashSaveIndicator();
+  } catch (e) {
+    console.warn('localStorage not available:', e);
+  }
+}
+
+function loadFromStorage() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      data = JSON.parse(stored);
+      return true;
+    }
+  } catch (e) {
+    console.warn('localStorage not available:', e);
+  }
+  return false;
+}
+
+function flashSaveIndicator() {
+  const indicator = document.getElementById('saveIndicator');
+  indicator.textContent = '💾 Saved!';
+  indicator.style.color = '#06d6a0';
+  setTimeout(() => {
+    indicator.textContent = '💾 Auto-saved';
+    indicator.style.color = '#06d6a0';
+  }, 1000);
+}
+
+// ==============================================
+// DATE UTILITIES
+// ==============================================
+function getToday() {
+  return new Date().toISOString().split('T')[0];
+}
+
+function sortByDateDesc(arr) {
+  return [...arr].sort((a, b) => b.date.localeCompare(a.date));
+}
+
+function ensureTodayExists() {
+  const today = getToday();
+  const hasToday = data.some(row => row.date === today);
+  if (!hasToday) {
+    data.unshift({ date: today, drive: 0, onDuty: 0 });
+  }
+}
+
+// ==============================================
+// DERIVED FIELDS: Computed fresh every render
+// ==============================================
+function computeDerived(row) {
+  const result = { ...row };
+  
+  // Total = Drive + OnDuty
+  result.total = parseFloat((row.drive + row.onDuty).toFixed(2));
+  
+  // Status based on drive hours
+  if (row.drive > SCHEMA.driveLimit) {
+    result.status = 'VIOLATION';
+    result.statusClass = 'status-violation';
+    result.inputClass = 'violation';
+  } else if (row.drive > SCHEMA.driveWarning) {
+    result.status = 'WARNING';
+    result.statusClass = 'status-warning';
+    result.inputClass = 'warning';
+  } else if (result.total > 0) {
+    result.status = 'OK';
+    result.statusClass = 'status-ok';
+    result.inputClass = '';
+  } else {
+    result.status = 'REST';
+    result.statusClass = 'status-rest';
+    result.inputClass = '';
+  }
+  
+  // Is this today?
+  result.isToday = (row.date === getToday());
+  
+  return result;
+}
+
+function computeSummary() {
+  // SORT by date descending before slicing!
+  const sorted = sortByDateDesc(data);
+  const last8 = sorted.slice(0, SCHEMA.cycleDays);
+  
+  // Cycle used = sum of all totals in 8-day window
+  const cycleUsed = last8.reduce((sum, row) => {
+    const total = parseFloat((row.drive + row.onDuty).toFixed(2));
+    return sum + total;
+  }, 0);
+  
+  const cycleAvail = SCHEMA.cycleLimit - cycleUsed;
+  
+  // Tomorrow's recap = Day 8's total (oldest in window, falling out)
+  const day8 = last8[SCHEMA.cycleDays - 1];
+  const tomorrowRecap = day8 ? parseFloat((day8.drive + day8.onDuty).toFixed(2)) : 0;
+  
+  // Update display
+  document.getElementById('cycleUsed').textContent = cycleUsed.toFixed(2);
+  
+  const availEl = document.getElementById('cycleAvail');
+  availEl.textContent = cycleAvail.toFixed(2);
+  availEl.className = 'summary-value ' + 
+    (cycleAvail < 10 ? 'danger' : cycleAvail < 20 ? 'tight' : 'good');
+  
+  document.getElementById('tomorrowRecap').textContent = '+' + tomorrowRecap.toFixed(2);
+}
+
+// ==============================================
+// RENDER: Draw the table
+// ==============================================
+function render() {
+  // Sort data by date descending for display
+  const sorted = sortByDateDesc(data);
+  
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  
+  sorted.forEach((row, displayIdx) => {
+    // Find actual index in data array for updates
+    const dataIdx = data.findIndex(d => d.date === row.date);
+    const computed = computeDerived(row);
+    
+    const tr = document.createElement('tr');
+    if (computed.isToday) tr.className = 'today-row';
+    
+    tr.innerHTML = `
+      <td><input type="date" value="${row.date}" onchange="updateCell(${dataIdx}, 'date', this.value)"></td>
+      <td><input type="number" step="0.01" min="0" max="24" value="${row.drive}" 
+          class="${computed.inputClass}"
+          onchange="updateCell(${dataIdx}, 'drive', parseFloat(this.value) || 0)"></td>
+      <td><input type="number" step="0.01" min="0" max="24" value="${row.onDuty}" 
+          onchange="updateCell(${dataIdx}, 'onDuty', parseFloat(this.value) || 0)"></td>
+      <td><input type="number" value="${computed.total.toFixed(2)}" readonly></td>
+      <td class="status-cell ${computed.statusClass}">${computed.status}${computed.isToday ? ' 📍' : ''}</td>
+      <td><button onclick="deleteRow(${dataIdx})" style="background:none;border:none;cursor:pointer;font-size:1em;">❌</button></td>
+    `;
+    
+    tbody.appendChild(tr);
+  });
+  
+  computeSummary();
+}
+
+// ==============================================
+// INTERACTIONS
+// ==============================================
+function updateCell(rowIdx, field, value) {
+  data[rowIdx][field] = value;
+  saveToStorage();
+  render();
+}
+
+function addRow() {
+  const today = getToday();
+  // Check if today already exists
+  if (data.some(row => row.date === today)) {
+    // Add tomorrow instead (or prompt)
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    data.push({ date: tomorrow.toISOString().split('T')[0], drive: 0, onDuty: 0 });
+  } else {
+    data.push({ date: today, drive: 0, onDuty: 0 });
+  }
+  saveToStorage();
+  render();
+}
+
+function deleteRow(rowIdx) {
+  if (confirm('Delete this day?')) {
+    data.splice(rowIdx, 1);
+    saveToStorage();
+    render();
+  }
+}
+
+function clearData() {
+  if (confirm('Clear ALL data? This cannot be undone.')) {
+    data = [];
+    localStorage.removeItem(STORAGE_KEY);
+    render();
+  }
+}
+
+// ==============================================
+// EXPORT/IMPORT: Raw inputs only!
+// ==============================================
+function exportJSON() {
+  // Export ONLY raw inputs - derived fields computed on load
+  const exportData = {
+    version: SCHEMA.version,
+    exportedAt: new Date().toISOString(),
+    exportedBy: 'Crystal Ball Mini V2',
+    note: 'Raw inputs only. Total/status computed on import.',
+    data: data.map(row => ({
+      date: row.date,
+      drive: row.drive,
+      onDuty: row.onDuty
+    }))
+  };
+  
+  const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `crystal_ball_${getToday()}.json`;
+  a.click();
+  
+  URL.revokeObjectURL(url);
+}
+
+function importJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      
+      if (imported.data && Array.isArray(imported.data)) {
+        // Extract only raw fields, ignore any derived fields
+        data = imported.data.map(row => ({
+          date: row.date,
+          drive: parseFloat(row.drive) || 0,
+          onDuty: parseFloat(row.onDuty) || 0
+        }));
+        saveToStorage();
+        render();
+        alert('✅ Imported ' + data.length + ' days successfully!\nDerived fields recalculated.');
+      } else {
+        alert('❌ Invalid file format');
+      }
+    } catch (err) {
+      alert('❌ Error parsing file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ==============================================
+// BOOT: Start the engine!
+// ==============================================
+function init() {
+  // Try to load from localStorage first
+  if (!loadFromStorage() || data.length === 0) {
+    // No saved data - use defaults
+    data = [...DEFAULT_DATA];
+  }
+  
+  // Ensure today exists
+  ensureTodayExists();
+  
+  // Save (in case we added today)
+  saveToStorage();
+  
+  // Render!
+  render();
+}
+
+init();
+</script>
+
+</body>
+</html>
