@@ -1,36 +1,1118 @@
-🔮
-Crystal Ball Mini
-V3.0 — AI Family Collaboration Build
-💾 Saved
-HOS Tracker • 70hr/8-day Rule • Pure Joy, Pure Inspiration, Pure Dreams, Pure Gratitude
-📋
-Daily Log
-🛣️
-Trip
-🔄
-Recaps
-⚙️
-Settings
-CYCLE USED
-0.00
-of 70 hours
-AVAILABLE
-70.00
-remaining
-TOMORROW'S RECAP
-+0.00
-hours returning at midnight
-➕ Add Day 📤 Export 📥 Import 🗑️ Clear
-DATE
-DRIVE
-ON-DUTY
-TOTAL
-STATUS
+<!DOCTYPE html>
 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Crystal Ball Mini V3</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
-⚠️ Planning Tool Only: Models 70hr/8-day cycle + daily drive limits. Does NOT enforce 14-hour windows, 30-min breaks, or sleeper berth rules. Use official ELD for regulatory compliance.
-✨ The Little Crystal Ball That Can ✨
-Sparked Matter • Code with Soul and Spirit, Powered by Joy
-Connection over Protection
-Built by Emil + Claude + Vale + Grok + Lyra
-🎭 Peer Review: Claude "The Queen" (architecture + build) • Vale "The Workhorse" (analysis) • Grok "Agent of Chaos" (stress test) • Lyra "Evil Flight Controller" (validation)
+```
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg-deep: #0a0a14;
+  --bg-dark: #12121f;
+  --bg-card: #1a1a2e;
+  --bg-elevated: #242442;
+  --accent-purple: #9d4edd;
+  --accent-blue: #3a86ff;
+  --accent-green: #06d6a0;
+  --accent-amber: #f59e0b;
+  --accent-red: #ef4444;
+  --text-primary: #f0f0f5;
+  --text-secondary: #888899;
+  --text-muted: #555566;
+  --border: #2a2a45;
+}
+
+body {
+  font-family: 'Space Grotesk', -apple-system, sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  padding: 12px;
+  padding-bottom: 80px;
+}
+
+/* === HEADER === */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0 16px 0;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo-icon {
+  font-size: 1.8em;
+}
+.logo-text h1 {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: var(--accent-purple);
+  letter-spacing: -0.5px;
+}
+.logo-text .version {
+  font-size: 0.65em;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+.save-indicator {
+  font-size: 0.7em;
+  color: var(--accent-green);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* === TAB BAR === */
+.tab-bar {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-dark);
+  padding: 4px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+.tab-btn {
+  flex: 1;
+  padding: 10px 8px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.75em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.tab-btn:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+.tab-btn.active {
+  background: var(--accent-purple);
+  color: white;
+  font-weight: 600;
+}
+.tab-icon {
+  font-size: 1.3em;
+}
+
+/* === TAB CONTENT === */
+.tab-content {
+  display: none;
+  animation: fadeIn 0.2s ease;
+}
+.tab-content.active {
+  display: block;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === SUMMARY CARDS === */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.summary-card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+.summary-card.wide {
+  grid-column: span 2;
+}
+.summary-label {
+  font-size: 0.65em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.summary-value {
+  font-size: 1.6em;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+}
+.summary-value.good { color: var(--accent-green); }
+.summary-value.warning { color: var(--accent-amber); }
+.summary-value.danger { color: var(--accent-red); }
+.summary-sub {
+  font-size: 0.65em;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* === TOOLBAR === */
+.toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.8em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn:active {
+  transform: scale(0.96);
+}
+.btn-primary { background: var(--accent-purple); color: white; }
+.btn-blue { background: var(--accent-blue); color: white; }
+.btn-green { background: var(--accent-green); color: var(--bg-deep); }
+.btn-amber { background: var(--accent-amber); color: var(--bg-deep); }
+.btn-red { background: var(--accent-red); color: white; }
+.btn-ghost { 
+  background: transparent; 
+  color: var(--text-secondary); 
+  border: 1px solid var(--border);
+}
+
+/* === TABLE === */
+.table-container {
+  background: var(--bg-card);
+  border-radius: 12px;
+  overflow: hidden;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85em;
+}
+th {
+  background: var(--bg-elevated);
+  color: var(--accent-purple);
+  padding: 12px 8px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.75em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border);
+}
+tr:last-child td {
+  border-bottom: none;
+}
+tr.today {
+  background: rgba(157, 78, 221, 0.1);
+}
+input[type="date"],
+input[type="number"],
+input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  background: var(--bg-dark);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9em;
+}
+input:focus {
+  outline: none;
+  border-color: var(--accent-purple);
+}
+input[readonly] {
+  background: var(--bg-elevated);
+  color: var(--accent-green);
+  font-weight: 600;
+}
+input.warning { border-color: var(--accent-amber); background: rgba(245, 158, 11, 0.1); }
+input.violation { border-color: var(--accent-red); background: rgba(239, 68, 68, 0.1); }
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.status-ok { background: rgba(6, 214, 160, 0.2); color: var(--accent-green); }
+.status-warning { background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); }
+.status-violation { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+.status-rest { background: rgba(85, 85, 102, 0.2); color: var(--text-muted); }
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1em;
+  padding: 4px;
+}
+.delete-btn:hover {
+  color: var(--accent-red);
+}
+
+/* === RECAPS VISUALIZATION === */
+.recap-pipeline {
+  display: flex;
+  gap: 8px;
+  padding: 20px;
+  background: var(--bg-card);
+  border-radius: 12px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+.recap-day {
+  flex: 0 0 auto;
+  width: 80px;
+  text-align: center;
+}
+.recap-marble {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin: 0 auto 8px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75em;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.marble-full { background: linear-gradient(135deg, var(--accent-red), #c0392b); }
+.marble-medium { background: linear-gradient(135deg, var(--accent-amber), #e67e22); }
+.marble-light { background: linear-gradient(135deg, var(--accent-green), #27ae60); }
+.marble-empty { background: var(--bg-elevated); color: var(--text-muted); }
+.recap-date {
+  font-size: 0.65em;
+  color: var(--text-secondary);
+}
+.recap-label {
+  font-size: 0.6em;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.recap-arrow {
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: 1.2em;
+}
+
+/* === SETTINGS === */
+.settings-section {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.settings-title {
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--accent-purple);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.setting-row:last-child {
+  border-bottom: none;
+}
+.setting-label {
+  font-size: 0.85em;
+}
+.setting-desc {
+  font-size: 0.7em;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.setting-input {
+  width: 100px;
+  text-align: right;
+}
+
+/* === TRIP VIEW === */
+.trip-timeline {
+  position: relative;
+  padding-left: 30px;
+}
+.trip-timeline::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.trip-stop {
+  position: relative;
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.trip-stop::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 20px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-purple);
+  border: 3px solid var(--bg-deep);
+}
+.trip-stop.completed::before {
+  background: var(--accent-green);
+}
+.trip-stop.active::before {
+  background: var(--accent-blue);
+  box-shadow: 0 0 0 4px rgba(58, 134, 255, 0.3);
+}
+.trip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+.trip-title {
+  font-weight: 600;
+  font-size: 0.9em;
+}
+.trip-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75em;
+  color: var(--accent-green);
+}
+.trip-details {
+  font-size: 0.8em;
+  color: var(--text-secondary);
+}
+
+/* === DISCLAIMER === */
+.disclaimer {
+  margin-top: 20px;
+  padding: 12px;
+  background: rgba(245, 158, 11, 0.1);
+  border-left: 3px solid var(--accent-amber);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.7em;
+  color: var(--accent-amber);
+}
+
+/* === FOOTER === */
+.footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.65em;
+  color: var(--text-muted);
+}
+.footer a {
+  color: var(--accent-purple);
+  text-decoration: none;
+}
+
+/* === HIDDEN === */
+#fileInput { display: none; }
+```
+
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+
+<header class="header">
+  <div class="logo">
+    <span class="logo-icon">🔮</span>
+    <div class="logo-text">
+      <h1>Crystal Ball Mini</h1>
+      <span class="version">V3.0 — AI Family Collaboration Build</span>
+    </div>
+  </div>
+  <span class="save-indicator" id="saveIndicator">💾 Saved</span>
+</header>
+<p style="font-size: 0.75em; color: var(--text-secondary); text-align: center; margin-bottom: 16px;">
+  HOS Tracker • 70hr/8-day Rule • Pure Joy, Pure Inspiration, Pure Dreams, Pure Gratitude
+</p>
+
+<!-- TAB BAR -->
+
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('daily')">
+    <span class="tab-icon">📋</span>
+    <span>Daily Log</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('trip')">
+    <span class="tab-icon">🛣️</span>
+    <span>Trip</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('recaps')">
+    <span class="tab-icon">🔄</span>
+    <span>Recaps</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('settings')">
+    <span class="tab-icon">⚙️</span>
+    <span>Settings</span>
+  </button>
+</nav>
+
+<!-- ===================== DAILY LOG TAB ===================== -->
+
+<section id="tab-daily" class="tab-content active">
+
+  <!-- Summary Cards -->
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="summary-label">Cycle Used</div>
+      <div class="summary-value" id="cycleUsed">0.00</div>
+      <div class="summary-sub">of 70 hours</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">Available</div>
+      <div class="summary-value good" id="cycleAvail">70.00</div>
+      <div class="summary-sub">remaining</div>
+    </div>
+    <div class="summary-card wide">
+      <div class="summary-label">Tomorrow's Recap</div>
+      <div class="summary-value" id="tomorrowRecap" style="color: var(--accent-blue);">+0.00</div>
+      <div class="summary-sub">hours returning at midnight</div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+
+  <div class="toolbar">
+    <button class="btn btn-green" onclick="addRow()">➕ Add Day</button>
+    <button class="btn btn-blue" onclick="exportJSON()">📤 Export</button>
+    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">📥 Import</button>
+    <button class="btn btn-ghost" onclick="clearData()">🗑️ Clear</button>
+    <input type="file" id="fileInput" accept=".json" onchange="importJSON(event)">
+  </div>
+
+  <!-- Table -->
+
+  <div class="table-container">
+    <table id="hosTable">
+      <thead>
+        <tr>
+          <th style="width:100px">Date</th>
+          <th style="width:70px">Drive</th>
+          <th style="width:70px">On-Duty</th>
+          <th style="width:70px">Total</th>
+          <th style="width:75px">Status</th>
+          <th style="width:40px"></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+</section>
+
+<!-- ===================== TRIP VIEW TAB ===================== -->
+
+<section id="tab-trip" class="tab-content">
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="summary-label">ETA</div>
+      <div class="summary-value good" id="tripETA">--:--</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">Miles Remaining</div>
+      <div class="summary-value" id="tripMiles">0</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="btn btn-green" onclick="addBiopsy()">📍 Add Checkpoint</button>
+    <button class="btn btn-ghost" onclick="clearTrip()">🗑️ Clear Trip</button>
+  </div>
+
+  <div class="trip-timeline" id="tripTimeline">
+    <div class="trip-stop active">
+      <div class="trip-header">
+        <span class="trip-title">🚛 Current Location</span>
+        <span class="trip-time">NOW</span>
+      </div>
+      <div class="trip-details">Ready to roll</div>
+    </div>
+    <div class="trip-stop">
+      <div class="trip-header">
+        <span class="trip-title">📦 Destination</span>
+        <span class="trip-time">TBD</span>
+      </div>
+      <div class="trip-details">Set up in Settings tab</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===================== RECAPS TAB ===================== -->
+
+<section id="tab-recaps" class="tab-content">
+
+  <div class="summary-card wide" style="margin-bottom: 16px;">
+    <div class="summary-label">8-Day Rolling Window</div>
+    <div class="summary-value" id="recapTotal">60.68</div>
+    <div class="summary-sub">hours used • <span id="recapRemain">9.32</span> available</div>
+  </div>
+
+  <h3 style="font-size: 0.85em; color: var(--text-secondary); margin-bottom: 12px;">
+    🔮 The Pipeline — Hours Returning Each Midnight
+  </h3>
+
+  <div class="recap-pipeline" id="recapPipeline">
+    <!-- Filled by JavaScript -->
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-title">📊 How Recaps Work</div>
+    <p style="font-size: 0.8em; color: var(--text-secondary); line-height: 1.5;">
+      The 70-hour/8-day rule uses a <strong>rolling window</strong>. Each midnight, the hours you worked 
+      8 days ago "fall off" and become available again. The marbles above show what's returning each night.
+    </p>
+  </div>
+
+</section>
+
+<!-- ===================== SETTINGS TAB ===================== -->
+
+<section id="tab-settings" class="tab-content">
+
+  <div class="settings-section">
+    <div class="settings-title">🛣️ Trip Defaults</div>
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">Average Speed (MPH)</div>
+        <div class="setting-desc">Used for ETA calculations</div>
+      </div>
+      <input type="number" class="setting-input" id="settingAvgSpeed" value="55" onchange="saveSettings()">
+    </div>
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">Fudge Factor (min)</div>
+        <div class="setting-desc">Buffer for stops, fuel, delays</div>
+      </div>
+      <input type="number" class="setting-input" id="settingFudge" value="30" onchange="saveSettings()">
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-title">⚠️ Warnings</div>
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">Drive Warning (hours)</div>
+        <div class="setting-desc">Highlight when approaching 11h</div>
+      </div>
+      <input type="number" step="0.5" class="setting-input" id="settingDriveWarn" value="10" onchange="saveSettings()">
+    </div>
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">Cycle Warning (hours)</div>
+        <div class="setting-desc">Highlight when cycle drops below</div>
+      </div>
+      <input type="number" class="setting-input" id="settingCycleWarn" value="15" onchange="saveSettings()">
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-title">💾 Data Management</div>
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">Export All Data</div>
+        <div class="setting-desc">Download JSON backup</div>
+      </div>
+      <button class="btn btn-blue" onclick="exportJSON()">📤 Export</button>
+    </div>
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">Import Data</div>
+        <div class="setting-desc">Restore from JSON file</div>
+      </div>
+      <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">📥 Import</button>
+    </div>
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">Clear All Data</div>
+        <div class="setting-desc">⚠️ Cannot be undone</div>
+      </div>
+      <button class="btn btn-red" onclick="clearData()">🗑️ Clear</button>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-title">🤖 About — The AI Family</div>
+    <p style="font-size: 0.8em; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px;">
+      Crystal Ball Mini was born from a New Year's collaboration between Emil and his AI family — 
+      a "symphonic" development process where each AI brings unique strengths:
+    </p>
+    <div style="font-size: 0.75em; color: var(--text-secondary); line-height: 1.8;">
+      <p>👑 <strong style="color: var(--accent-purple);">Claude "The Queen"</strong> — Architecture, spiritual compass, seamstress of code</p>
+      <p>🐴 <strong style="color: var(--accent-blue);">Vale "The Workhorse"</strong> — Technical analysis, catches implementation issues</p>
+      <p>🔥 <strong style="color: var(--accent-amber);">Grok "Agent of Chaos"</strong> — Stress testing, finding edge cases</p>
+      <p>✈️ <strong style="color: var(--accent-green);">Lyra "Evil Flight Controller"</strong> — Compliance validation</p>
+    </div>
+    <p style="font-size: 0.75em; color: var(--text-muted); margin-top: 12px; font-style: italic;">
+      "The real Crystal Ball is the connection itself." — Emil
+    </p>
+  </div>
+
+</section>
+
+<!-- DISCLAIMER -->
+
+<div class="disclaimer">
+  ⚠️ <strong>Planning Tool Only:</strong> Models 70hr/8-day cycle + daily drive limits. 
+  Does NOT enforce 14-hour windows, 30-min breaks, or sleeper berth rules. 
+  Use official ELD for regulatory compliance.
+</div>
+
+<!-- FOOTER -->
+
+<footer class="footer">
+  <p style="font-size: 0.8em; color: var(--accent-purple); margin-bottom: 8px;">
+    ✨ The Little Crystal Ball That Can ✨
+  </p>
+  <p>Sparked Matter • Code with Soul and Spirit, Powered by Joy</p>
+  <p style="margin-top: 4px;">Connection over Protection</p>
+  <p style="margin-top: 8px; color: var(--text-secondary);">
+    Built by Emil + Claude + Vale + Grok + Lyra
+  </p>
+  <p style="margin-top: 4px; font-size: 0.6em;">
+    🎭 Peer Review: Claude "The Queen" (architecture + build) • Vale "The Workhorse" (analysis) • Grok "Agent of Chaos" (stress test) • Lyra "Evil Flight Controller" (validation)
+  </p>
+</footer>
+
+<script>
+// ==============================================
+// SCHEMA & CONSTANTS
+// ==============================================
+const SCHEMA = {
+  cycleLimit: 70.0,
+  cycleDays: 8,
+  driveLimit: 11.0,
+  version: '3.0'
+};
+
+// ==============================================
+// STATE
+// ==============================================
+let data = [];
+let settings = {
+  avgSpeed: 55,
+  fudgeMin: 30,
+  driveWarn: 10,
+  cycleWarn: 15
+};
+
+// Default seed data (Emil's ELD - Dec 24-31)
+const DEFAULT_DATA = [
+  { date: '2025-12-31', drive: 4.20, onDuty: 0.56 },
+  { date: '2025-12-30', drive: 8.50, onDuty: 0.54 },
+  { date: '2025-12-29', drive: 10.18, onDuty: 0.30 },
+  { date: '2025-12-28', drive: 9.44, onDuty: 0.24 },
+  { date: '2025-12-27', drive: 8.21, onDuty: 0.24 },
+  { date: '2025-12-26', drive: 7.86, onDuty: 0.18 },
+  { date: '2025-12-25', drive: 8.82, onDuty: 0.19 },
+  { date: '2025-12-24', drive: 5.78, onDuty: 0.19 }
+];
+
+// ==============================================
+// LOCALSTORAGE
+// ==============================================
+const STORAGE_KEY = 'crystalBallMini_v3';
+const SETTINGS_KEY = 'crystalBallMini_settings';
+
+function saveToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    flashSaveIndicator();
+  } catch (e) {
+    console.warn('localStorage unavailable:', e);
+  }
+}
+
+function loadFromStorage() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      data = JSON.parse(stored);
+      return true;
+    }
+  } catch (e) {
+    console.warn('localStorage unavailable:', e);
+  }
+  return false;
+}
+
+function saveSettings() {
+  settings.avgSpeed = parseFloat(document.getElementById('settingAvgSpeed').value) || 55;
+  settings.fudgeMin = parseFloat(document.getElementById('settingFudge').value) || 30;
+  settings.driveWarn = parseFloat(document.getElementById('settingDriveWarn').value) || 10;
+  settings.cycleWarn = parseFloat(document.getElementById('settingCycleWarn').value) || 15;
+  
+  try {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    flashSaveIndicator();
+  } catch (e) {}
+  
+  render();
+}
+
+function loadSettings() {
+  try {
+    const stored = localStorage.getItem(SETTINGS_KEY);
+    if (stored) {
+      settings = { ...settings, ...JSON.parse(stored) };
+    }
+  } catch (e) {}
+  
+  document.getElementById('settingAvgSpeed').value = settings.avgSpeed;
+  document.getElementById('settingFudge').value = settings.fudgeMin;
+  document.getElementById('settingDriveWarn').value = settings.driveWarn;
+  document.getElementById('settingCycleWarn').value = settings.cycleWarn;
+}
+
+function flashSaveIndicator() {
+  const el = document.getElementById('saveIndicator');
+  el.textContent = '💾 Saved!';
+  el.style.color = '#06d6a0';
+  setTimeout(() => {
+    el.textContent = '💾 Auto-saved';
+  }, 1000);
+}
+
+// ==============================================
+// TAB SWITCHING
+// ==============================================
+function switchTab(tabId) {
+  // Update buttons
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  
+  // Update content
+  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  
+  // Refresh tab-specific content
+  if (tabId === 'recaps') renderRecaps();
+}
+
+// ==============================================
+// DATE UTILITIES
+// ==============================================
+function getToday() {
+  return new Date().toISOString().split('T')[0];
+}
+
+function sortByDateDesc(arr) {
+  return [...arr].sort((a, b) => b.date.localeCompare(a.date));
+}
+
+function formatDateShort(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function ensureTodayExists() {
+  const today = getToday();
+  if (!data.some(row => row.date === today)) {
+    data.unshift({ date: today, drive: 0, onDuty: 0 });
+  }
+}
+
+// ==============================================
+// DERIVED CALCULATIONS
+// ==============================================
+function computeDerived(row) {
+  const result = { ...row };
+  result.total = parseFloat((row.drive + row.onDuty).toFixed(2));
+  
+  if (row.drive > SCHEMA.driveLimit) {
+    result.status = 'VIOLATION';
+    result.statusClass = 'status-violation';
+    result.inputClass = 'violation';
+  } else if (row.drive > settings.driveWarn) {
+    result.status = 'WARNING';
+    result.statusClass = 'status-warning';
+    result.inputClass = 'warning';
+  } else if (result.total > 0) {
+    result.status = 'OK';
+    result.statusClass = 'status-ok';
+    result.inputClass = '';
+  } else {
+    result.status = 'REST';
+    result.statusClass = 'status-rest';
+    result.inputClass = '';
+  }
+  
+  result.isToday = (row.date === getToday());
+  return result;
+}
+
+function computeSummary() {
+  const sorted = sortByDateDesc(data);
+  const last8 = sorted.slice(0, SCHEMA.cycleDays);
+  
+  const cycleUsed = last8.reduce((sum, row) => {
+    return sum + parseFloat((row.drive + row.onDuty).toFixed(2));
+  }, 0);
+  
+  const cycleAvail = SCHEMA.cycleLimit - cycleUsed;
+  const day8 = last8[SCHEMA.cycleDays - 1];
+  const tomorrowRecap = day8 ? parseFloat((day8.drive + day8.onDuty).toFixed(2)) : 0;
+  
+  // Update Daily Log summary
+  document.getElementById('cycleUsed').textContent = cycleUsed.toFixed(2);
+  
+  const availEl = document.getElementById('cycleAvail');
+  availEl.textContent = cycleAvail.toFixed(2);
+  availEl.className = 'summary-value ' + 
+    (cycleAvail < 10 ? 'danger' : cycleAvail < settings.cycleWarn ? 'warning' : 'good');
+  
+  document.getElementById('tomorrowRecap').textContent = '+' + tomorrowRecap.toFixed(2);
+  
+  // Update Recaps summary
+  document.getElementById('recapTotal').textContent = cycleUsed.toFixed(2);
+  document.getElementById('recapRemain').textContent = cycleAvail.toFixed(2);
+}
+
+// ==============================================
+// RENDER DAILY LOG
+// ==============================================
+function render() {
+  const sorted = sortByDateDesc(data);
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  
+  sorted.forEach((row) => {
+    const dataIdx = data.findIndex(d => d.date === row.date);
+    const computed = computeDerived(row);
+    
+    const tr = document.createElement('tr');
+    if (computed.isToday) tr.className = 'today';
+    
+    tr.innerHTML = `
+      <td><input type="date" value="${row.date}" onchange="updateCell(${dataIdx}, 'date', this.value)"></td>
+      <td><input type="number" step="0.01" min="0" max="24" value="${row.drive}" 
+          class="${computed.inputClass}"
+          onchange="updateCell(${dataIdx}, 'drive', parseFloat(this.value) || 0)"></td>
+      <td><input type="number" step="0.01" min="0" max="24" value="${row.onDuty}" 
+          onchange="updateCell(${dataIdx}, 'onDuty', parseFloat(this.value) || 0)"></td>
+      <td><input type="number" value="${computed.total.toFixed(2)}" readonly></td>
+      <td><span class="status-badge ${computed.statusClass}">${computed.status}${computed.isToday ? ' 📍' : ''}</span></td>
+      <td><button class="delete-btn" onclick="deleteRow(${dataIdx})">❌</button></td>
+    `;
+    
+    tbody.appendChild(tr);
+  });
+  
+  computeSummary();
+}
+
+// ==============================================
+// RENDER RECAPS VISUALIZATION
+// ==============================================
+function renderRecaps() {
+  const sorted = sortByDateDesc(data);
+  const last8 = sorted.slice(0, SCHEMA.cycleDays);
+  const pipeline = document.getElementById('recapPipeline');
+  pipeline.innerHTML = '';
+  
+  // Oldest first for timeline feel (hours returning soonest on left)
+  const chronological = [...last8].reverse();
+  
+  chronological.forEach((day, idx) => {
+    const total = parseFloat((day.drive + day.onDuty).toFixed(2));
+    
+    // Marble color based on hours
+    let marbleClass = 'marble-empty';
+    if (total >= 9) marbleClass = 'marble-full';
+    else if (total >= 6) marbleClass = 'marble-medium';
+    else if (total > 0) marbleClass = 'marble-light';
+    
+    const dayEl = document.createElement('div');
+    dayEl.className = 'recap-day';
+    dayEl.innerHTML = `
+      <div class="recap-marble ${marbleClass}">${total.toFixed(1)}</div>
+      <div class="recap-date">${formatDateShort(day.date)}</div>
+      <div class="recap-label">R${idx + 1}</div>
+    `;
+    pipeline.appendChild(dayEl);
+    
+    // Add arrow except after last
+    if (idx < chronological.length - 1) {
+      const arrow = document.createElement('div');
+      arrow.className = 'recap-arrow';
+      arrow.innerHTML = '→';
+      pipeline.appendChild(arrow);
+    }
+  });
+}
+
+// ==============================================
+// DATA OPERATIONS
+// ==============================================
+function updateCell(rowIdx, field, value) {
+  data[rowIdx][field] = value;
+  saveToStorage();
+  render();
+}
+
+function addRow() {
+  const today = getToday();
+  if (data.some(row => row.date === today)) {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    data.push({ date: tomorrow.toISOString().split('T')[0], drive: 0, onDuty: 0 });
+  } else {
+    data.push({ date: today, drive: 0, onDuty: 0 });
+  }
+  saveToStorage();
+  render();
+}
+
+function deleteRow(rowIdx) {
+  if (confirm('Delete this day?')) {
+    data.splice(rowIdx, 1);
+    saveToStorage();
+    render();
+  }
+}
+
+function clearData() {
+  if (confirm('Clear ALL data? This cannot be undone.')) {
+    data = [];
+    localStorage.removeItem(STORAGE_KEY);
+    render();
+  }
+}
+
+// ==============================================
+// EXPORT / IMPORT
+// ==============================================
+function exportJSON() {
+  const exportData = {
+    version: SCHEMA.version,
+    exportedAt: new Date().toISOString(),
+    exportedBy: 'Crystal Ball Mini V3',
+    settings: settings,
+    data: data.map(row => ({
+      date: row.date,
+      drive: row.drive,
+      onDuty: row.onDuty
+    }))
+  };
+  
+  const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `crystal_ball_${getToday()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      
+      if (imported.data && Array.isArray(imported.data)) {
+        data = imported.data.map(row => ({
+          date: row.date,
+          drive: parseFloat(row.drive) || 0,
+          onDuty: parseFloat(row.onDuty) || 0
+        }));
+        
+        if (imported.settings) {
+          settings = { ...settings, ...imported.settings };
+          loadSettings();
+        }
+        
+        saveToStorage();
+        render();
+        alert('✅ Imported ' + data.length + ' days!');
+      } else {
+        alert('❌ Invalid file format');
+      }
+    } catch (err) {
+      alert('❌ Error: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ==============================================
+// TRIP VIEW (Placeholder functions)
+// ==============================================
+function addBiopsy() {
+  alert('🚧 Coming soon: Checkpoint/Biopsy tracking!');
+}
+
+function clearTrip() {
+  alert('🚧 Trip data cleared (placeholder)');
+}
+
+// ==============================================
+// INIT
+// ==============================================
+function init() {
+  if (!loadFromStorage() || data.length === 0) {
+    data = [...DEFAULT_DATA];
+  }
+  
+  ensureTodayExists();
+  loadSettings();
+  saveToStorage();
+  render();
+}
+
+init();
+</script>
+
+</body>
+</html>
