@@ -856,6 +856,11 @@ function ensureTodayExists() {
   const today = getToday();
   if (!data.some(row => row.date === today)) {
     data.unshift({ date: today, drive: 0, onDuty: 0 });
+    
+    // Ring buffer: Keep only 8 days max
+    if (data.length > SCHEMA.cycleDays) {
+      data = data.slice(0, SCHEMA.cycleDays);
+    }
   }
 }
 
@@ -998,14 +1003,30 @@ function updateCell(rowIdx, field, value) {
 }
 
 function addRow() {
-  const today = getToday();
-  if (data.some(row => row.date === today)) {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    data.push({ date: tomorrow.toISOString().split('T')[0], drive: 0, onDuty: 0 });
+  // Ring buffer: Add new day to FRONT, find next date chronologically
+  let newDate;
+  
+  if (data.length === 0) {
+    // No data yet - start with today
+    newDate = getToday();
   } else {
-    data.push({ date: today, drive: 0, onDuty: 0 });
+    // Sort by date to find the newest entry
+    const sorted = sortByDateDesc(data);
+    const newestDate = new Date(sorted[0].date + 'T00:00:00');
+    
+    // Add one day to the newest entry
+    newestDate.setDate(newestDate.getDate() + 1);
+    newDate = newestDate.toISOString().split('T')[0];
   }
+  
+  // Add to FRONT (newest first)
+  data.unshift({ date: newDate, drive: 0, onDuty: 0 });
+  
+  // Ring buffer: Keep only 8 days max
+  if (data.length > SCHEMA.cycleDays) {
+    data = data.slice(0, SCHEMA.cycleDays);
+  }
+  
   saveToStorage();
   render();
 }
