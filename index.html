@@ -1003,6 +1003,68 @@ function updateCell(rowIdx, field, value) {
 }
 
 function addRow() {
+  // Check for reset warning first
+  const offDutyHours = countConsecutiveOffDuty();
+  
+  if (offDutyHours >= 24 && offDutyHours < 34) {
+    showResetDialog();
+    return;
+  }
+  
+  addNormalDay();
+}
+
+function countConsecutiveOffDuty() {
+  // Count consecutive days from the front with 0 hours worked
+  const sorted = sortByDateDesc(data);
+  let offDutyHours = 0;
+  
+  for (const day of sorted) {
+    const total = parseFloat((day.drive + day.onDuty).toFixed(2));
+    if (total === 0) {
+      offDutyHours += 24; // Each full day = 24 hours
+    } else {
+      break; // Hit a work day, stop counting
+    }
+  }
+  
+  return offDutyHours;
+}
+
+function showResetDialog() {
+  const offDutyHours = countConsecutiveOffDuty();
+  const hoursToReset = 34 - offDutyHours;
+  
+  const choice = confirm(
+    `⚠️ RESET WARNING ⚠️\n\n` +
+    `You have ${offDutyHours} consecutive off-duty hours.\n` +
+    `Adding ${hoursToReset}+ more hours will trigger a 34-HOUR RESET.\n\n` +
+    `Click OK to trigger RESET (fresh 70 hours)\n` +
+    `Click Cancel to add WORK DAY instead`
+  );
+  
+  if (choice) {
+    triggerReset();
+  } else {
+    addNormalDay();
+  }
+}
+
+function triggerReset() {
+  // Add the reset day
+  addNormalDay();
+  
+  // Wipe the ring buffer except for the new day
+  const newDay = data[0]; // Save the day we just added
+  data = [newDay]; // Reset to just the new day
+  
+  alert('🔄 34-HOUR RESET COMPLETE!\n\nYou now have 70 fresh hours available.');
+  
+  saveToStorage();
+  render();
+}
+
+function addNormalDay() {
   // Ring buffer: Add new day to FRONT, find next date chronologically
   let newDate;
   
