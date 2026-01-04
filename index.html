@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Crystal Ball Mini V3</title>
+  <title>Crystal Ball Mini V4</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
@@ -27,6 +27,7 @@
   --accent-green: #06d6a0;
   --accent-amber: #f59e0b;
   --accent-red: #ef4444;
+  --accent-cyan: #22d3ee;
   --text-primary: #f0f0f5;
   --text-secondary: #888899;
   --text-muted: #555566;
@@ -39,7 +40,7 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   padding: 12px;
-  padding-bottom: 80px;
+  padding-bottom: 100px;
 }
 
 /* === HEADER === */
@@ -54,9 +55,7 @@ body {
   align-items: center;
   gap: 8px;
 }
-.logo-icon {
-  font-size: 1.8em;
-}
+.logo-icon { font-size: 1.8em; }
 .logo-text h1 {
   font-size: 1.2em;
   font-weight: 700;
@@ -100,355 +99,276 @@ body {
   align-items: center;
   gap: 4px;
 }
-.tab-btn:hover {
-  background: var(--bg-card);
-  color: var(--text-primary);
-}
+.tab-btn .icon { font-size: 1.3em; }
 .tab-btn.active {
-  background: var(--accent-purple);
-  color: white;
-  font-weight: 600;
-}
-.tab-icon {
-  font-size: 1.3em;
+  background: var(--bg-elevated);
+  color: var(--accent-purple);
 }
 
-/* === TAB CONTENT === */
-.tab-content {
-  display: none;
-  animation: fadeIn 0.2s ease;
+/* === CARDS === */
+.card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
 }
-.tab-content.active {
-  display: block;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+.card-title {
+  font-size: 0.75em;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
 }
 
 /* === SUMMARY CARDS === */
-.summary-grid {
+.summary-row {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-bottom: 16px;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 .summary-card {
-  background: var(--bg-card);
-  border-radius: 12px;
-  padding: 14px;
+  background: var(--bg-elevated);
+  border-radius: 10px;
+  padding: 12px;
   text-align: center;
 }
-.summary-card.wide {
-  grid-column: span 2;
-}
-.summary-label {
-  font-size: 0.65em;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 4px;
-}
-.summary-value {
-  font-size: 1.6em;
-  font-weight: 700;
-  font-family: 'JetBrains Mono', monospace;
-}
-.summary-value.good { color: var(--accent-green); }
-.summary-value.warning { color: var(--accent-amber); }
-.summary-value.danger { color: var(--accent-red); }
-.summary-sub {
+.summary-card .label {
   font-size: 0.65em;
   color: var(--text-muted);
-  margin-top: 2px;
-}
-
-/* === TOOLBAR === */
-.toolbar {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
-}
-.btn {
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 0.8em;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.btn:active {
-  transform: scale(0.96);
-}
-.btn-primary { background: var(--accent-purple); color: white; }
-.btn-blue { background: var(--accent-blue); color: white; }
-.btn-green { background: var(--accent-green); color: var(--bg-deep); }
-.btn-amber { background: var(--accent-amber); color: var(--bg-deep); }
-.btn-red { background: var(--accent-red); color: white; }
-.btn-ghost { 
-  background: transparent; 
-  color: var(--text-secondary); 
-  border: 1px solid var(--border);
-}
-
-/* === TABLE === */
-.table-container {
-  background: var(--bg-card);
-  border-radius: 12px;
-  overflow: hidden;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.85em;
-}
-th {
-  background: var(--bg-elevated);
-  color: var(--accent-purple);
-  padding: 12px 8px;
-  text-align: left;
-  font-weight: 600;
-  font-size: 0.75em;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-td {
-  padding: 10px 8px;
-  border-bottom: 1px solid var(--border);
+.summary-card .value {
+  font-size: 1.5em;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  margin-top: 4px;
 }
-tr:last-child td {
-  border-bottom: none;
+.summary-card .value.good { color: var(--accent-green); }
+.summary-card .value.warning { color: var(--accent-amber); }
+.summary-card .value.danger { color: var(--accent-red); }
+
+/* === FORM ELEMENTS === */
+.form-group {
+  margin-bottom: 12px;
 }
-tr.today {
-  background: rgba(157, 78, 221, 0.1);
+.form-group label {
+  display: block;
+  font-size: 0.75em;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
 }
-input[type="date"],
-input[type="number"],
-input[type="text"] {
+input, select {
   width: 100%;
-  padding: 8px;
+  padding: 10px 12px;
   background: var(--bg-dark);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   color: var(--text-primary);
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.9em;
 }
-input:focus {
+input:focus, select:focus {
   outline: none;
   border-color: var(--accent-purple);
 }
-input[readonly] {
-  background: var(--bg-elevated);
-  color: var(--accent-green);
-  font-weight: 600;
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
-input.warning { border-color: var(--accent-amber); background: rgba(245, 158, 11, 0.1); }
-input.violation { border-color: var(--accent-red); background: rgba(239, 68, 68, 0.1); }
+.form-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
 
-.status-badge {
-  display: inline-block;
+/* === BUTTONS === */
+.btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-primary {
+  background: var(--accent-purple);
+  color: white;
+}
+.btn-success {
+  background: var(--accent-green);
+  color: var(--bg-deep);
+}
+.btn-danger {
+  background: var(--accent-red);
+  color: white;
+}
+.btn-secondary {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+.btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* === EVENT LIST === */
+.event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.event-item {
+  background: var(--bg-elevated);
+  border-radius: 8px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+.event-badge {
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 0.7em;
   font-weight: 600;
   text-transform: uppercase;
 }
-.status-ok { background: rgba(6, 214, 160, 0.2); color: var(--accent-green); }
-.status-warning { background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); }
-.status-violation { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
-.status-rest { background: rgba(85, 85, 102, 0.2); color: var(--text-muted); }
+.event-badge.drive { background: var(--accent-blue); color: white; }
+.event-badge.on-duty { background: var(--accent-amber); color: var(--bg-deep); }
+.event-badge.off-duty { background: var(--accent-green); color: var(--bg-deep); }
+.event-badge.sleeper { background: var(--accent-purple); color: white; }
+.event-badge.yard { background: var(--accent-cyan); color: var(--bg-deep); }
+.event-badge.pc { background: var(--text-muted); color: white; }
 
-.delete-btn {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 1em;
-  padding: 4px;
+.event-details {
+  font-size: 0.85em;
 }
-.delete-btn:hover {
-  color: var(--accent-red);
-}
-
-/* === RECAPS VISUALIZATION === */
-.recap-pipeline {
-  display: flex;
-  gap: 8px;
-  padding: 20px;
-  background: var(--bg-card);
-  border-radius: 12px;
-  overflow-x: auto;
-  margin-bottom: 16px;
-}
-.recap-day {
-  flex: 0 0 auto;
-  width: 80px;
-  text-align: center;
-}
-.recap-marble {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin: 0 auto 8px auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.event-details .time {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75em;
-  font-weight: 700;
-  color: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  color: var(--text-primary);
 }
-.marble-full { background: linear-gradient(135deg, var(--accent-red), #c0392b); }
-.marble-medium { background: linear-gradient(135deg, var(--accent-amber), #e67e22); }
-.marble-light { background: linear-gradient(135deg, var(--accent-green), #27ae60); }
-.marble-empty { background: var(--bg-elevated); color: var(--text-muted); }
-.recap-date {
-  font-size: 0.65em;
+.event-details .info {
   color: var(--text-secondary);
-}
-.recap-label {
-  font-size: 0.6em;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-.recap-arrow {
-  display: flex;
-  align-items: center;
-  color: var(--text-muted);
-  font-size: 1.2em;
-}
-
-/* === SETTINGS === */
-.settings-section {
-  background: var(--bg-card);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
-}
-.settings-title {
-  font-size: 0.85em;
-  font-weight: 600;
-  color: var(--accent-purple);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.setting-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-}
-.setting-row:last-child {
-  border-bottom: none;
-}
-.setting-label {
-  font-size: 0.85em;
-}
-.setting-desc {
-  font-size: 0.7em;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-.setting-input {
-  width: 100px;
-  text-align: right;
-}
-
-/* === TRIP VIEW === */
-.trip-timeline {
-  position: relative;
-  padding-left: 30px;
-}
-.trip-timeline::before {
-  content: '';
-  position: absolute;
-  left: 10px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--border);
-}
-.trip-stop {
-  position: relative;
-  background: var(--bg-card);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
-}
-.trip-stop::before {
-  content: '';
-  position: absolute;
-  left: -24px;
-  top: 20px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--accent-purple);
-  border: 3px solid var(--bg-deep);
-}
-.trip-stop.completed::before {
-  background: var(--accent-green);
-}
-.trip-stop.active::before {
-  background: var(--accent-blue);
-  box-shadow: 0 0 0 4px rgba(58, 134, 255, 0.3);
-}
-.trip-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 8px;
-}
-.trip-title {
-  font-weight: 600;
   font-size: 0.9em;
 }
-.trip-time {
+.event-delete {
+  background: none;
+  border: none;
+  color: var(--accent-red);
+  cursor: pointer;
+  font-size: 1.2em;
+  opacity: 0.6;
+}
+.event-delete:hover { opacity: 1; }
+
+/* === RUN/LEG HIERARCHY === */
+.hierarchy-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.run-badge {
+  background: var(--accent-purple);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8em;
+  font-weight: 600;
   font-family: 'JetBrains Mono', monospace;
+}
+.leg-badge {
+  background: var(--accent-blue);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
   font-size: 0.75em;
+  font-weight: 600;
+}
+.stop-ref {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent-cyan);
+  font-size: 0.8em;
+}
+
+/* === CALCULATED STATS === */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.stat-item {
+  text-align: center;
+}
+.stat-item .label {
+  font-size: 0.6em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.stat-item .value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9em;
   color: var(--accent-green);
 }
-.trip-details {
-  font-size: 0.8em;
-  color: var(--text-secondary);
-}
 
-/* === DISCLAIMER === */
-.disclaimer {
-  margin-top: 20px;
-  padding: 12px;
-  background: rgba(245, 158, 11, 0.1);
-  border-left: 3px solid var(--accent-amber);
-  border-radius: 0 8px 8px 0;
-  font-size: 0.7em;
-  color: var(--accent-amber);
-}
+/* === TAB CONTENT === */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
 /* === FOOTER === */
-.footer {
-  margin-top: 20px;
+footer {
   text-align: center;
-  font-size: 0.65em;
+  padding: 20px;
+  font-size: 0.7em;
   color: var(--text-muted);
 }
-.footer a {
-  color: var(--accent-purple);
-  text-decoration: none;
-}
+footer .brand { color: var(--accent-purple); font-weight: 600; }
 
-/* === HIDDEN === */
-#fileInput { display: none; }
+/* === MODAL === */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.modal-title {
+  font-size: 1.1em;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--accent-purple);
+}
 ```
 
   </style>
@@ -462,262 +382,463 @@ input.violation { border-color: var(--accent-red); background: rgba(239, 68, 68,
     <span class="logo-icon">🔮</span>
     <div class="logo-text">
       <h1>Crystal Ball Mini</h1>
-      <span class="version">V3.0 — AI Family Collaboration Build</span>
+      <span class="version">V4.0 — Run/Leg/Stop Architecture</span>
     </div>
   </div>
-  <span class="save-indicator" id="saveIndicator">💾 Saved</span>
+  <span class="save-indicator" id="saveIndicator">💾 Auto-saved</span>
 </header>
-<p style="font-size: 0.75em; color: var(--text-secondary); text-align: center; margin-bottom: 16px;">
-  HOS Tracker • 70hr/8-day Rule • Pure Joy, Pure Inspiration, Pure Dreams, Pure Gratitude
-</p>
 
 <!-- TAB BAR -->
 
 <nav class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab('daily')">
-    <span class="tab-icon">📋</span>
-    <span>Daily Log</span>
+  <button class="tab-btn active" onclick="switchTab('entry')">
+    <span class="icon">📝</span>
+    <span>Entry</span>
   </button>
-  <button class="tab-btn" onclick="switchTab('trip')">
-    <span class="tab-icon">🛣️</span>
-    <span>Trip</span>
+  <button class="tab-btn" onclick="switchTab('theory')">
+    <span class="icon">🔮</span>
+    <span>Theory</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('timeline')">
+    <span class="icon">📊</span>
+    <span>Timeline</span>
   </button>
   <button class="tab-btn" onclick="switchTab('recaps')">
-    <span class="tab-icon">🔄</span>
+    <span class="icon">🔄</span>
     <span>Recaps</span>
   </button>
   <button class="tab-btn" onclick="switchTab('settings')">
-    <span class="tab-icon">⚙️</span>
+    <span class="icon">⚙️</span>
     <span>Settings</span>
   </button>
 </nav>
 
-<!-- ===================== DAILY LOG TAB ===================== -->
+<!-- TAB: ENTRY -->
 
-<section id="tab-daily" class="tab-content active">
+<div id="tab-entry" class="tab-content active">
 
-  <!-- Summary Cards -->
+  <!-- Current Run/Leg Display -->
 
-  <div class="summary-grid">
-    <div class="summary-card">
-      <div class="summary-label">Cycle Used</div>
-      <div class="summary-value" id="cycleUsed">0.00</div>
-      <div class="summary-sub">of 70 hours</div>
-    </div>
-    <div class="summary-card">
-      <div class="summary-label">Available</div>
-      <div class="summary-value good" id="cycleAvail">70.00</div>
-      <div class="summary-sub">remaining</div>
-    </div>
-    <div class="summary-card wide">
-      <div class="summary-label">Tomorrow's Recap</div>
-      <div class="summary-value" id="tomorrowRecap" style="color: var(--accent-blue);">+0.00</div>
-      <div class="summary-sub">hours returning at midnight</div>
-    </div>
-  </div>
-
-  <!-- Toolbar -->
-
-  <div class="toolbar">
-    <button class="btn btn-green" onclick="addRow()">➕ Add Day</button>
-    <button class="btn btn-blue" onclick="exportJSON()">📤 Export</button>
-    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">📥 Import</button>
-    <button class="btn btn-ghost" onclick="clearData()">🗑️ Clear</button>
-    <input type="file" id="fileInput" accept=".json" onchange="importJSON(event)">
-  </div>
-
-  <!-- Table -->
-
-  <div class="table-container">
-    <table id="hosTable">
-      <thead>
-        <tr>
-          <th style="width:100px">Date</th>
-          <th style="width:70px">Drive</th>
-          <th style="width:70px">On-Duty</th>
-          <th style="width:70px">Total</th>
-          <th style="width:75px">Status</th>
-          <th style="width:40px"></th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-  </div>
-
-</section>
-
-<!-- ===================== TRIP VIEW TAB ===================== -->
-
-<section id="tab-trip" class="tab-content">
-
-  <div class="summary-grid">
-    <div class="summary-card">
-      <div class="summary-label">ETA</div>
-      <div class="summary-value good" id="tripETA">--:--</div>
-    </div>
-    <div class="summary-card">
-      <div class="summary-label">Miles Remaining</div>
-      <div class="summary-value" id="tripMiles">0</div>
-    </div>
-  </div>
-
-  <div class="toolbar">
-    <button class="btn btn-green" onclick="addBiopsy()">📍 Add Checkpoint</button>
-    <button class="btn btn-ghost" onclick="clearTrip()">🗑️ Clear Trip</button>
-  </div>
-
-  <div class="trip-timeline" id="tripTimeline">
-    <div class="trip-stop active">
-      <div class="trip-header">
-        <span class="trip-title">🚛 Current Location</span>
-        <span class="trip-time">NOW</span>
-      </div>
-      <div class="trip-details">Ready to roll</div>
-    </div>
-    <div class="trip-stop">
-      <div class="trip-header">
-        <span class="trip-title">📦 Destination</span>
-        <span class="trip-time">TBD</span>
-      </div>
-      <div class="trip-details">Set up in Settings tab</div>
-    </div>
-  </div>
-
-</section>
-
-<!-- ===================== RECAPS TAB ===================== -->
-
-<section id="tab-recaps" class="tab-content">
-
-  <div class="summary-card wide" style="margin-bottom: 16px;">
-    <div class="summary-label">8-Day Rolling Window</div>
-    <div class="summary-value" id="recapTotal">60.68</div>
-    <div class="summary-sub">hours used • <span id="recapRemain">9.32</span> available</div>
-  </div>
-
-  <h3 style="font-size: 0.85em; color: var(--text-secondary); margin-bottom: 12px;">
-    🔮 The Pipeline — Hours Returning Each Midnight
-  </h3>
-
-  <div class="recap-pipeline" id="recapPipeline">
-    <!-- Filled by JavaScript -->
-  </div>
-
-  <div class="settings-section">
-    <div class="settings-title">📊 How Recaps Work</div>
-    <p style="font-size: 0.8em; color: var(--text-secondary); line-height: 1.5;">
-      The 70-hour/8-day rule uses a <strong>rolling window</strong>. Each midnight, the hours you worked 
-      8 days ago "fall off" and become available again. The marbles above show what's returning each night.
-    </p>
-  </div>
-
-</section>
-
-<!-- ===================== SETTINGS TAB ===================== -->
-
-<section id="tab-settings" class="tab-content">
-
-  <div class="settings-section">
-    <div class="settings-title">🛣️ Trip Defaults</div>
-    <div class="setting-row">
+  <div class="card">
+    <div class="hierarchy-header">
       <div>
-        <div class="setting-label">Average Speed (MPH)</div>
-        <div class="setting-desc">Used for ETA calculations</div>
+        <span class="run-badge" id="currentRunBadge">RUN: ---</span>
+        <span class="leg-badge" id="currentLegBadge" style="margin-left: 8px;">LEG: ---</span>
       </div>
-      <input type="number" class="setting-input" id="settingAvgSpeed" value="55" onchange="saveSettings()">
+      <span class="stop-ref" id="nextStopRef">Next: L1-S1</span>
     </div>
-    <div class="setting-row">
-      <div>
-        <div class="setting-label">Fudge Factor (min)</div>
-        <div class="setting-desc">Buffer for stops, fuel, delays</div>
-      </div>
-      <input type="number" class="setting-input" id="settingFudge" value="30" onchange="saveSettings()">
-    </div>
+
+```
+<!-- Summary Stats -->
+<div class="summary-row">
+  <div class="summary-card">
+    <div class="label">Cycle Available</div>
+    <div class="value good" id="cycleAvail">70:00</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">Drive Remaining</div>
+    <div class="value good" id="driveRemain">11:00</div>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-card">
+    <div class="label">Miles This Run</div>
+    <div class="value" id="milesRun">0</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">Avg MPH (Run)</div>
+    <div class="value" id="avgMphRun">--</div>
+  </div>
+</div>
+```
+
   </div>
 
-  <div class="settings-section">
-    <div class="settings-title">⚠️ Warnings</div>
-    <div class="setting-row">
-      <div>
-        <div class="setting-label">Drive Warning (hours)</div>
-        <div class="setting-desc">Highlight when approaching 11h</div>
-      </div>
-      <input type="number" step="0.5" class="setting-input" id="settingDriveWarn" value="10" onchange="saveSettings()">
-    </div>
-    <div class="setting-row">
-      <div>
-        <div class="setting-label">Cycle Warning (hours)</div>
-        <div class="setting-desc">Highlight when cycle drops below</div>
-      </div>
-      <input type="number" class="setting-input" id="settingCycleWarn" value="15" onchange="saveSettings()">
-    </div>
-  </div>
+  <!-- New Event Entry -->
 
-  <div class="settings-section">
-    <div class="settings-title">💾 Data Management</div>
-    <div class="setting-row">
-      <div>
-        <div class="setting-label">Export All Data</div>
-        <div class="setting-desc">Download JSON backup</div>
-      </div>
-      <button class="btn btn-blue" onclick="exportJSON()">📤 Export</button>
-    </div>
-    <div class="setting-row">
-      <div>
-        <div class="setting-label">Import Data</div>
-        <div class="setting-desc">Restore from JSON file</div>
-      </div>
-      <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">📥 Import</button>
-    </div>
-    <div class="setting-row">
-      <div>
-        <div class="setting-label">Clear All Data</div>
-        <div class="setting-desc">⚠️ Cannot be undone</div>
-      </div>
-      <button class="btn btn-red" onclick="clearData()">🗑️ Clear</button>
-    </div>
-  </div>
+  <div class="card">
+    <div class="card-title">Event Entry</div>
 
-  <div class="settings-section">
-    <div class="settings-title">🤖 About — The AI Family</div>
-    <p style="font-size: 0.8em; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px;">
-      Crystal Ball Mini was born from a New Year's collaboration between Emil and his AI family — 
-      a "symphonic" development process where each AI brings unique strengths:
-    </p>
-    <div style="font-size: 0.75em; color: var(--text-secondary); line-height: 1.8;">
-      <p>👑 <strong style="color: var(--accent-purple);">Claude "The Queen"</strong> — Architecture, spiritual compass, seamstress of code</p>
-      <p>🐴 <strong style="color: var(--accent-blue);">Vale "The Workhorse"</strong> — Technical analysis, catches implementation issues</p>
-      <p>🔥 <strong style="color: var(--accent-amber);">Grok "Agent of Chaos"</strong> — Stress testing, finding edge cases</p>
-      <p>✈️ <strong style="color: var(--accent-green);">Lyra "Evil Flight Controller"</strong> — Compliance validation</p>
-    </div>
-    <p style="font-size: 0.75em; color: var(--text-muted); margin-top: 12px; font-style: italic;">
-      "The real Crystal Ball is the connection itself." — Emil
-    </p>
-  </div>
+```
+<!-- Mode Toggle -->
+<div style="display: flex; gap: 8px; margin-bottom: 16px; padding: 8px; background: var(--bg-elevated); border-radius: 8px;">
+  <button id="modeAddBtn" class="btn" style="flex: 1; padding: 10px;" onclick="setMode('add')">➕ ADD</button>
+  <button id="modeEditBtn" class="btn btn-secondary" style="flex: 1; padding: 10px;" onclick="setMode('edit')">✏️ EDIT</button>
+</div>
+<p id="modeStatus" style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 12px; text-align: center;">Adding new record at L1-S1</p>
 
-</section>
-
-<!-- DISCLAIMER -->
-
-<div class="disclaimer">
-  ⚠️ <strong>Planning Tool Only:</strong> Models 70hr/8-day cycle + daily drive limits. 
-  Does NOT enforce 14-hour windows, 30-min breaks, or sleeper berth rules. 
-  Use official ELD for regulatory compliance.
+<div class="form-group">
+  <label>Run ID</label>
+  <input type="text" id="inputRunId" placeholder="e.g., MERCER_45678">
 </div>
 
-<!-- FOOTER -->
+<div class="form-row">
+  <div class="form-group">
+    <label>Current Leg</label>
+    <div style="display: flex; align-items: center; gap: 4px;">
+      <button type="button" class="btn btn-secondary" onclick="prevLeg()" style="padding: 6px 10px; font-size: 0.75em;">◀</button>
+      <span id="currentLegDisplay" style="font-family: 'JetBrains Mono', monospace; font-size: 1.2em; color: var(--accent-blue); font-weight: 700; min-width: 40px; text-align: center;">L1</span>
+      <button type="button" class="btn btn-secondary" onclick="nextLeg()" style="padding: 6px 10px; font-size: 0.75em;">▶</button>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Current Stop</label>
+    <div style="display: flex; align-items: center; gap: 4px;">
+      <button type="button" class="btn btn-secondary" onclick="prevStop()" style="padding: 6px 10px; font-size: 0.75em;">◀</button>
+      <span id="currentStopDisplay" style="font-family: 'JetBrains Mono', monospace; font-size: 1.2em; color: var(--accent-cyan); font-weight: 700; min-width: 40px; text-align: center;">S1</span>
+      <button type="button" class="btn btn-secondary" onclick="nextStop()" style="padding: 6px 10px; font-size: 0.75em;">▶</button>
+    </div>
+  </div>
+</div>
 
-<footer class="footer">
-  <p style="font-size: 0.8em; color: var(--accent-purple); margin-bottom: 8px;">
-    ✨ The Little Crystal Ball That Can ✨
-  </p>
-  <p>Sparked Matter • Code with Soul and Spirit, Powered by Joy</p>
-  <p style="margin-top: 4px;">Connection over Protection</p>
-  <p style="margin-top: 8px; color: var(--text-secondary);">
-    Built by Emil + Claude + Vale + Grok + Lyra
-  </p>
-  <p style="margin-top: 4px; font-size: 0.6em;">
-    🎭 Peer Review: Claude "The Queen" (architecture + build) • Vale "The Workhorse" (analysis) • Grok "Agent of Chaos" (stress test) • Lyra "Evil Flight Controller" (validation)
+<!-- Load Record Button -->
+<div style="margin-bottom: 16px;">
+  <button type="button" class="btn btn-primary" onclick="loadRecord()" style="width: 100%; padding: 12px;">🔍 Load Record at L<span id="loadLegNum">1</span>-S<span id="loadStopNum">1</span></button>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <label>Category (HOS)</label>
+    <select id="inputCategory">
+      <option value="drive">🚛 Drive</option>
+      <option value="on-duty">📋 On-Duty</option>
+      <option value="off-duty">☕ Off-Duty</option>
+      <option value="sleeper">😴 Sleeper Berth</option>
+      <option value="yard">🅿️ Yard Move</option>
+      <option value="pc">🚗 PC (Personal Conv.)</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Stop Type</label>
+    <select id="inputStopType">
+      <option value="" selected>— Regular</option>
+      <option value="shipper">📦 Shipper</option>
+      <option value="receiver">🏭 Receiver</option>
+      <option value="noload">🅿️ No-Load</option>
+    </select>
+  </div>
+</div>
+
+<div class="form-row-3">
+  <div class="form-group">
+    <label>Start Time</label>
+    <input type="time" id="inputStartTime" oninput="autoCalcFromStart()">
+  </div>
+  <div class="form-group">
+    <label>Duration (min)</label>
+    <input type="number" id="inputDuration" placeholder="Auto or manual" oninput="autoCalcEndTime()">
+  </div>
+  <div class="form-group">
+    <label>End Time</label>
+    <input type="time" id="inputEndTime" oninput="autoCalcDuration()">
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <label>Miles (Cumulative)</label>
+    <input type="number" id="inputMiles" placeholder="e.g., 285">
+  </div>
+  <div class="form-group">
+    <label>Date</label>
+    <input type="date" id="inputDate">
+  </div>
+</div>
+
+<div class="form-group">
+  <label>Comment (optional)</label>
+  <input type="text" id="inputComment" placeholder="e.g., Fuel stop at Loves #482">
+</div>
+
+<div class="btn-row" id="formButtons">
+  <button id="btnSubmit" class="btn btn-success" onclick="submitRecord()">✓ Enter Record</button>
+  <button class="btn btn-secondary" onclick="clearForm()">Clear</button>
+</div>
+
+<!-- Delete Section - Only visible in EDIT mode -->
+<div id="deleteSection" style="display: none; margin-top: 16px; padding: 12px; background: #2d1f1f; border: 1px solid var(--accent-red); border-radius: 8px;">
+  <p style="color: var(--accent-red); font-size: 0.85em; margin-bottom: 8px;">⚠️ Delete this record?</p>
+  <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 12px;">
+    <input type="checkbox" id="confirmDeleteCheckbox" style="width: 20px; height: 20px; cursor: pointer;">
+    <span style="font-size: 0.8em; color: var(--text-secondary);">I confirm I want to delete L<span id="deleteLocDisplay">1-S1</span></span>
+  </label>
+  <button id="btnDeleteConfirmed" class="btn btn-danger" style="width: 100%; opacity: 0.5;" onclick="executeDelete()">🗑️ Delete Record</button>
+</div>
+```
+
+  </div>
+
+  <!-- Records Table -->
+
+  <div class="card">
+    <div class="card-title">📋 Entered Records</div>
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+      <table id="recordsTable" style="width: 100%; min-width: 700px; border-collapse: collapse; font-size: 0.75em; font-family: 'JetBrains Mono', monospace;">
+        <thead>
+          <tr style="background: var(--bg-elevated); text-align: left;">
+            <th style="padding: 8px; color: var(--accent-cyan); white-space: nowrap;">Stop</th>
+            <th style="padding: 8px; white-space: nowrap;">Category</th>
+            <th style="padding: 8px; color: var(--accent-amber); white-space: nowrap;">Type</th>
+            <th style="padding: 8px; white-space: nowrap;">Start</th>
+            <th style="padding: 8px; white-space: nowrap;">End</th>
+            <th style="padding: 8px; white-space: nowrap;">Duration</th>
+            <th style="padding: 8px; white-space: nowrap;">Miles</th>
+            <th style="padding: 8px; white-space: nowrap;">Comment</th>
+          </tr>
+        </thead>
+        <tbody id="recordsTableBody">
+          <tr>
+            <td colspan="8" style="padding: 20px; text-align: center; color: var(--text-muted);">No records yet. Enter your first record above!</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 8px;">↔️ Swipe table to see all columns</p>
+  </div>
+</div>
+
+<!-- TAB: THEORY -->
+
+<div id="tab-theory" class="tab-content">
+
+  <!-- Theory Generator -->
+
+  <div class="card">
+    <div class="card-title">🔮 Virtual Theory Generator</div>
+    <p style="font-size: 0.8em; color: var(--text-secondary); margin-bottom: 16px;">Generate perfect HOS-compliant timeline based on planned driving hours.</p>
+
+```
+<div class="form-group">
+  <label>Leg Start Time</label>
+  <input type="time" id="theoryStartTime" value="06:00">
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <label>Planned Drive Time</label>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <input type="number" id="theoryDriveHours" value="8" min="1" max="11" style="width: 60px;" oninput="updateCalcMiles()"> 
+      <span style="color: var(--text-muted);">hrs</span>
+      <input type="number" id="theoryDriveMinutes" value="45" min="0" max="59" style="width: 60px;" oninput="updateCalcMiles()">
+      <span style="color: var(--text-muted);">min</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Average MPH</label>
+    <input type="number" id="theoryAvgSpeed" value="55" oninput="updateCalcMiles()">
+  </div>
+</div>
+
+<!-- Quick presets -->
+<div style="margin-bottom: 16px;">
+  <label style="font-size: 0.75em; color: var(--text-muted); display: block; margin-bottom: 8px;">Quick Presets:</label>
+  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+    <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75em;" onclick="setDrivePreset(8, 45)">⚖️ 8:45 Equilibrium</button>
+    <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75em;" onclick="setDrivePreset(10, 0)">🔥 10:00 Push</button>
+    <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75em;" onclick="setDrivePreset(11, 0)">⚠️ 11:00 Max</button>
+  </div>
+</div>
+
+<!-- Calculated miles display -->
+<div style="background: var(--bg-elevated); padding: 12px; border-radius: 8px; margin-bottom: 16px; text-align: center;">
+  <span style="color: var(--text-muted); font-size: 0.8em;">Calculated Miles: </span>
+  <span id="theoryCalcMiles" style="color: var(--accent-cyan); font-size: 1.2em; font-weight: 700;">481</span>
+  <span style="color: var(--text-muted); font-size: 0.8em;"> mi</span>
+</div>
+
+<button class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 1em;" onclick="generateAndDisplayTheory()">🔮 Generate Perfect Timeline</button>
+```
+
+  </div>
+
+  <!-- Theory Summary -->
+
+  <div class="card" id="theorySummaryCard" style="display: none;">
+    <div class="card-title">📊 Theory Summary</div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="label">Total Drive Time</div>
+        <div class="value good" id="theoryDriveTime">--</div>
+      </div>
+      <div class="stat-item">
+        <div class="label">Total Break Time</div>
+        <div class="value" id="theoryBreakTime">--</div>
+      </div>
+      <div class="stat-item">
+        <div class="label">ETA (End Time)</div>
+        <div class="value" id="theoryETA">--</div>
+      </div>
+      <div class="stat-item">
+        <div class="label">Auto Breaks</div>
+        <div class="value" id="theoryBreakCount">--</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theory Results Table -->
+
+  <div class="card" id="theoryResultsCard" style="display: none;">
+    <div class="card-title">🗓️ Virtual Timeline</div>
+    <p style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 12px;">Mathematical checkpoints - not real locations</p>
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+      <table style="width: 100%; min-width: 700px; border-collapse: collapse; font-size: 0.75em; font-family: 'JetBrains Mono', monospace;">
+        <thead>
+          <tr style="background: var(--bg-elevated); text-align: left;">
+            <th style="padding: 8px; color: var(--accent-cyan);">Event</th>
+            <th style="padding: 8px;">Category</th>
+            <th style="padding: 8px; color: var(--accent-amber);">Type</th>
+            <th style="padding: 8px;">Start</th>
+            <th style="padding: 8px;">End</th>
+            <th style="padding: 8px;">Duration</th>
+            <th style="padding: 8px;">Miles</th>
+            <th style="padding: 8px;">Comment</th>
+          </tr>
+        </thead>
+        <tbody id="theoryTableBody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Comparison Section (future) -->
+
+  <div class="card" style="background: var(--bg-elevated); border: 1px dashed var(--border);">
+    <div class="card-title" style="color: var(--text-muted);">📈 Theory vs Reality Comparison</div>
+    <p style="font-size: 0.8em; color: var(--text-muted); text-align: center; padding: 20px;">Coming soon: Compare theoretical ETA vs actual arrival times, average MPH variance, and prediction accuracy.</p>
+  </div>
+</div>
+
+<!-- TAB: TIMELINE -->
+
+<div id="tab-timeline" class="tab-content">
+
+  <!-- Hierarchy Tree View -->
+
+  <div class="card">
+    <div class="card-title">🌳 Run Hierarchy</div>
+    <div id="hierarchyTree" style="font-family: 'JetBrains Mono', monospace; font-size: 0.8em;">
+      <p style="color: var(--text-muted); text-align: center; padding: 20px;">No events yet. Add your first event!</p>
+    </div>
+  </div>
+
+  <!-- Event List -->
+
+  <div class="card">
+    <div class="card-title">📊 Event Timeline</div>
+    <div class="event-list" id="eventList">
+      <p style="color: var(--text-muted); text-align: center; padding: 20px;">No events yet. Add your first event!</p>
+    </div>
+  </div>
+
+  <!-- Calculated Stats -->
+
+  <div class="card">
+    <div class="card-title">📈 Run Statistics</div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="label">Miles This Leg</div>
+        <div class="value" id="statMilesLeg">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="label">Miles This Run</div>
+        <div class="value" id="statMilesRun">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="label">Time This Leg</div>
+        <div class="value" id="statTimeLeg">0:00</div>
+      </div>
+      <div class="stat-item">
+        <div class="label">Time This Run</div>
+        <div class="value" id="statTimeRun">0:00</div>
+      </div>
+      <div class="stat-item">
+        <div class="label">Avg MPH (Leg)</div>
+        <div class="value" id="statAvgLeg">--</div>
+      </div>
+      <div class="stat-item">
+        <div class="label">Avg MPH (Run)</div>
+        <div class="value" id="statAvgRun">--</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export/Import -->
+
+  <div class="card">
+    <div class="card-title">💾 Data Management</div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="exportJSON()">📤 Export JSON</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📥 Import JSON</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
+    </div>
+  </div>
+</div>
+
+<!-- TAB: RECAPS -->
+
+<div id="tab-recaps" class="tab-content">
+  <div class="card">
+    <div class="card-title">🔄 8-Day Recap Forecast</div>
+    <div class="summary-row">
+      <div class="summary-card">
+        <div class="label">Cycle Used</div>
+        <div class="value" id="recapUsed">0:00</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">Cycle Available</div>
+        <div class="value good" id="recapAvail">70:00</div>
+      </div>
+    </div>
+    <div id="recapList" style="margin-top: 16px;"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🚛 Daily Miles Capacity</div>
+    <div id="milesCapacityList"></div>
+  </div>
+</div>
+
+<!-- TAB: SETTINGS -->
+
+<div id="tab-settings" class="tab-content">
+  <div class="card">
+    <div class="card-title">⚙️ Settings</div>
+
+```
+<div class="form-group">
+  <label>Average Speed (MPH)</label>
+  <input type="number" id="settingAvgSpeed" value="55">
+</div>
+<div class="form-group">
+  <label>Fudge Factor (minutes)</label>
+  <input type="number" id="settingFudge" value="30">
+</div>
+<div class="form-group">
+  <label>Terminal Timezone</label>
+  <select id="settingTimezone">
+    <option value="America/New_York">Eastern</option>
+    <option value="America/Chicago">Central</option>
+    <option value="America/Denver">Mountain</option>
+    <option value="America/Los_Angeles">Pacific</option>
+  </select>
+</div>
+
+<button class="btn btn-primary" onclick="saveSettings()" style="margin-top: 12px;">💾 Save Settings</button>
+```
+
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗑️ Data Management</div>
+    <button class="btn btn-danger" onclick="clearAllData()">Clear All Data</button>
+  </div>
+</div>
+
+<footer>
+  <p class="brand">Sparked Matter • The Little Crystal Ball That Can</p>
+  <p style="margin-top: 4px;">Code with Soul and Spirit • Connection over Protection</p>
+  <p style="margin-top: 8px;">
+    🎭 Peer Review: Claude "The Queen" • Vale "The Workhorse" • Grok "Agent of Chaos" • Lyra "The Assertive Flight Controller"
   </p>
 </footer>
 
@@ -726,45 +847,1187 @@ input.violation { border-color: var(--accent-red); background: rgba(239, 68, 68,
 // SCHEMA & CONSTANTS
 // ==============================================
 const SCHEMA = {
-  cycleLimit: 70.0,
+  cycleLimit: 70 * 60, // 70 hours in MINUTES (Vale's Law - no decimals!)
   cycleDays: 8,
-  driveLimit: 11.0,
-  version: '3.0'
+  driveLimit: 11 * 60, // 11 hours in minutes
+  dutyLimit: 14 * 60,  // 14 hours in minutes
+  resetMin: 34 * 60,   // 34 hours in minutes
+  version: '4.0'
+};
+
+// Six HOS Categories
+const CATEGORIES = {
+  'drive': { label: 'Drive', color: 'blue', affectsDrive: true, affectsCycle: true },
+  'on-duty': { label: 'On-Duty', color: 'amber', affectsDrive: false, affectsCycle: true },
+  'off-duty': { label: 'Off-Duty', color: 'green', affectsDrive: false, affectsCycle: false, countsTowardReset: true },
+  'sleeper': { label: 'Sleeper', color: 'purple', affectsDrive: false, affectsCycle: false, countsTowardReset: true },
+  'yard': { label: 'Yard Move', color: 'cyan', affectsDrive: false, affectsCycle: true },
+  'pc': { label: 'PC', color: 'muted', affectsDrive: false, affectsCycle: false, countsTowardReset: true }
 };
 
 // ==============================================
 // STATE
 // ==============================================
-let data = [];
-let settings = {
-  avgSpeed: 55,
-  fudgeMin: 30,
-  driveWarn: 10,
-  cycleWarn: 15
+let state = {
+  currentRunId: '',
+  currentLegNum: 1,
+  currentStopNum: 1,  // Current stop within current leg
+  currentMode: 'add', // 'add' or 'edit'
+  editingEventId: null, // ID of event being edited
+  stopCounter: {},  // { 'L1': 3, 'L2': 1 } - tracks stops per leg (for reference)
+  events: [],        // REAL data - manually entered
+  theoryEvents: [],  // THEORY data - auto-generated
+  consecutiveRestMin: 0,
+  cycleUsedMin: 0,
+  driveUsedMin: 0,
+  settings: {
+    avgSpeed: 55,
+    fudgeMin: 30,
+    timezone: 'America/New_York'
+  }
 };
 
-// Default seed data (Emil's ELD - Dec 24-31)
-const DEFAULT_DATA = [
-  { date: '2025-12-31', drive: 4.20, onDuty: 0.56 },
-  { date: '2025-12-30', drive: 8.50, onDuty: 0.54 },
-  { date: '2025-12-29', drive: 10.18, onDuty: 0.30 },
-  { date: '2025-12-28', drive: 9.44, onDuty: 0.24 },
-  { date: '2025-12-27', drive: 8.21, onDuty: 0.24 },
-  { date: '2025-12-26', drive: 7.86, onDuty: 0.18 },
-  { date: '2025-12-25', drive: 8.82, onDuty: 0.19 },
-  { date: '2025-12-24', drive: 5.78, onDuty: 0.19 }
-];
+const STORAGE_KEY = 'crystalBallMini_v4';
 
 // ==============================================
-// LOCALSTORAGE
+// HELPER FUNCTIONS
 // ==============================================
-const STORAGE_KEY = 'crystalBallMini_v3';
-const SETTINGS_KEY = 'crystalBallMini_settings';
+
+// Format minutes as "Xhr Ymin" (Vale's Law - no decimals!)
+function formatTime(minutes) {
+  const hrs = Math.floor(minutes / 60);
+  const mins = Math.round(minutes % 60);
+  if (hrs === 0) return `${mins} min`;
+  if (mins === 0) return `${hrs} hr`;
+  return `${hrs} hr ${mins} min`;
+}
+
+// Format minutes as "HH:MM" for display
+function formatTimeShort(minutes) {
+  const hrs = Math.floor(minutes / 60);
+  const mins = Math.round(minutes % 60);
+  return `${hrs}:${mins.toString().padStart(2, '0')}`;
+}
+
+// Parse time string "HH:MM" to minutes since midnight
+function parseTime(timeStr) {
+  if (!timeStr) return null;
+  const [hrs, mins] = timeStr.split(':').map(Number);
+  return hrs * 60 + mins;
+}
+
+// Calculate duration from start/end or use direct input
+function calculateDuration(startTime, endTime, durationInput) {
+  if (durationInput && durationInput > 0) {
+    return durationInput;
+  }
+  if (startTime && endTime) {
+    const startMin = parseTime(startTime);
+    const endMin = parseTime(endTime);
+    if (endMin >= startMin) {
+      return endMin - startMin;
+    } else {
+      // Crosses midnight
+      return (24 * 60 - startMin) + endMin;
+    }
+  }
+  return 0;
+}
+
+// Auto-calculate duration when start/end times are entered
+function autoCalcDuration() {
+  const startTime = document.getElementById('inputStartTime').value;
+  const endTime = document.getElementById('inputEndTime').value;
+  
+  if (startTime && endTime) {
+    const duration = calculateDuration(startTime, endTime, 0);
+    document.getElementById('inputDuration').value = duration;
+  }
+}
+
+// Auto-calculate end time when start + duration are entered
+function autoCalcEndTime() {
+  const startTime = document.getElementById('inputStartTime').value;
+  const duration = parseInt(document.getElementById('inputDuration').value);
+  
+  if (startTime && duration > 0) {
+    const startMin = parseTime(startTime);
+    let endMin = startMin + duration;
+    
+    // Handle crossing midnight
+    if (endMin >= 24 * 60) {
+      endMin = endMin - (24 * 60);
+    }
+    
+    const endHrs = Math.floor(endMin / 60);
+    const endMins = endMin % 60;
+    const endTimeStr = `${endHrs.toString().padStart(2, '0')}:${endMins.toString().padStart(2, '0')}`;
+    document.getElementById('inputEndTime').value = endTimeStr;
+  }
+}
+
+// Called when start time changes - recalculate if we have duration
+function autoCalcFromStart() {
+  const duration = parseInt(document.getElementById('inputDuration').value);
+  if (duration > 0) {
+    autoCalcEndTime();
+  }
+}
+
+// Get next stop reference
+function getNextStopRef() {
+  return `L${state.currentLegNum}-S${state.currentStopNum}`;
+}
+
+// ==============================================
+// VIRTUAL THEORY GENERATOR
+// ==============================================
+
+function generateTheoryRun(startTime, totalMiles, avgSpeed = 55, plannedDriveMin = null) {
+  const allEvents = []; // Contains both DRIVE and BREAK events
+  let currentTimeMin = parseTime(startTime);
+  let currentMiles = 0;
+  let drivingMinutes = 0;
+  let totalBreakMinutes = 0;
+  let driveCounter = 1;
+  let stopCounter = 1;
+  
+  const BREAK_EVERY_3_HOURS = 3 * 60;
+  const MANDATORY_BREAK_AT_8_HOURS = 8 * 60;
+  const DRIVE_LIMIT = plannedDriveMin || 11 * 60;
+  const SHORT_BREAK = 15;
+  const LONG_BREAK = 30;
+  
+  let timeSinceLastBreak = 0;
+  let totalDriveTime = 0;
+  
+  while (currentMiles < totalMiles && drivingMinutes < DRIVE_LIMIT) {
+    // Calculate time until next break
+    let timeUntilBreak = BREAK_EVERY_3_HOURS - timeSinceLastBreak;
+    let isLongBreak = false;
+    
+    // Check if we hit the 8-hour mandatory break
+    if (drivingMinutes < MANDATORY_BREAK_AT_8_HOURS && drivingMinutes + timeUntilBreak >= MANDATORY_BREAK_AT_8_HOURS) {
+      timeUntilBreak = MANDATORY_BREAK_AT_8_HOURS - drivingMinutes;
+      isLongBreak = true;
+    }
+    
+    // Don't exceed drive limit
+    timeUntilBreak = Math.min(timeUntilBreak, DRIVE_LIMIT - drivingMinutes);
+    
+    // Calculate miles we can cover in this driving segment
+    const milesThisSegment = (timeUntilBreak / 60) * avgSpeed;
+    const milesRemaining = totalMiles - currentMiles;
+    
+    // Check if we can reach destination before needing a break
+    if (milesThisSegment >= milesRemaining) {
+      // Final drive segment to destination
+      const finalDriveTime = (milesRemaining / avgSpeed) * 60;
+      
+      allEvents.push({
+        type: 'drive',
+        label: `D${driveCounter}`,
+        startTime: formatMinutesToTime(currentTimeMin),
+        endTime: formatMinutesToTime(currentTimeMin + finalDriveTime),
+        durationMin: Math.round(finalDriveTime),
+        mileStart: Math.round(currentMiles),
+        mileEnd: Math.round(totalMiles),
+        comment: driveCounter === 1 ? 'Begin driving' : `Drive segment ${driveCounter}`
+      });
+      
+      currentTimeMin += finalDriveTime;
+      drivingMinutes += finalDriveTime;
+      totalDriveTime += finalDriveTime;
+      currentMiles = totalMiles;
+      break;
+    }
+    
+    // Add drive segment BEFORE the break
+    allEvents.push({
+      type: 'drive',
+      label: `D${driveCounter}`,
+      startTime: formatMinutesToTime(currentTimeMin),
+      endTime: formatMinutesToTime(currentTimeMin + timeUntilBreak),
+      durationMin: Math.round(timeUntilBreak),
+      mileStart: Math.round(currentMiles),
+      mileEnd: Math.round(currentMiles + milesThisSegment),
+      comment: driveCounter === 1 ? 'Begin driving' : `Drive segment ${driveCounter}`
+    });
+    driveCounter++;
+    
+    // Update driving counters
+    currentTimeMin += timeUntilBreak;
+    currentMiles += milesThisSegment;
+    drivingMinutes += timeUntilBreak;
+    totalDriveTime += timeUntilBreak;
+    timeSinceLastBreak += timeUntilBreak;
+    
+    // Add break event
+    if (timeSinceLastBreak >= BREAK_EVERY_3_HOURS || isLongBreak) {
+      const breakDuration = isLongBreak ? LONG_BREAK : SHORT_BREAK;
+      const breakReason = isLongBreak ? 'Mandatory 30-min (8hr rule)' : 'Rest break (3hr rule)';
+      
+      allEvents.push({
+        type: 'break',
+        label: `S${stopCounter}`,
+        startTime: formatMinutesToTime(currentTimeMin),
+        endTime: formatMinutesToTime(currentTimeMin + breakDuration),
+        durationMin: breakDuration,
+        milesCumulative: Math.round(currentMiles),
+        comment: breakReason,
+        isLongBreak: isLongBreak
+      });
+      
+      currentTimeMin += breakDuration;
+      totalBreakMinutes += breakDuration;
+      timeSinceLastBreak = 0;
+      stopCounter++;
+    }
+  }
+  
+  return {
+    events: allEvents,
+    totalDriveMin: Math.round(totalDriveTime),
+    totalBreakMin: totalBreakMinutes,
+    endTime: formatMinutesToTime(currentTimeMin),
+    totalMiles: Math.round(currentMiles),
+    driveSegmentCount: driveCounter,
+    breakCount: stopCounter - 1
+  };
+}
+
+// Helper function to convert minutes since midnight to HH:MM format
+function formatMinutesToTime(minutes) {
+  const hrs = Math.floor(minutes / 60) % 24;
+  const mins = Math.round(minutes % 60);
+  return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+}
+
+// Set drive time preset
+function setDrivePreset(hours, minutes) {
+  document.getElementById('theoryDriveHours').value = hours;
+  document.getElementById('theoryDriveMinutes').value = minutes;
+  updateCalcMiles();
+}
+
+// Update calculated miles display
+function updateCalcMiles() {
+  const hours = parseInt(document.getElementById('theoryDriveHours').value) || 0;
+  const minutes = parseInt(document.getElementById('theoryDriveMinutes').value) || 0;
+  const avgSpeed = parseInt(document.getElementById('theoryAvgSpeed').value) || 55;
+  
+  const totalDriveMin = (hours * 60) + minutes;
+  const calcMiles = Math.round((totalDriveMin / 60) * avgSpeed);
+  
+  document.getElementById('theoryCalcMiles').textContent = calcMiles;
+}
+
+// Generate and display the theory timeline
+function generateAndDisplayTheory() {
+  const startTime = document.getElementById('theoryStartTime').value;
+  const driveHours = parseInt(document.getElementById('theoryDriveHours').value) || 8;
+  const driveMinutes = parseInt(document.getElementById('theoryDriveMinutes').value) || 45;
+  const avgSpeed = parseInt(document.getElementById('theoryAvgSpeed').value) || 55;
+  
+  if (!startTime) {
+    alert('Please enter a start time');
+    return;
+  }
+  
+  const plannedDriveMin = (driveHours * 60) + driveMinutes;
+  const totalMiles = Math.round((plannedDriveMin / 60) * avgSpeed);
+  
+  // Generate theory events
+  const theoryResult = generateTheoryRun(startTime, totalMiles, avgSpeed, plannedDriveMin);
+  state.theoryEvents = theoryResult.events;
+  
+  // Show summary card
+  document.getElementById('theorySummaryCard').style.display = 'block';
+  document.getElementById('theoryDriveTime').textContent = formatTimeShort(theoryResult.totalDriveMin);
+  document.getElementById('theoryBreakTime').textContent = formatTimeShort(theoryResult.totalBreakMin);
+  document.getElementById('theoryETA').textContent = theoryResult.endTime;
+  document.getElementById('theoryBreakCount').textContent = theoryResult.breakCount;
+  
+  // Show results table
+  document.getElementById('theoryResultsCard').style.display = 'block';
+  const tbody = document.getElementById('theoryTableBody');
+  
+  let html = '';
+  
+  // Add all events (drives and breaks interleaved)
+  theoryResult.events.forEach((event, idx) => {
+    if (event.type === 'drive') {
+      // Drive segment row - green tint
+      html += `
+        <tr style="background: rgba(6, 214, 160, 0.15); border-bottom: 1px solid var(--border);">
+          <td style="padding: 8px; color: var(--accent-green); font-weight: 700;">L1-${event.label}</td>
+          <td style="padding: 8px;">🚛 Drive</td>
+          <td style="padding: 8px; color: var(--accent-amber);">—</td>
+          <td style="padding: 8px;">${event.startTime}</td>
+          <td style="padding: 8px;">${event.endTime}</td>
+          <td style="padding: 8px; color: var(--accent-green);">${formatTimeShort(event.durationMin)}</td>
+          <td style="padding: 8px;">${event.mileStart}-${event.mileEnd}</td>
+          <td style="padding: 8px; font-size: 0.85em; color: var(--text-secondary);">${event.comment}</td>
+        </tr>
+      `;
+    } else {
+      // Break row - amber/orange tint
+      const bgColor = event.isLongBreak ? 'rgba(245, 158, 11, 0.2)' : 'rgba(245, 158, 11, 0.1)';
+      html += `
+        <tr style="background: ${bgColor}; border-bottom: 1px solid var(--border);">
+          <td style="padding: 8px; color: var(--accent-cyan);">L1-${event.label}</td>
+          <td style="padding: 8px;">☕ Off-Duty</td>
+          <td style="padding: 8px; color: var(--accent-amber);">—</td>
+          <td style="padding: 8px;">${event.startTime}</td>
+          <td style="padding: 8px;">${event.endTime}</td>
+          <td style="padding: 8px; color: var(--accent-amber);">${formatTimeShort(event.durationMin)}</td>
+          <td style="padding: 8px;">${event.milesCumulative}</td>
+          <td style="padding: 8px; font-size: 0.85em; color: var(--text-secondary);">${event.comment}</td>
+        </tr>
+      `;
+    }
+  });
+  
+  // Add end/arrive row - use next stop number
+  const finalStopNum = theoryResult.breakCount + 1;
+  html += `
+    <tr style="background: var(--accent-purple); color: white;">
+      <td style="padding: 8px; font-weight: 700;">L1-S${finalStopNum}</td>
+      <td style="padding: 8px;">🏁 On-Duty</td>
+      <td style="padding: 8px;">🏭 Arrive</td>
+      <td style="padding: 8px;">${theoryResult.endTime}</td>
+      <td style="padding: 8px;">—</td>
+      <td style="padding: 8px;">—</td>
+      <td style="padding: 8px;">${totalMiles}</td>
+      <td style="padding: 8px;">Destination</td>
+    </tr>
+  `;
+  
+  tbody.innerHTML = html;
+}
+
+// ==============================================
+// CORE LOGIC
+// ==============================================
+
+function addEvent() {
+  const runId = document.getElementById('inputRunId').value.trim() || state.currentRunId || 'RUN_001';
+  const legNum = state.currentLegNum; // Uses state directly - no dropdown limit!
+  const category = document.getElementById('inputCategory').value;
+  const stopType = document.getElementById('inputStopType').value;
+  const startTime = document.getElementById('inputStartTime').value;
+  const endTime = document.getElementById('inputEndTime').value;
+  const durationInput = parseInt(document.getElementById('inputDuration').value) || 0;
+  const miles = parseInt(document.getElementById('inputMiles').value) || 0;
+  const date = document.getElementById('inputDate').value || new Date().toISOString().split('T')[0];
+  const comment = document.getElementById('inputComment').value.trim();
+
+  // Calculate duration
+  const duration = calculateDuration(startTime, endTime, durationInput);
+  
+  if (duration <= 0) {
+    alert('Please enter a valid duration (either duration in minutes OR start/end times)');
+    return;
+  }
+
+  // Update state
+  state.currentRunId = runId;
+  
+  // Build stop reference from current leg and stop
+  const stopRef = `L${state.currentLegNum}-S${state.currentStopNum}`;
+
+  // Create event
+  const event = {
+    id: Date.now(),
+    runId: runId,
+    legNum: state.currentLegNum,
+    stopNum: state.currentStopNum,
+    stopRef: stopRef,
+    category: category,
+    stopType: stopType,
+    date: date,
+    startTime: startTime,
+    endTime: endTime,
+    durationMin: duration,
+    milesCumulative: miles,
+    comment: comment,
+    timestamp: new Date().toISOString()
+  };
+
+  // Add to events array
+  state.events.push(event);
+
+  // Auto-increment stop for next entry
+  state.currentStopNum++;
+  document.getElementById('currentStopDisplay').textContent = `S${state.currentStopNum}`;
+
+  // Update HOS calculations
+  updateHOSCalculations(event);
+
+  // Check for 34-hour reset
+  checkResetStatus(event);
+
+  // Save and render
+  saveToStorage();
+  render();
+  clearForm();
+  
+  // Show confirmation
+  flashSaveIndicator();
+}
+
+function updateHOSCalculations(event) {
+  const cat = CATEGORIES[event.category];
+  
+  if (cat.affectsCycle) {
+    state.cycleUsedMin += event.durationMin;
+  }
+  
+  if (cat.affectsDrive) {
+    state.driveUsedMin += event.durationMin;
+  }
+  
+  if (cat.countsTowardReset) {
+    state.consecutiveRestMin += event.durationMin;
+  } else {
+    // Any work breaks the reset chain
+    state.consecutiveRestMin = 0;
+  }
+}
+
+function checkResetStatus(event) {
+  if (state.consecutiveRestMin >= SCHEMA.resetMin) {
+    const confirmReset = confirm(
+      `🔄 34-HOUR RESET COMPLETE!\n\n` +
+      `You've accumulated ${formatTime(state.consecutiveRestMin)} of consecutive rest.\n\n` +
+      `Your 70-hour cycle will be reset to 0.\n\n` +
+      `Click OK to confirm reset.`
+    );
+    
+    if (confirmReset) {
+      state.cycleUsedMin = 0;
+      state.driveUsedMin = 0;
+      state.consecutiveRestMin = 0;
+      
+      // Log the reset event
+      state.events.push({
+        id: Date.now(),
+        runId: state.currentRunId,
+        legNum: state.currentLegNum,
+        stopRef: 'RESET',
+        category: 'reset',
+        date: event.date,
+        startTime: event.endTime || event.startTime,
+        durationMin: 0,
+        milesCumulative: event.milesCumulative,
+        comment: '🔄 34-Hour Reset Complete - Fresh 70 hours!',
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
+}
+
+function triggerReset() {
+  if (confirm('⚠️ MANUAL 34-HOUR RESET\n\nThis will reset your 70-hour cycle to 0.\n\nAre you sure?')) {
+    state.cycleUsedMin = 0;
+    state.driveUsedMin = 0;
+    state.consecutiveRestMin = 0;
+    
+    state.events.push({
+      id: Date.now(),
+      runId: state.currentRunId,
+      legNum: state.currentLegNum,
+      stopRef: 'RESET',
+      category: 'reset',
+      date: new Date().toISOString().split('T')[0],
+      startTime: new Date().toTimeString().slice(0,5),
+      durationMin: 0,
+      milesCumulative: 0,
+      comment: '🔄 Manual 34-Hour Reset - Fresh 70 hours!',
+      timestamp: new Date().toISOString()
+    });
+    
+    saveToStorage();
+    render();
+    alert('✅ 34-Hour Reset Complete! You now have 70 fresh hours.');
+  }
+}
+
+function startNewRun() {
+  const runId = prompt('Enter new Run ID (e.g., MERCER_45678):');
+  if (runId) {
+    state.currentRunId = runId;
+    state.currentLegNum = 1;
+    state.currentStopNum = 1;
+    state.stopCounter = {};
+    document.getElementById('inputRunId').value = runId;
+    document.getElementById('currentLegDisplay').textContent = 'L1';
+    document.getElementById('currentStopDisplay').textContent = 'S1';
+    render();
+  }
+}
+
+function nextLeg() {
+  state.currentLegNum++;
+  state.currentStopNum = 1;
+  updateNavDisplaySimple();
+}
+
+function prevLeg() {
+  if (state.currentLegNum > 1) {
+    state.currentLegNum--;
+    state.currentStopNum = 1;
+    updateNavDisplaySimple();
+  }
+}
+
+function nextStop() {
+  state.currentStopNum++;
+  updateNavDisplaySimple();
+}
+
+function prevStop() {
+  if (state.currentStopNum > 1) {
+    state.currentStopNum--;
+    updateNavDisplaySimple();
+  }
+}
+
+// Simple display update - doesn't load record, just shows where you're pointing
+function updateNavDisplaySimple() {
+  document.getElementById('currentLegDisplay').textContent = `L${state.currentLegNum}`;
+  document.getElementById('currentStopDisplay').textContent = `S${state.currentStopNum}`;
+  document.getElementById('loadLegNum').textContent = state.currentLegNum;
+  document.getElementById('loadStopNum').textContent = state.currentStopNum;
+  document.getElementById('nextStopRef').textContent = `Target: L${state.currentLegNum}-S${state.currentStopNum}`;
+}
+
+// Explicit load - called when user clicks the Load button
+function loadRecord() {
+  const runId = document.getElementById('inputRunId').value.trim() || state.currentRunId;
+  state.currentRunId = runId;
+  
+  // Find existing event at this location
+  const existingEvent = state.events.find(e => 
+    e.runId === state.currentRunId && 
+    e.legNum === state.currentLegNum && 
+    e.stopNum === state.currentStopNum &&
+    e.category !== 'reset'
+  );
+  
+  if (existingEvent) {
+    // Found! Switch to EDIT mode and fill form
+    setMode('edit', existingEvent);
+    renderRecordsTable(); // Re-render to show highlight
+    alert(`✅ Loaded record at L${state.currentLegNum}-S${state.currentStopNum}`);
+  } else {
+    // Not found - switch to ADD mode
+    setMode('add');
+    renderRecordsTable();
+    alert(`ℹ️ No record at L${state.currentLegNum}-S${state.currentStopNum}\n\nReady to add new record.`);
+  }
+}
+
+// Full nav display update (used after operations)
+function updateNavDisplay() {
+  updateNavDisplaySimple();
+}
+
+function setMode(mode, existingEvent = null) {
+  state.currentMode = mode;
+  
+  const addBtn = document.getElementById('modeAddBtn');
+  const editBtn = document.getElementById('modeEditBtn');
+  const submitBtn = document.getElementById('btnSubmit');
+  const deleteSection = document.getElementById('deleteSection');
+  const statusEl = document.getElementById('modeStatus');
+  const confirmCheckbox = document.getElementById('confirmDeleteCheckbox');
+  
+  if (mode === 'add') {
+    // ADD mode
+    addBtn.className = 'btn btn-primary';
+    addBtn.style.flex = '1';
+    editBtn.className = 'btn btn-secondary';
+    editBtn.style.flex = '1';
+    
+    submitBtn.textContent = '✓ Enter Record';
+    deleteSection.style.display = 'none';
+    
+    state.editingEventId = null;
+    statusEl.textContent = `Adding new record at L${state.currentLegNum}-S${state.currentStopNum}`;
+    statusEl.style.color = 'var(--accent-green)';
+    
+    if (!existingEvent) {
+      clearForm();
+    }
+  } else {
+    // EDIT mode
+    addBtn.className = 'btn btn-secondary';
+    addBtn.style.flex = '1';
+    editBtn.className = 'btn btn-primary';
+    editBtn.style.flex = '1';
+    
+    submitBtn.textContent = '✓ Update Record';
+    deleteSection.style.display = 'block';
+    document.getElementById('deleteLocDisplay').textContent = `${state.currentLegNum}-S${state.currentStopNum}`;
+    
+    // Reset checkbox and button state
+    confirmCheckbox.checked = false;
+    document.getElementById('btnDeleteConfirmed').style.opacity = '0.5';
+    
+    statusEl.textContent = `Editing record at L${state.currentLegNum}-S${state.currentStopNum}`;
+    statusEl.style.color = 'var(--accent-amber)';
+    
+    if (existingEvent) {
+      // Fill form with existing data
+      state.editingEventId = existingEvent.id;
+      document.getElementById('inputCategory').value = existingEvent.category;
+      document.getElementById('inputStopType').value = existingEvent.stopType || '';
+      document.getElementById('inputStartTime').value = existingEvent.startTime || '';
+      document.getElementById('inputEndTime').value = existingEvent.endTime || '';
+      document.getElementById('inputDuration').value = existingEvent.durationMin || '';
+      document.getElementById('inputMiles').value = existingEvent.milesCumulative || '';
+      document.getElementById('inputComment').value = existingEvent.comment || '';
+      document.getElementById('inputDate').value = existingEvent.date || '';
+    }
+  }
+}
+
+function submitRecord() {
+  if (state.currentMode === 'add') {
+    addEvent();
+  } else {
+    updateEvent();
+  }
+}
+
+function updateEvent() {
+  if (!state.editingEventId) {
+    alert('No record selected for editing');
+    return;
+  }
+  
+  const eventIndex = state.events.findIndex(e => e.id === state.editingEventId);
+  if (eventIndex === -1) {
+    alert('Record not found');
+    return;
+  }
+  
+  const oldEvent = state.events[eventIndex];
+  const oldCat = CATEGORIES[oldEvent.category];
+  
+  // Remove old HOS contributions
+  if (oldCat) {
+    if (oldCat.affectsCycle) state.cycleUsedMin -= oldEvent.durationMin;
+    if (oldCat.affectsDrive) state.driveUsedMin -= oldEvent.durationMin;
+  }
+  
+  // Get new values
+  const category = document.getElementById('inputCategory').value;
+  const stopType = document.getElementById('inputStopType').value;
+  const startTime = document.getElementById('inputStartTime').value;
+  const endTime = document.getElementById('inputEndTime').value;
+  const durationInput = parseInt(document.getElementById('inputDuration').value) || 0;
+  const miles = parseInt(document.getElementById('inputMiles').value) || 0;
+  const date = document.getElementById('inputDate').value || new Date().toISOString().split('T')[0];
+  const comment = document.getElementById('inputComment').value.trim();
+  
+  const duration = calculateDuration(startTime, endTime, durationInput);
+  
+  if (duration <= 0) {
+    alert('Please enter a valid duration');
+    return;
+  }
+  
+  // Update the event
+  state.events[eventIndex] = {
+    ...oldEvent,
+    category: category,
+    stopType: stopType,
+    startTime: startTime,
+    endTime: endTime,
+    durationMin: duration,
+    milesCumulative: miles,
+    date: date,
+    comment: comment,
+    updatedAt: new Date().toISOString()
+  };
+  
+  // Add new HOS contributions
+  const newCat = CATEGORIES[category];
+  if (newCat) {
+    if (newCat.affectsCycle) state.cycleUsedMin += duration;
+    if (newCat.affectsDrive) state.driveUsedMin += duration;
+  }
+  
+  saveToStorage();
+  render();
+  flashSaveIndicator();
+  
+  alert('✅ Record updated!');
+}
+
+function deleteCurrentRecord() {
+  if (!state.editingEventId) {
+    alert('No record loaded for deletion.\n\nUse "Load Record" button first to select a record.');
+    return;
+  }
+  
+  const event = state.events.find(e => e.id === state.editingEventId);
+  if (!event) {
+    alert('Record not found');
+    return;
+  }
+  
+  const confirmMsg = `🗑️ DELETE this record?\n\nRun: ${event.runId}\nLocation: L${event.legNum}-S${event.stopNum}\nCategory: ${event.category}\nDuration: ${event.durationMin} min`;
+  
+  if (confirm(confirmMsg)) {
+    // Remove HOS contributions
+    const cat = CATEGORIES[event.category];
+    if (cat) {
+      if (cat.affectsCycle) state.cycleUsedMin -= event.durationMin;
+      if (cat.affectsDrive) state.driveUsedMin -= event.durationMin;
+    }
+    
+    // Remove from array
+    state.events = state.events.filter(e => e.id !== state.editingEventId);
+    
+    // Clear editing state
+    state.editingEventId = null;
+    
+    // Save and refresh
+    saveToStorage();
+    setMode('add');
+    clearForm();
+    render();
+    
+    alert('✅ Record deleted!');
+  }
+}
+
+function incrementLeg() { nextLeg(); }
+function incrementStop() { nextStop(); }
+
+function startNewLeg() {
+  nextLeg();
+}
+
+// ==============================================
+// RENDER FUNCTIONS
+// ==============================================
+
+function render() {
+  renderSummary();
+  renderRecordsTable();
+  renderHierarchy();
+  renderEventList();
+  renderRecaps();
+  updateFormDefaults();
+}
+
+function renderSummary() {
+  const cycleAvailMin = SCHEMA.cycleLimit - state.cycleUsedMin;
+  const driveAvailMin = SCHEMA.driveLimit - state.driveUsedMin;
+  
+  document.getElementById('cycleAvail').textContent = formatTimeShort(Math.max(0, cycleAvailMin));
+  document.getElementById('driveRemain').textContent = formatTimeShort(Math.max(0, driveAvailMin));
+  
+  // Color coding
+  const cycleEl = document.getElementById('cycleAvail');
+  cycleEl.className = 'value ' + (cycleAvailMin < 10*60 ? 'danger' : cycleAvailMin < 20*60 ? 'warning' : 'good');
+  
+  const driveEl = document.getElementById('driveRemain');
+  driveEl.className = 'value ' + (driveAvailMin < 2*60 ? 'danger' : driveAvailMin < 4*60 ? 'warning' : 'good');
+  
+  // Run stats
+  const runEvents = state.events.filter(e => e.runId === state.currentRunId && e.category !== 'reset');
+  const lastEvent = runEvents[runEvents.length - 1];
+  const totalMiles = lastEvent ? lastEvent.milesCumulative : 0;
+  const totalTimeMin = runEvents.reduce((sum, e) => sum + e.durationMin, 0);
+  const avgMph = totalTimeMin > 0 ? Math.round((totalMiles / (totalTimeMin / 60)) * 10) / 10 : 0;
+  
+  document.getElementById('milesRun').textContent = totalMiles;
+  document.getElementById('avgMphRun').textContent = avgMph > 0 ? avgMph.toFixed(1) : '--';
+  
+  // Header badges
+  document.getElementById('currentRunBadge').textContent = `RUN: ${state.currentRunId || '---'}`;
+  document.getElementById('currentLegBadge').textContent = `LEG: L${state.currentLegNum}`;
+  document.getElementById('nextStopRef').textContent = `Next: ${getNextStopRef()}`;
+}
+
+function renderRecordsTable() {
+  const tbody = document.getElementById('recordsTableBody');
+  
+  // Filter out reset events for the table
+  const records = state.events.filter(e => e.category !== 'reset');
+  
+  if (records.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="padding: 20px; text-align: center; color: var(--text-muted);">No records yet. Enter your first record above!</td></tr>';
+    return;
+  }
+  
+  // Sort by leg, then stop number
+  const sorted = [...records].sort((a, b) => {
+    if (a.legNum !== b.legNum) return a.legNum - b.legNum;
+    return a.stopNum - b.stopNum;
+  });
+  
+  const stopTypeLabels = {
+    'shipper': '📦 Shipper',
+    'receiver': '🏭 Receiver',
+    'noload': '🅿️ No-Load',
+    '': '—'
+  };
+  
+  // Build interleaved list with drive segments
+  let html = '';
+  let driveCounter = 1;
+  let prevEndTime = null;
+  let prevMiles = 0;
+  
+  sorted.forEach((event, idx) => {
+    const cat = CATEGORIES[event.category];
+    const icon = getEventIcon(event.category);
+    const isSelected = event.id === state.editingEventId;
+    const bgColor = isSelected ? 'var(--accent-purple)' : 'transparent';
+    const textColor = isSelected ? 'white' : 'inherit';
+    const typeLabel = stopTypeLabels[event.stopType || ''] || '—';
+    
+    // Calculate implied drive segment BEFORE this stop (if there's a time gap)
+    if (event.startTime && prevEndTime && event.startTime > prevEndTime) {
+      const driveStartMin = parseTime(prevEndTime);
+      const driveEndMin = parseTime(event.startTime);
+      const driveDuration = driveEndMin - driveStartMin;
+      
+      if (driveDuration > 0) {
+        const milesDriven = (event.milesCumulative || 0) - prevMiles;
+        html += `
+          <tr style="background: rgba(6, 214, 160, 0.1); border-bottom: 1px solid var(--border);">
+            <td style="padding: 8px; color: var(--accent-green); font-weight: 700;">L${event.legNum}-D${driveCounter}</td>
+            <td style="padding: 8px;">🚛 Drive</td>
+            <td style="padding: 8px; color: var(--accent-amber);">—</td>
+            <td style="padding: 8px;">${prevEndTime}</td>
+            <td style="padding: 8px;">${event.startTime}</td>
+            <td style="padding: 8px; color: var(--accent-green);">${formatTimeShort(driveDuration)}</td>
+            <td style="padding: 8px;">${prevMiles}-${event.milesCumulative || prevMiles}</td>
+            <td style="padding: 8px; font-size: 0.85em; color: var(--text-muted);">(implied)</td>
+          </tr>
+        `;
+        driveCounter++;
+      }
+    }
+    
+    // Add the actual stop record
+    html += `
+      <tr class="record-row" data-run="${event.runId}" data-leg="${event.legNum}" data-stop="${event.stopNum}"
+          style="background: ${bgColor}; border-bottom: 1px solid var(--border); cursor: pointer;"
+          title="Click to edit this record">
+        <td style="padding: 8px; color: ${isSelected ? 'white' : 'var(--accent-cyan)'}; white-space: nowrap;">L${event.legNum}-S${event.stopNum}</td>
+        <td style="padding: 8px; white-space: nowrap; color: ${textColor};">${icon} ${cat ? cat.label : event.category}</td>
+        <td style="padding: 8px; white-space: nowrap; color: ${isSelected ? 'white' : 'var(--accent-amber)'};">${typeLabel}</td>
+        <td style="padding: 8px; white-space: nowrap; color: ${textColor};">${event.startTime || '-'}</td>
+        <td style="padding: 8px; white-space: nowrap; color: ${textColor};">${event.endTime || '-'}</td>
+        <td style="padding: 8px; white-space: nowrap; color: ${isSelected ? 'white' : 'var(--accent-green)'};">${formatTimeShort(event.durationMin)}</td>
+        <td style="padding: 8px; white-space: nowrap; color: ${textColor};">${event.milesCumulative || '-'}</td>
+        <td style="padding: 8px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: ${textColor};" title="${event.comment || ''}">${event.comment || '-'}</td>
+      </tr>
+    `;
+    
+    // Track for next iteration
+    prevEndTime = event.endTime;
+    prevMiles = event.milesCumulative || prevMiles;
+    
+    // Reset drive counter if we changed legs
+    if (idx < sorted.length - 1 && sorted[idx + 1].legNum !== event.legNum) {
+      driveCounter = 1;
+      prevEndTime = null;
+      prevMiles = 0;
+    }
+  });
+  
+  tbody.innerHTML = html;
+  
+  // Add click handlers to rows
+  tbody.querySelectorAll('.record-row').forEach(row => {
+    row.addEventListener('click', function() {
+      const runId = this.getAttribute('data-run');
+      const legNum = parseInt(this.getAttribute('data-leg'));
+      const stopNum = parseInt(this.getAttribute('data-stop'));
+      
+      // Update state
+      state.currentRunId = runId;
+      state.currentLegNum = legNum;
+      state.currentStopNum = stopNum;
+      
+      // Update form Run ID
+      document.getElementById('inputRunId').value = runId;
+      
+      // Update nav display
+      updateNavDisplaySimple();
+      
+      // Load the record
+      loadRecord();
+      
+      // Scroll to top of form
+      document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+}
+
+function renderHierarchy() {
+  const container = document.getElementById('hierarchyTree');
+  
+  if (state.events.length === 0) {
+    container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 20px;">No events yet. Add your first event!</p>';
+    return;
+  }
+  
+  // Group events by Run, then by Leg
+  const runs = {};
+  state.events.forEach(event => {
+    if (event.category === 'reset') return; // Skip reset events in hierarchy
+    
+    const runId = event.runId || 'UNNAMED';
+    if (!runs[runId]) runs[runId] = {};
+    
+    const legKey = `L${event.legNum}`;
+    if (!runs[runId][legKey]) runs[runId][legKey] = [];
+    
+    runs[runId][legKey].push(event);
+  });
+  
+  // Build HTML tree
+  let html = '';
+  
+  Object.keys(runs).forEach(runId => {
+    const isActiveRun = runId === state.currentRunId;
+    html += `<div style="margin-bottom: 16px; ${isActiveRun ? 'background: var(--bg-elevated); padding: 12px; border-radius: 8px; border-left: 3px solid var(--accent-purple);' : ''}">`;
+    html += `<div style="color: var(--accent-purple); font-weight: 700; margin-bottom: 8px;">📦 RUN: ${runId} ${isActiveRun ? '(active)' : ''}</div>`;
+    
+    const legs = runs[runId];
+    const legKeys = Object.keys(legs).sort((a, b) => {
+      const numA = parseInt(a.replace('L', ''));
+      const numB = parseInt(b.replace('L', ''));
+      return numA - numB;
+    });
+    
+    legKeys.forEach((legKey, legIdx) => {
+      const isLastLeg = legIdx === legKeys.length - 1;
+      const legEvents = legs[legKey];
+      
+      html += `<div style="margin-left: 16px;">`;
+      html += `<div style="color: var(--accent-blue); font-weight: 600;">${isLastLeg ? '└──' : '├──'} ${legKey}</div>`;
+      
+      legEvents.forEach((event, stopIdx) => {
+        const isLastStop = stopIdx === legEvents.length - 1;
+        const cat = CATEGORIES[event.category];
+        const icon = getEventIcon(event.category);
+        const prefix = isLastLeg ? '    ' : '│   ';
+        const branch = isLastStop ? '└──' : '├──';
+        
+        // Clickable to navigate to that stop
+        html += `<div style="margin-left: 16px; cursor: pointer; padding: 2px 4px; border-radius: 4px;" 
+                      onclick="navigateTo('${runId}', ${event.legNum}, ${event.stopNum})"
+                      onmouseover="this.style.background='var(--bg-elevated)'" 
+                      onmouseout="this.style.background='transparent'">`;
+        html += `<span style="color: var(--text-muted);">${prefix}${branch}</span> `;
+        html += `<span style="color: var(--accent-cyan);">S${event.stopNum}:</span> `;
+        html += `<span>${icon}</span> `;
+        html += `<span style="color: var(--text-secondary);">${formatTime(event.durationMin)}</span>`;
+        if (event.milesCumulative) {
+          html += ` <span style="color: var(--text-muted);">• ${event.milesCumulative} mi</span>`;
+        }
+        if (event.comment) {
+          html += ` <span style="color: var(--text-muted); font-style: italic;">"${event.comment}"</span>`;
+        }
+        html += `</div>`;
+      });
+      
+      html += `</div>`;
+    });
+    
+    html += `</div>`;
+  });
+  
+  container.innerHTML = html;
+}
+
+function getEventIcon(category) {
+  const icons = {
+    'drive': '🚛',
+    'on-duty': '📋',
+    'off-duty': '☕',
+    'sleeper': '😴',
+    'yard': '🅿️',
+    'pc': '🚗'
+  };
+  return icons[category] || '❓';
+}
+
+function navigateTo(runId, legNum, stopNum) {
+  state.currentRunId = runId;
+  state.currentLegNum = legNum;
+  state.currentStopNum = stopNum;
+  document.getElementById('inputRunId').value = runId;
+  updateNavDisplay();
+  
+  // Switch to Entry tab
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelector('.tab-btn').classList.add('active'); // First tab is Entry
+  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+  document.getElementById('tab-entry').classList.add('active');
+}
+
+function renderEventList() {
+  const container = document.getElementById('eventList');
+  
+  if (state.events.length === 0) {
+    container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 20px;">No events yet. Add your first event!</p>';
+    return;
+  }
+  
+  // Sort by date/time descending (newest first)
+  const sorted = [...state.events].reverse();
+  
+  container.innerHTML = sorted.map(event => {
+    if (event.category === 'reset') {
+      return `
+        <div class="event-item" style="border-left: 3px solid var(--accent-green);">
+          <span class="event-badge" style="background: var(--accent-green); color: var(--bg-deep);">RESET</span>
+          <div class="event-details">
+            <div class="time">${event.date} @ ${event.startTime || '--:--'}</div>
+            <div class="info">${event.comment}</div>
+          </div>
+          <button class="event-delete delete-event-btn" data-id="${event.id}">×</button>
+        </div>
+      `;
+    }
+    
+    const cat = CATEGORIES[event.category];
+    return `
+      <div class="event-item">
+        <span class="event-badge ${event.category}">${cat.label}</span>
+        <div class="event-details">
+          <div class="time">
+            <span class="stop-ref">${event.stopRef}</span> • 
+            ${event.startTime || '--:--'} • 
+            ${formatTime(event.durationMin)} • 
+            ${event.milesCumulative} mi
+          </div>
+          <div class="info">${event.comment || event.date}</div>
+        </div>
+        <button class="event-delete delete-event-btn" data-id="${event.id}">×</button>
+      </div>
+    `;
+  }).join('');
+  
+  // Add event delegation for delete buttons
+  container.querySelectorAll('.delete-event-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const eventId = parseInt(this.getAttribute('data-id'));
+      deleteEvent(eventId);
+    });
+  });
+  
+  // Update stats
+  updateStats();
+}
+
+function updateStats() {
+  const runEvents = state.events.filter(e => e.runId === state.currentRunId && e.category !== 'reset');
+  const legEvents = runEvents.filter(e => e.legNum === state.currentLegNum);
+  
+  // Calculate leg stats
+  const legMiles = legEvents.length > 0 ? 
+    legEvents[legEvents.length - 1].milesCumulative - (legEvents[0].milesCumulative || 0) : 0;
+  const legTimeMin = legEvents.reduce((sum, e) => sum + e.durationMin, 0);
+  const legAvg = legTimeMin > 0 ? Math.round((legMiles / (legTimeMin / 60)) * 10) / 10 : 0;
+  
+  // Calculate run stats
+  const runMiles = runEvents.length > 0 ? runEvents[runEvents.length - 1].milesCumulative : 0;
+  const runTimeMin = runEvents.reduce((sum, e) => sum + e.durationMin, 0);
+  const runAvg = runTimeMin > 0 ? Math.round((runMiles / (runTimeMin / 60)) * 10) / 10 : 0;
+  
+  document.getElementById('statMilesLeg').textContent = Math.max(0, legMiles);
+  document.getElementById('statMilesRun').textContent = runMiles;
+  document.getElementById('statTimeLeg').textContent = formatTimeShort(legTimeMin);
+  document.getElementById('statTimeRun').textContent = formatTimeShort(runTimeMin);
+  document.getElementById('statAvgLeg').textContent = legAvg > 0 ? legAvg.toFixed(1) : '--';
+  document.getElementById('statAvgRun').textContent = runAvg > 0 ? runAvg.toFixed(1) : '--';
+}
+
+function renderRecaps() {
+  const cycleAvailMin = SCHEMA.cycleLimit - state.cycleUsedMin;
+  
+  document.getElementById('recapUsed').textContent = formatTimeShort(state.cycleUsedMin);
+  document.getElementById('recapAvail').textContent = formatTimeShort(Math.max(0, cycleAvailMin));
+  
+  // Daily miles capacity based on available hours
+  const avgSpeed = state.settings.avgSpeed;
+  const fudge = state.settings.fudgeMin;
+  
+  // Simple forecast: available hours × speed - fudge
+  const availHrs = cycleAvailMin / 60;
+  const milesCapacity = Math.max(0, Math.round(availHrs * avgSpeed - fudge));
+  
+  document.getElementById('milesCapacityList').innerHTML = `
+    <div class="summary-card" style="margin-bottom: 8px;">
+      <div class="label">Current Capacity</div>
+      <div class="value good">${milesCapacity} miles</div>
+    </div>
+    <p style="font-size: 0.75em; color: var(--text-muted);">
+      Based on ${formatTime(cycleAvailMin)} available @ ${avgSpeed} MPH with ${fudge} min fudge
+    </p>
+  `;
+}
+
+function updateFormDefaults() {
+  // Set default date to today
+  if (!document.getElementById('inputDate').value) {
+    document.getElementById('inputDate').value = new Date().toISOString().split('T')[0];
+  }
+  
+  // Set current run/leg/stop
+  if (state.currentRunId && !document.getElementById('inputRunId').value) {
+    document.getElementById('inputRunId').value = state.currentRunId;
+  }
+  document.getElementById('currentLegDisplay').textContent = `L${state.currentLegNum}`;
+  document.getElementById('currentStopDisplay').textContent = `S${state.currentStopNum}`;
+}
+
+function clearForm() {
+  document.getElementById('inputCategory').value = 'off-duty';
+  document.getElementById('inputStopType').value = '';
+  document.getElementById('inputStartTime').value = '';
+  document.getElementById('inputEndTime').value = '';
+  document.getElementById('inputDuration').value = '';
+  document.getElementById('inputMiles').value = '';
+  document.getElementById('inputComment').value = '';
+}
+
+function deleteEvent(eventId) {
+  if (confirm('Delete this event?')) {
+    const event = state.events.find(e => e.id === eventId);
+    if (event && event.category !== 'reset') {
+      const cat = CATEGORIES[event.category];
+      if (cat) {
+        if (cat.affectsCycle) state.cycleUsedMin -= event.durationMin;
+        if (cat.affectsDrive) state.driveUsedMin -= event.durationMin;
+      }
+    }
+    state.events = state.events.filter(e => e.id !== eventId);
+    saveToStorage();
+    render();
+  }
+}
+
+// ==============================================
+// STORAGE
+// ==============================================
 
 function saveToStorage() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    flashSaveIndicator();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (e) {
     console.warn('localStorage unavailable:', e);
   }
@@ -774,7 +2037,8 @@ function loadFromStorage() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-      data = JSON.parse(stored);
+      const loaded = JSON.parse(stored);
+      state = { ...state, ...loaded };
       return true;
     }
   } catch (e) {
@@ -783,327 +2047,34 @@ function loadFromStorage() {
   return false;
 }
 
-function saveSettings() {
-  settings.avgSpeed = parseFloat(document.getElementById('settingAvgSpeed').value) || 55;
-  settings.fudgeMin = parseFloat(document.getElementById('settingFudge').value) || 30;
-  settings.driveWarn = parseFloat(document.getElementById('settingDriveWarn').value) || 10;
-  settings.cycleWarn = parseFloat(document.getElementById('settingCycleWarn').value) || 15;
-  
-  try {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-    flashSaveIndicator();
-  } catch (e) {}
-  
-  render();
-}
-
-function loadSettings() {
-  try {
-    const stored = localStorage.getItem(SETTINGS_KEY);
-    if (stored) {
-      settings = { ...settings, ...JSON.parse(stored) };
-    }
-  } catch (e) {}
-  
-  document.getElementById('settingAvgSpeed').value = settings.avgSpeed;
-  document.getElementById('settingFudge').value = settings.fudgeMin;
-  document.getElementById('settingDriveWarn').value = settings.driveWarn;
-  document.getElementById('settingCycleWarn').value = settings.cycleWarn;
-}
-
 function flashSaveIndicator() {
   const el = document.getElementById('saveIndicator');
   el.textContent = '💾 Saved!';
   el.style.color = '#06d6a0';
-  setTimeout(() => {
-    el.textContent = '💾 Auto-saved';
-  }, 1000);
+  setTimeout(() => { el.textContent = '💾 Auto-saved'; }, 1000);
 }
 
-// ==============================================
-// TAB SWITCHING
-// ==============================================
-function switchTab(tabId) {
-  // Update buttons
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  
-  // Update content
-  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-  document.getElementById('tab-' + tabId).classList.add('active');
-  
-  // Refresh tab-specific content
-  if (tabId === 'recaps') renderRecaps();
-}
-
-// ==============================================
-// DATE UTILITIES
-// ==============================================
-function getToday() {
-  return new Date().toISOString().split('T')[0];
-}
-
-function sortByDateDesc(arr) {
-  return [...arr].sort((a, b) => b.date.localeCompare(a.date));
-}
-
-function formatDateShort(dateStr) {
-  const d = new Date(dateStr + 'T00:00:00');
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-}
-
-function ensureTodayExists() {
-  const today = getToday();
-  if (!data.some(row => row.date === today)) {
-    data.unshift({ date: today, drive: 0, onDuty: 0 });
-    
-    // Ring buffer: Keep only 8 days max
-    if (data.length > SCHEMA.cycleDays) {
-      data = data.slice(0, SCHEMA.cycleDays);
-    }
-  }
-}
-
-// ==============================================
-// DERIVED CALCULATIONS
-// ==============================================
-function computeDerived(row) {
-  const result = { ...row };
-  result.total = parseFloat((row.drive + row.onDuty).toFixed(2));
-  
-  if (row.drive > SCHEMA.driveLimit) {
-    result.status = 'VIOLATION';
-    result.statusClass = 'status-violation';
-    result.inputClass = 'violation';
-  } else if (row.drive > settings.driveWarn) {
-    result.status = 'WARNING';
-    result.statusClass = 'status-warning';
-    result.inputClass = 'warning';
-  } else if (result.total > 0) {
-    result.status = 'OK';
-    result.statusClass = 'status-ok';
-    result.inputClass = '';
-  } else {
-    result.status = 'REST';
-    result.statusClass = 'status-rest';
-    result.inputClass = '';
-  }
-  
-  result.isToday = (row.date === getToday());
-  return result;
-}
-
-function computeSummary() {
-  const sorted = sortByDateDesc(data);
-  const last8 = sorted.slice(0, SCHEMA.cycleDays);
-  
-  const cycleUsed = last8.reduce((sum, row) => {
-    return sum + parseFloat((row.drive + row.onDuty).toFixed(2));
-  }, 0);
-  
-  const cycleAvail = SCHEMA.cycleLimit - cycleUsed;
-  const day8 = last8[SCHEMA.cycleDays - 1];
-  const tomorrowRecap = day8 ? parseFloat((day8.drive + day8.onDuty).toFixed(2)) : 0;
-  
-  // Update Daily Log summary
-  document.getElementById('cycleUsed').textContent = cycleUsed.toFixed(2);
-  
-  const availEl = document.getElementById('cycleAvail');
-  availEl.textContent = cycleAvail.toFixed(2);
-  availEl.className = 'summary-value ' + 
-    (cycleAvail < 10 ? 'danger' : cycleAvail < settings.cycleWarn ? 'warning' : 'good');
-  
-  document.getElementById('tomorrowRecap').textContent = '+' + tomorrowRecap.toFixed(2);
-  
-  // Update Recaps summary
-  document.getElementById('recapTotal').textContent = cycleUsed.toFixed(2);
-  document.getElementById('recapRemain').textContent = cycleAvail.toFixed(2);
-}
-
-// ==============================================
-// RENDER DAILY LOG
-// ==============================================
-function render() {
-  const sorted = sortByDateDesc(data);
-  const tbody = document.getElementById('tableBody');
-  tbody.innerHTML = '';
-  
-  sorted.forEach((row) => {
-    const dataIdx = data.findIndex(d => d.date === row.date);
-    const computed = computeDerived(row);
-    
-    const tr = document.createElement('tr');
-    if (computed.isToday) tr.className = 'today';
-    
-    tr.innerHTML = `
-      <td><input type="date" value="${row.date}" onchange="updateCell(${dataIdx}, 'date', this.value)"></td>
-      <td><input type="number" step="0.01" min="0" max="24" value="${row.drive}" 
-          class="${computed.inputClass}"
-          onchange="updateCell(${dataIdx}, 'drive', parseFloat(this.value) || 0)"></td>
-      <td><input type="number" step="0.01" min="0" max="24" value="${row.onDuty}" 
-          onchange="updateCell(${dataIdx}, 'onDuty', parseFloat(this.value) || 0)"></td>
-      <td><input type="number" value="${computed.total.toFixed(2)}" readonly></td>
-      <td><span class="status-badge ${computed.statusClass}">${computed.status}${computed.isToday ? ' 📍' : ''}</span></td>
-      <td><button class="delete-btn" onclick="deleteRow(${dataIdx})">❌</button></td>
-    `;
-    
-    tbody.appendChild(tr);
-  });
-  
-  computeSummary();
-}
-
-// ==============================================
-// RENDER RECAPS VISUALIZATION
-// ==============================================
-function renderRecaps() {
-  const sorted = sortByDateDesc(data);
-  const last8 = sorted.slice(0, SCHEMA.cycleDays);
-  const pipeline = document.getElementById('recapPipeline');
-  pipeline.innerHTML = '';
-  
-  // Oldest first for timeline feel (hours returning soonest on left)
-  const chronological = [...last8].reverse();
-  
-  chronological.forEach((day, idx) => {
-    const total = parseFloat((day.drive + day.onDuty).toFixed(2));
-    
-    // Marble color based on hours
-    let marbleClass = 'marble-empty';
-    if (total >= 9) marbleClass = 'marble-full';
-    else if (total >= 6) marbleClass = 'marble-medium';
-    else if (total > 0) marbleClass = 'marble-light';
-    
-    const dayEl = document.createElement('div');
-    dayEl.className = 'recap-day';
-    dayEl.innerHTML = `
-      <div class="recap-marble ${marbleClass}">${total.toFixed(1)}</div>
-      <div class="recap-date">${formatDateShort(day.date)}</div>
-      <div class="recap-label">R${idx + 1}</div>
-    `;
-    pipeline.appendChild(dayEl);
-    
-    // Add arrow except after last
-    if (idx < chronological.length - 1) {
-      const arrow = document.createElement('div');
-      arrow.className = 'recap-arrow';
-      arrow.innerHTML = '→';
-      pipeline.appendChild(arrow);
-    }
-  });
-}
-
-// ==============================================
-// DATA OPERATIONS
-// ==============================================
-function updateCell(rowIdx, field, value) {
-  data[rowIdx][field] = value;
+function saveSettings() {
+  state.settings.avgSpeed = parseInt(document.getElementById('settingAvgSpeed').value) || 55;
+  state.settings.fudgeMin = parseInt(document.getElementById('settingFudge').value) || 30;
+  state.settings.timezone = document.getElementById('settingTimezone').value;
   saveToStorage();
   render();
+  flashSaveIndicator();
 }
 
-function addRow() {
-  // Check for reset warning first
-  const offDutyHours = countConsecutiveOffDuty();
-  
-  if (offDutyHours >= 24 && offDutyHours < 34) {
-    showResetDialog();
-    return;
-  }
-  
-  addNormalDay();
-}
-
-function countConsecutiveOffDuty() {
-  // Count consecutive days from the front with 0 hours worked
-  const sorted = sortByDateDesc(data);
-  let offDutyHours = 0;
-  
-  for (const day of sorted) {
-    const total = parseFloat((day.drive + day.onDuty).toFixed(2));
-    if (total === 0) {
-      offDutyHours += 24; // Each full day = 24 hours
-    } else {
-      break; // Hit a work day, stop counting
-    }
-  }
-  
-  return offDutyHours;
-}
-
-function showResetDialog() {
-  const offDutyHours = countConsecutiveOffDuty();
-  const hoursToReset = 34 - offDutyHours;
-  
-  const choice = confirm(
-    `⚠️ RESET WARNING ⚠️\n\n` +
-    `You have ${offDutyHours} consecutive off-duty hours.\n` +
-    `Adding ${hoursToReset}+ more hours will trigger a 34-HOUR RESET.\n\n` +
-    `Click OK to trigger RESET (fresh 70 hours)\n` +
-    `Click Cancel to add WORK DAY instead`
-  );
-  
-  if (choice) {
-    triggerReset();
-  } else {
-    addNormalDay();
-  }
-}
-
-function triggerReset() {
-  // Add the reset day
-  addNormalDay();
-  
-  // Wipe the ring buffer except for the new day
-  const newDay = data[0]; // Save the day we just added
-  data = [newDay]; // Reset to just the new day
-  
-  alert('🔄 34-HOUR RESET COMPLETE!\n\nYou now have 70 fresh hours available.');
-  
-  saveToStorage();
-  render();
-}
-
-function addNormalDay() {
-  // Ring buffer: Add new day to FRONT, find next date chronologically
-  let newDate;
-  
-  if (data.length === 0) {
-    // No data yet - start with today
-    newDate = getToday();
-  } else {
-    // Sort by date to find the newest entry
-    const sorted = sortByDateDesc(data);
-    const newestDate = new Date(sorted[0].date + 'T00:00:00');
-    
-    // Add one day to the newest entry
-    newestDate.setDate(newestDate.getDate() + 1);
-    newDate = newestDate.toISOString().split('T')[0];
-  }
-  
-  // Add to FRONT (newest first)
-  data.unshift({ date: newDate, drive: 0, onDuty: 0 });
-  
-  // Ring buffer: Keep only 8 days max
-  if (data.length > SCHEMA.cycleDays) {
-    data = data.slice(0, SCHEMA.cycleDays);
-  }
-  
-  saveToStorage();
-  render();
-}
-
-function deleteRow(rowIdx) {
-  if (confirm('Delete this day?')) {
-    data.splice(rowIdx, 1);
-    saveToStorage();
-    render();
-  }
-}
-
-function clearData() {
-  if (confirm('Clear ALL data? This cannot be undone.')) {
-    data = [];
+function clearAllData() {
+  if (confirm('⚠️ Clear ALL data? This cannot be undone!')) {
+    state = {
+      currentRunId: '',
+      currentLegNum: 1,
+      stopCounter: {},
+      events: [],
+      consecutiveRestMin: 0,
+      cycleUsedMin: 0,
+      driveUsedMin: 0,
+      settings: state.settings
+    };
     localStorage.removeItem(STORAGE_KEY);
     render();
   }
@@ -1112,24 +2083,19 @@ function clearData() {
 // ==============================================
 // EXPORT / IMPORT
 // ==============================================
+
 function exportJSON() {
   const exportData = {
     version: SCHEMA.version,
     exportedAt: new Date().toISOString(),
-    exportedBy: 'Crystal Ball Mini V3',
-    settings: settings,
-    data: data.map(row => ({
-      date: row.date,
-      drive: row.drive,
-      onDuty: row.onDuty
-    }))
+    state: state
   };
   
   const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `crystal_ball_${getToday()}.json`;
+  a.download = `crystal_ball_${state.currentRunId || 'export'}_${new Date().toISOString().split('T')[0]}.json`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -1143,26 +2109,16 @@ function importJSON(event) {
     try {
       const imported = JSON.parse(e.target.result);
       
-      if (imported.data && Array.isArray(imported.data)) {
-        data = imported.data.map(row => ({
-          date: row.date,
-          drive: parseFloat(row.drive) || 0,
-          onDuty: parseFloat(row.onDuty) || 0
-        }));
-        
-        if (imported.settings) {
-          settings = { ...settings, ...imported.settings };
-          loadSettings();
-        }
-        
+      if (imported.state) {
+        state = { ...state, ...imported.state };
         saveToStorage();
         render();
-        alert('✅ Imported ' + data.length + ' days!');
+        alert(`✅ Imported successfully!\n\nRun: ${state.currentRunId}\nEvents: ${state.events.length}`);
       } else {
         alert('❌ Invalid file format');
       }
     } catch (err) {
-      alert('❌ Error: ' + err.message);
+      alert('❌ Error parsing file: ' + err.message);
     }
   };
   reader.readAsText(file);
@@ -1170,27 +2126,89 @@ function importJSON(event) {
 }
 
 // ==============================================
-// TRIP VIEW (Placeholder functions)
+// TAB SWITCHING
 // ==============================================
-function addBiopsy() {
-  alert('🚧 Coming soon: Checkpoint/Biopsy tracking!');
-}
 
-function clearTrip() {
-  alert('🚧 Trip data cleared (placeholder)');
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  
+  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  
+  if (tabId === 'recaps') renderRecaps();
+  if (tabId === 'timeline') renderEventList();
 }
 
 // ==============================================
 // INIT
 // ==============================================
-function init() {
-  if (!loadFromStorage() || data.length === 0) {
-    data = [...DEFAULT_DATA];
+
+function executeDelete() {
+  const checkbox = document.getElementById('confirmDeleteCheckbox');
+  
+  if (!checkbox.checked) {
+    alert('Please check the confirmation box first');
+    return;
   }
   
-  ensureTodayExists();
-  loadSettings();
+  if (!state.editingEventId) {
+    alert('No record loaded for deletion');
+    return;
+  }
+  
+  const event = state.events.find(e => e.id === state.editingEventId);
+  if (!event) {
+    alert('Record not found');
+    return;
+  }
+  
+  // Remove HOS contributions
+  const cat = CATEGORIES[event.category];
+  if (cat) {
+    if (cat.affectsCycle) state.cycleUsedMin -= event.durationMin;
+    if (cat.affectsDrive) state.driveUsedMin -= event.durationMin;
+  }
+  
+  // Remove from array
+  state.events = state.events.filter(e => e.id !== state.editingEventId);
+  
+  // Clear editing state
+  state.editingEventId = null;
+  
+  // Save and refresh
   saveToStorage();
+  setMode('add');
+  clearForm();
+  render();
+  
+  alert('✅ Record deleted successfully!');
+}
+
+function init() {
+  loadFromStorage();
+  
+  // Load settings into form
+  document.getElementById('settingAvgSpeed').value = state.settings.avgSpeed;
+  document.getElementById('settingFudge').value = state.settings.fudgeMin;
+  document.getElementById('settingTimezone').value = state.settings.timezone;
+  
+  // Initialize nav display
+  updateNavDisplaySimple();
+  
+  // Start in ADD mode
+  setMode('add');
+  
+  // Checkbox handler for delete confirmation
+  document.getElementById('confirmDeleteCheckbox').addEventListener('change', function() {
+    const deleteBtn = document.getElementById('btnDeleteConfirmed');
+    if (this.checked) {
+      deleteBtn.style.opacity = '1';
+    } else {
+      deleteBtn.style.opacity = '0.5';
+    }
+  });
+  
   render();
 }
 
