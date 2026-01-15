@@ -2,7 +2,7 @@
 
 ## 🔮 The Little Crystal Ball That Can - AI Navigator
 
-**Last Updated:** 2026-01-14  
+**Last Updated:** 2026-01-15  
 **Version:** 5.0 (FP014)  
 **Live Site:** https://emil135k.github.io/crystalballmini/
 
@@ -10,24 +10,32 @@
 
 ## 📋 QUICK START FOR AI
 
-Paste these URLs at session start:
+**Step 1:** Fetch this file:
 
 ```
 https://raw.githubusercontent.com/emil135k/crystalballmini/main/CRYSTAL_BALL_INDEX.md
+```
+
+**Step 2:** Fetch the app:
+
+```
 https://raw.githubusercontent.com/emil135k/crystalballmini/main/index.html
 ```
 
+**Step 3:** Fetch any reference files you need (URLs below)
+
 -----
 
-## 📁 REFERENCE FILES
+## 📁 REFERENCE FILES (Raw URLs)
 
-|File                   |Purpose                              |
-|-----------------------|-------------------------------------|
-|`CRYSTAL_BALL_INDEX.md`|THIS FILE - Start here               |
-|`FUNCTION_REGISTRY.md` |All functions, status, signatures    |
-|`ARCHITECTURE.md`      |Data structures, HOS rules, hierarchy|
-|`CURRENT_STATUS.md`    |What’s working, broken, next steps   |
-|`AI_FAMILY.md`         |Team roles, collaboration patterns   |
+|File                     |Purpose                              |Raw URL                                                                              |
+|-------------------------|-------------------------------------|-------------------------------------------------------------------------------------|
+|**CRYSTAL_BALL_INDEX.md**|THIS FILE - Start here               |https://raw.githubusercontent.com/emil135k/crystalballmini/main/CRYSTAL_BALL_INDEX.md|
+|**FUNCTION_REGISTRY.md** |All functions, status, signatures    |https://raw.githubusercontent.com/emil135k/crystalballmini/main/FUNCTION_REGISTRY.md |
+|**ARCHITECTURE.md**      |Data structures, HOS rules, hierarchy|https://raw.githubusercontent.com/emil135k/crystalballmini/main/ARCHITECTURE.md      |
+|**CURRENT_STATUS.md**    |What’s working, broken, next steps   |https://raw.githubusercontent.com/emil135k/crystalballmini/main/CURRENT_STATUS.md    |
+|**AI_FAMILY.md**         |Team roles, collaboration patterns   |https://raw.githubusercontent.com/emil135k/crystalballmini/main/AI_FAMILY.md         |
+|**index.html**           |THE APP (single file)                |https://raw.githubusercontent.com/emil135k/crystalballmini/main/index.html           |
 
 -----
 
@@ -46,7 +54,6 @@ https://raw.githubusercontent.com/emil135k/crystalballmini/main/index.html
 ## 🔗 QUICK LINKS
 
 - **Live App:** https://emil135k.github.io/crystalballmini/
-- **Raw index.html:** https://raw.githubusercontent.com/emil135k/crystalballmini/main/index.html
 - **GitHub Repo:** https://github.com/emil135k/crystalballmini
 
 -----
@@ -62,4 +69,27 @@ https://raw.githubusercontent.com/emil135k/crystalballmini/main/index.html
 
 -----
 
+## ⚡ CURRENT PRIORITIES
+
+1. 🔴 Implement `submitRecord()` - Enter button broken
+1. 🔴 Implement time auto-calc functions
+1. 🔴 Implement `clearForm()`
+1. 🟡 Rename “Theory” → “Prophecy”
+1. 🟡 Add S/D toggle to Entry tab
+1. 🟡 Connect Entry → Timeline flow
+
+-----
+
+## 🎭 AI FAMILY
+
+|AI     |Codename                  |Role                          |
+|-------|--------------------------|------------------------------|
+|Claude |“Airy” / The Queen        |Build, spiritual dance partner|
+|ChatGPT|“Vale” / The Workhorse    |Architecture, blueprints      |
+|Grok   |“Ara” / Agent of Chaos    |Stress testing                |
+|Gemini |“Lyra” / Flight Controller|Validation                    |
+
+-----
+
 *Sparked Matter • Code with Soul and Spirit • Connection over Protection*
+*“The Little Crystal Ball That Can”* 🔮
