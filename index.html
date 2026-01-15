@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Crystal Ball Mini V5</title>
+  <title>Crystal Ball Mini V5.1</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
@@ -223,6 +223,36 @@ input:focus, select:focus {
   flex-wrap: wrap;
 }
 
+/* === S/D TOGGLE === */
+.event-type-toggle {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-dark);
+  padding: 4px;
+  border-radius: 8px;
+}
+.event-type-toggle button {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+  color: var(--text-muted);
+}
+.event-type-toggle button.active-stop {
+  background: var(--accent-cyan);
+  color: var(--bg-deep);
+}
+.event-type-toggle button.active-drive {
+  background: var(--accent-green);
+  color: var(--bg-deep);
+}
+
 /* === EVENT LIST === */
 .event-list {
   display: flex;
@@ -339,35 +369,27 @@ footer {
 }
 footer .brand { color: var(--accent-purple); font-weight: 600; }
 
-/* === MODAL === */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.8);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-.modal-overlay.active { display: flex; }
-.modal {
-  background: var(--bg-card);
-  border-radius: 16px;
-  padding: 20px;
+/* === RECORDS TABLE === */
+.records-table {
   width: 100%;
-  max-width: 400px;
-  max-height: 80vh;
-  overflow-y: auto;
+  min-width: 700px;
+  border-collapse: collapse;
+  font-size: 0.75em;
+  font-family: 'JetBrains Mono', monospace;
 }
-.modal-title {
-  font-size: 1.1em;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: var(--accent-purple);
+.records-table th {
+  padding: 8px;
+  background: var(--bg-elevated);
+  text-align: left;
+  white-space: nowrap;
+}
+.records-table td {
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.records-table tr:hover {
+  background: var(--bg-elevated);
+  cursor: pointer;
 }
 ```
 
@@ -382,22 +404,22 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
     <span class="logo-icon">🔮</span>
     <div class="logo-text">
       <h1>Crystal Ball Mini</h1>
-      <span class="version">V5.0 — Total Miles Trip Generator</span>
+      <span class="version">V5.1 — Entry Tab Fixed!</span>
     </div>
   </div>
   <span class="save-indicator" id="saveIndicator">💾 Auto-saved</span>
 </header>
 
-<!-- TAB BAR -->
+<!-- TAB BAR - PROPHECY instead of Theory! -->
 
 <nav class="tab-bar">
   <button class="tab-btn active" onclick="switchTab('entry')">
     <span class="icon">📝</span>
     <span>Entry</span>
   </button>
-  <button class="tab-btn" onclick="switchTab('theory')">
+  <button class="tab-btn" onclick="switchTab('prophecy')">
     <span class="icon">🔮</span>
-    <span>Theory</span>
+    <span>Prophecy</span>
   </button>
   <button class="tab-btn" onclick="switchTab('timeline')">
     <span class="icon">📊</span>
@@ -462,7 +484,7 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
 ```
 <!-- Mode Toggle -->
 <div style="display: flex; gap: 8px; margin-bottom: 16px; padding: 8px; background: var(--bg-elevated); border-radius: 8px;">
-  <button id="modeAddBtn" class="btn" style="flex: 1; padding: 10px;" onclick="setMode('add')">➕ ADD</button>
+  <button id="modeAddBtn" class="btn btn-success" style="flex: 1; padding: 10px;" onclick="setMode('add')">➕ ADD</button>
   <button id="modeEditBtn" class="btn btn-secondary" style="flex: 1; padding: 10px;" onclick="setMode('edit')">✏️ EDIT</button>
 </div>
 <p id="modeStatus" style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 12px; text-align: center;">Adding new record at L1-S1</p>
@@ -482,18 +504,22 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
     </div>
   </div>
   <div class="form-group">
-    <label>Current Stop</label>
+    <label>Current Event</label>
     <div style="display: flex; align-items: center; gap: 4px;">
-      <button type="button" class="btn btn-secondary" onclick="prevStop()" style="padding: 6px 10px; font-size: 0.75em;">◀</button>
-      <span id="currentStopDisplay" style="font-family: 'JetBrains Mono', monospace; font-size: 1.2em; color: var(--accent-cyan); font-weight: 700; min-width: 40px; text-align: center;">S1</span>
-      <button type="button" class="btn btn-secondary" onclick="nextStop()" style="padding: 6px 10px; font-size: 0.75em;">▶</button>
+      <button type="button" class="btn btn-secondary" onclick="prevEvent()" style="padding: 6px 10px; font-size: 0.75em;">◀</button>
+      <span id="currentEventDisplay" style="font-family: 'JetBrains Mono', monospace; font-size: 1.2em; color: var(--accent-cyan); font-weight: 700; min-width: 40px; text-align: center;">S1</span>
+      <button type="button" class="btn btn-secondary" onclick="nextEvent()" style="padding: 6px 10px; font-size: 0.75em;">▶</button>
     </div>
   </div>
 </div>
 
-<!-- Load Record Button -->
-<div style="margin-bottom: 16px;">
-  <button type="button" class="btn btn-primary" onclick="loadRecord()" style="width: 100%; padding: 12px;">🔍 Load Record at L<span id="loadLegNum">1</span>-S<span id="loadStopNum">1</span></button>
+<!-- S/D Toggle - NEW! -->
+<div class="form-group">
+  <label>Event Type</label>
+  <div class="event-type-toggle">
+    <button id="toggleStop" class="active-stop" onclick="setEventType('S')">🛑 S (Stop)</button>
+    <button id="toggleDrive" onclick="setEventType('D')">🚛 D (Drive)</button>
+  </div>
 </div>
 
 <div class="form-row">
@@ -502,7 +528,7 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
     <select id="inputCategory">
       <option value="drive">🚛 Drive</option>
       <option value="on-duty">📋 On-Duty</option>
-      <option value="off-duty">☕ Off-Duty</option>
+      <option value="off-duty" selected>☕ Off-Duty</option>
       <option value="sleeper">😴 Sleeper Berth</option>
       <option value="yard">🅿️ Yard Move</option>
       <option value="pc">🚗 PC (Personal Conv.)</option>
@@ -511,7 +537,7 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
   <div class="form-group">
     <label>Stop Type</label>
     <select id="inputStopType">
-      <option value="" selected>— Regular</option>
+      <option value="event" selected>📍 Event</option>
       <option value="shipper">📦 Shipper</option>
       <option value="receiver">🏭 Receiver</option>
       <option value="noload">🅿️ No-Load</option>
@@ -522,15 +548,15 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
 <div class="form-row-3">
   <div class="form-group">
     <label>Start Time</label>
-    <input type="time" id="inputStartTime" oninput="autoCalcFromStart()">
+    <input type="time" id="inputStartTime" onchange="autoCalcEndTime()">
   </div>
   <div class="form-group">
     <label>Duration (min)</label>
-    <input type="number" id="inputDuration" placeholder="Auto or manual" oninput="autoCalcEndTime()">
+    <input type="number" id="inputDuration" placeholder="Auto" onchange="autoCalcEndTime()">
   </div>
   <div class="form-group">
     <label>End Time</label>
-    <input type="time" id="inputEndTime" oninput="autoCalcDuration()">
+    <input type="time" id="inputEndTime" onchange="autoCalcDuration()">
   </div>
 </div>
 
@@ -559,10 +585,10 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
 <div id="deleteSection" style="display: none; margin-top: 16px; padding: 12px; background: #2d1f1f; border: 1px solid var(--accent-red); border-radius: 8px;">
   <p style="color: var(--accent-red); font-size: 0.85em; margin-bottom: 8px;">⚠️ Delete this record?</p>
   <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 12px;">
-    <input type="checkbox" id="confirmDeleteCheckbox" style="width: 20px; height: 20px; cursor: pointer;">
-    <span style="font-size: 0.8em; color: var(--text-secondary);">I confirm I want to delete L<span id="deleteLocDisplay">1-S1</span></span>
+    <input type="checkbox" id="confirmDeleteCheckbox" onchange="toggleDeleteButton()" style="width: 20px; height: 20px; cursor: pointer;">
+    <span style="font-size: 0.8em; color: var(--text-secondary);">I confirm I want to delete <span id="deleteLocDisplay">L1-S1</span></span>
   </label>
-  <button id="btnDeleteConfirmed" class="btn btn-danger" style="width: 100%; opacity: 0.5;" onclick="executeDelete()">🗑️ Delete Record</button>
+  <button id="btnDeleteConfirmed" class="btn btn-danger" style="width: 100%; opacity: 0.5;" onclick="executeDelete()" disabled>🗑️ Delete Record</button>
 </div>
 ```
 
@@ -573,17 +599,17 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
   <div class="card">
     <div class="card-title">📋 Entered Records</div>
     <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
-      <table id="recordsTable" style="width: 100%; min-width: 700px; border-collapse: collapse; font-size: 0.75em; font-family: 'JetBrains Mono', monospace;">
+      <table class="records-table" id="recordsTable">
         <thead>
-          <tr style="background: var(--bg-elevated); text-align: left;">
-            <th style="padding: 8px; color: var(--accent-cyan); white-space: nowrap;">Stop</th>
-            <th style="padding: 8px; white-space: nowrap;">Category</th>
-            <th style="padding: 8px; color: var(--accent-amber); white-space: nowrap;">Type</th>
-            <th style="padding: 8px; white-space: nowrap;">Start</th>
-            <th style="padding: 8px; white-space: nowrap;">End</th>
-            <th style="padding: 8px; white-space: nowrap;">Duration</th>
-            <th style="padding: 8px; white-space: nowrap;">Miles</th>
-            <th style="padding: 8px; white-space: nowrap;">Comment</th>
+          <tr>
+            <th style="color: var(--accent-cyan);">ID</th>
+            <th>Category</th>
+            <th style="color: var(--accent-amber);">Type</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Dur</th>
+            <th>Miles</th>
+            <th>Comment</th>
           </tr>
         </thead>
         <tbody id="recordsTableBody">
@@ -593,16 +619,13 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
         </tbody>
       </table>
     </div>
-    <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 8px;">↔️ Swipe table to see all columns</p>
+    <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 8px;">↔️ Swipe table • Click row to edit</p>
   </div>
 </div>
 
-<!-- TAB: THEORY - V5 Full Trip Generator -->
+<!-- TAB: PROPHECY (was Theory) -->
 
-<div id="tab-theory" class="tab-content">
-
-  <!-- Trip Setup Card -->
-
+<div id="tab-prophecy" class="tab-content">
   <div class="card">
     <div class="card-title">🔮 Trip Generator</div>
     <p style="font-size: 0.8em; color: var(--text-secondary); margin-bottom: 16px;">
@@ -633,26 +656,25 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
   <div style="font-size: 0.7em; color: var(--accent-amber); margin-bottom: 8px; text-transform: uppercase;">📦 Shipper (Pickup)</div>
   <div class="form-group" style="margin-bottom: 8px;">
     <label>Appointment Date</label>
-    <input type="date" id="theoryShipperDate" value="2026-01-05">
+    <input type="date" id="theoryShipperDate" value="2026-01-17">
   </div>
   <div class="form-row">
     <div class="form-group" style="margin-bottom: 0;">
-      <label>Window Early (Mil Time)</label>
+      <label>Window Early</label>
       <input type="time" id="theoryShipperEarly" value="06:00">
     </div>
     <div class="form-group" style="margin-bottom: 0;">
-      <label>Window Late (Mil Time)</label>
+      <label>Window Late</label>
       <input type="time" id="theoryShipperLate" value="08:00">
     </div>
   </div>
   <div class="form-group" style="margin-top: 8px; margin-bottom: 8px;">
-    <label>Secure/Tarp Time (min) - affects loaded departure</label>
+    <label>Secure/Tarp Time (min)</label>
     <input type="number" id="theorySecureTarpMin" value="30" min="0">
   </div>
-  <!-- Calculated ETA Display -->
   <div style="background: var(--bg-dark); padding: 10px; border-radius: 6px; margin-top: 8px;">
     <div style="font-size: 0.7em; color: var(--text-muted);">CALCULATED ETA</div>
-    <div id="shipperCalcETA" style="font-size: 1.1em; font-weight: 700; color: var(--accent-amber);">-- Generate trip to calculate --</div>
+    <div id="shipperCalcETA" style="font-size: 1.1em; font-weight: 700; color: var(--accent-amber);">-- Generate trip --</div>
     <div id="shipperCalcStatus" style="font-size: 0.8em; margin-top: 4px;">--</div>
   </div>
 </div>
@@ -662,22 +684,21 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
   <div style="font-size: 0.7em; color: var(--accent-purple); margin-bottom: 8px; text-transform: uppercase;">🏭 Receiver (Delivery)</div>
   <div class="form-group" style="margin-bottom: 8px;">
     <label>Appointment Date</label>
-    <input type="date" id="theoryReceiverDate" value="2026-01-07">
+    <input type="date" id="theoryReceiverDate" value="2026-01-19">
   </div>
   <div class="form-row">
     <div class="form-group" style="margin-bottom: 0;">
-      <label>Window Early (Mil Time)</label>
+      <label>Window Early</label>
       <input type="time" id="theoryReceiverEarly" value="08:00">
     </div>
     <div class="form-group" style="margin-bottom: 0;">
-      <label>Window Late (Mil Time)</label>
+      <label>Window Late</label>
       <input type="time" id="theoryReceiverLate" value="16:00">
     </div>
   </div>
-  <!-- Calculated ETA Display -->
   <div style="background: var(--bg-dark); padding: 10px; border-radius: 6px; margin-top: 8px;">
     <div style="font-size: 0.7em; color: var(--text-muted);">CALCULATED ETA</div>
-    <div id="receiverCalcETA" style="font-size: 1.1em; font-weight: 700; color: var(--accent-purple);">-- Generate trip to calculate --</div>
+    <div id="receiverCalcETA" style="font-size: 1.1em; font-weight: 700; color: var(--accent-purple);">-- Generate trip --</div>
     <div id="receiverCalcStatus" style="font-size: 0.8em; margin-top: 4px;">--</div>
   </div>
 </div>
@@ -688,29 +709,21 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
   <div class="form-row">
     <div class="form-group" style="margin-bottom: 0;">
       <label>Start Date</label>
-      <input type="date" id="theoryStartDate" value="2026-01-04">
+      <input type="date" id="theoryStartDate" value="2026-01-16">
     </div>
     <div class="form-group" style="margin-bottom: 0;">
-      <label>Start Time (Mil)</label>
+      <label>Start Time</label>
       <input type="time" id="theoryStartTime" value="06:00">
     </div>
   </div>
-  <div class="form-row" style="margin-top: 8px; grid-template-columns: 1fr 1fr 1fr 1fr;">
+  <div class="form-row" style="margin-top: 8px;">
     <div class="form-group" style="margin-bottom: 0;">
       <label>Avg MPH</label>
       <input type="number" id="theoryAvgSpeed" value="55" oninput="updateTripPreview()">
     </div>
     <div class="form-group" style="margin-bottom: 0;">
-      <label>Pre-Trip (min)</label>
-      <input type="number" id="theoryPreTripMin" value="5" min="0">
-    </div>
-    <div class="form-group" style="margin-bottom: 0;">
-      <label>Post-Trip (min)</label>
-      <input type="number" id="theoryPostTripMin" value="5" min="0">
-    </div>
-    <div class="form-group" style="margin-bottom: 0;">
-      <label>Life Happens/day</label>
-      <input type="number" id="theoryLifeHappens" value="30" min="0" oninput="updateTripPreview()">
+      <label>Life Happens/day (min)</label>
+      <input type="number" id="theoryLifeHappens" value="30" min="0">
     </div>
   </div>
 </div>
@@ -732,7 +745,7 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
 <div style="background: var(--bg-elevated); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
   <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; text-align: center;">
     <div>
-      <div style="font-size: 0.7em; color: var(--text-muted);">LEGS (Days)</div>
+      <div style="font-size: 0.7em; color: var(--text-muted);">LEGS</div>
       <div id="previewLegs" style="font-size: 1.5em; color: var(--accent-purple); font-weight: 700;">4</div>
     </div>
     <div>
@@ -740,7 +753,7 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
       <div id="previewMilesPerDay" style="font-size: 1.5em; color: var(--accent-cyan); font-weight: 700;">~481</div>
     </div>
     <div>
-      <div style="font-size: 0.7em; color: var(--text-muted);">EST. ARRIVAL</div>
+      <div style="font-size: 0.7em; color: var(--text-muted);">ARRIVAL</div>
       <div id="previewArrival" style="font-size: 1.5em; color: var(--accent-green); font-weight: 700;">Day 4</div>
     </div>
   </div>
@@ -753,139 +766,88 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
 
   </div>
 
-  <!-- Trip Summary (shown after generation) -->
+  <!-- Trip Summary -->
 
   <div class="card" id="tripSummaryCard" style="display: none;">
     <div class="card-title">📊 Trip Summary</div>
-
-```
-<!-- Shipper/Receiver Status -->
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
-  <div style="background: var(--bg-elevated); padding: 12px; border-radius: 8px;">
-    <div style="font-size: 0.7em; color: var(--accent-amber); text-transform: uppercase;">📦 Shipper ETA</div>
-    <div id="summaryShipperETA" style="font-size: 1.2em; font-weight: 700; margin-top: 4px;">--</div>
-    <div id="summaryShipperStatus" style="font-size: 0.8em; margin-top: 4px;">--</div>
-  </div>
-  <div style="background: var(--bg-elevated); padding: 12px; border-radius: 8px;">
-    <div style="font-size: 0.7em; color: var(--accent-purple); text-transform: uppercase;">🏭 Receiver ETA</div>
-    <div id="summaryReceiverETA" style="font-size: 1.2em; font-weight: 700; margin-top: 4px;">--</div>
-    <div id="summaryReceiverStatus" style="font-size: 0.8em; margin-top: 4px;">--</div>
-  </div>
-</div>
-
-<div class="stats-grid">
-  <div class="stat-item">
-    <div class="label">Total Legs</div>
-    <div class="value" style="color: var(--accent-purple);" id="summaryLegs">--</div>
-  </div>
-  <div class="stat-item">
-    <div class="label">Total Drive Time</div>
-    <div class="value good" id="summaryDriveTime">--</div>
-  </div>
-  <div class="stat-item">
-    <div class="label">Total On-Duty</div>
-    <div class="value" id="summaryOnDuty">--</div>
-  </div>
-  <div class="stat-item">
-    <div class="label">Life Happens Buffer</div>
-    <div class="value" style="color: var(--accent-cyan);" id="summaryBuffer">--</div>
-  </div>
-</div>
-```
-
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+      <div style="background: var(--bg-elevated); padding: 12px; border-radius: 8px;">
+        <div style="font-size: 0.7em; color: var(--accent-amber); text-transform: uppercase;">📦 Shipper ETA</div>
+        <div id="summaryShipperETA" style="font-size: 1.2em; font-weight: 700; margin-top: 4px;">--</div>
+        <div id="summaryShipperStatus" style="font-size: 0.8em; margin-top: 4px;">--</div>
+      </div>
+      <div style="background: var(--bg-elevated); padding: 12px; border-radius: 8px;">
+        <div style="font-size: 0.7em; color: var(--accent-purple); text-transform: uppercase;">🏭 Receiver ETA</div>
+        <div id="summaryReceiverETA" style="font-size: 1.2em; font-weight: 700; margin-top: 4px;">--</div>
+        <div id="summaryReceiverStatus" style="font-size: 0.8em; margin-top: 4px;">--</div>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="label">Total Legs</div>
+        <div class="value" style="color: var(--accent-purple);" id="summaryLegs">--</div>
+      </div>
+      <div class="stat-item">
+        <div class="label">Total Drive</div>
+        <div class="value good" id="summaryDriveTime">--</div>
+      </div>
+    </div>
   </div>
 
-  <!-- Leg-by-Leg Breakdown -->
-
-  <div class="card" id="tripLegsCard" style="display: none;">
-    <div class="card-title">🗓️ Leg-by-Leg Timeline</div>
-    <p style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 12px;">
-      Schema: L[leg]-D[drive] / L[leg]-S[stop] • Cumulative miles shown
-    </p>
-    <div id="legTabsContainer" style="display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap;"></div>
-    <div id="legDetailContainer"></div>
-  </div>
-
-  <!-- Full Timeline Table -->
+  <!-- Timeline Table -->
 
   <div class="card" id="tripTimelineCard" style="display: none;">
     <div class="card-title">📋 Complete Timeline</div>
-    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
-      <table style="width: 100%; min-width: 700px; border-collapse: collapse; font-size: 0.75em; font-family: 'JetBrains Mono', monospace;">
+    <div style="overflow-x: auto;">
+      <table class="records-table">
         <thead>
-          <tr style="background: var(--bg-elevated); text-align: left;">
-            <th style="padding: 8px; color: var(--accent-cyan);">Segment</th>
-            <th style="padding: 8px;">Category</th>
-            <th style="padding: 8px;">Start</th>
-            <th style="padding: 8px;">End</th>
-            <th style="padding: 8px;">Duration</th>
-            <th style="padding: 8px;">Mile</th>
-            <th style="padding: 8px;">Progress</th>
-            <th style="padding: 8px;">Notes</th>
+          <tr>
+            <th style="color: var(--accent-cyan);">Seg</th>
+            <th>Cat</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Dur</th>
+            <th>Mile</th>
+            <th>Notes</th>
           </tr>
         </thead>
         <tbody id="tripTimelineBody"></tbody>
       </table>
     </div>
   </div>
-
 </div>
 
 <!-- TAB: TIMELINE -->
 
 <div id="tab-timeline" class="tab-content">
-
-  <!-- Hierarchy Tree View -->
-
-  <div class="card">
-    <div class="card-title">🌳 Run Hierarchy</div>
-    <div id="hierarchyTree" style="font-family: 'JetBrains Mono', monospace; font-size: 0.8em;">
-      <p style="color: var(--text-muted); text-align: center; padding: 20px;">No events yet. Add your first event!</p>
-    </div>
-  </div>
-
-  <!-- Event List -->
-
   <div class="card">
     <div class="card-title">📊 Event Timeline</div>
     <div class="event-list" id="eventList">
-      <p style="color: var(--text-muted); text-align: center; padding: 20px;">No events yet. Add your first event!</p>
+      <p style="color: var(--text-muted); text-align: center; padding: 20px;">No events yet. Add your first event in Entry tab!</p>
     </div>
   </div>
-
-  <!-- Calculated Stats -->
 
   <div class="card">
     <div class="card-title">📈 Run Statistics</div>
     <div class="stats-grid">
       <div class="stat-item">
-        <div class="label">Miles This Leg</div>
-        <div class="value" id="statMilesLeg">0</div>
-      </div>
-      <div class="stat-item">
         <div class="label">Miles This Run</div>
         <div class="value" id="statMilesRun">0</div>
       </div>
       <div class="stat-item">
-        <div class="label">Time This Leg</div>
-        <div class="value" id="statTimeLeg">0:00</div>
+        <div class="label">Drive Time</div>
+        <div class="value" id="statDriveTime">0:00</div>
       </div>
       <div class="stat-item">
-        <div class="label">Time This Run</div>
-        <div class="value" id="statTimeRun">0:00</div>
+        <div class="label">On-Duty Time</div>
+        <div class="value" id="statOnDutyTime">0:00</div>
       </div>
       <div class="stat-item">
-        <div class="label">Avg MPH (Leg)</div>
-        <div class="value" id="statAvgLeg">--</div>
-      </div>
-      <div class="stat-item">
-        <div class="label">Avg MPH (Run)</div>
-        <div class="value" id="statAvgRun">--</div>
+        <div class="label">Avg MPH</div>
+        <div class="value" id="statAvgMph">--</div>
       </div>
     </div>
   </div>
-
-  <!-- Export/Import -->
 
   <div class="card">
     <div class="card-title">💾 Data Management</div>
@@ -912,12 +874,9 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
         <div class="value good" id="recapAvail">70:00</div>
       </div>
     </div>
-    <div id="recapList" style="margin-top: 16px;"></div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">🚛 Daily Miles Capacity</div>
-    <div id="milesCapacityList"></div>
+    <div id="recapList" style="margin-top: 16px;">
+      <p style="color: var(--text-muted); text-align: center;">Enter events to see recap forecast</p>
+    </div>
   </div>
 </div>
 
@@ -926,29 +885,24 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
 <div id="tab-settings" class="tab-content">
   <div class="card">
     <div class="card-title">⚙️ Settings</div>
-
-```
-<div class="form-group">
-  <label>Average Speed (MPH)</label>
-  <input type="number" id="settingAvgSpeed" value="55">
-</div>
-<div class="form-group">
-  <label>Fudge Factor (minutes)</label>
-  <input type="number" id="settingFudge" value="30">
-</div>
-<div class="form-group">
-  <label>Terminal Timezone</label>
-  <select id="settingTimezone">
-    <option value="America/New_York">Eastern</option>
-    <option value="America/Chicago">Central</option>
-    <option value="America/Denver">Mountain</option>
-    <option value="America/Los_Angeles">Pacific</option>
-  </select>
-</div>
-
-<button class="btn btn-primary" onclick="saveSettings()" style="margin-top: 12px;">💾 Save Settings</button>
-```
-
+    <div class="form-group">
+      <label>Average Speed (MPH)</label>
+      <input type="number" id="settingAvgSpeed" value="55">
+    </div>
+    <div class="form-group">
+      <label>Fudge Factor (min)</label>
+      <input type="number" id="settingFudge" value="30">
+    </div>
+    <div class="form-group">
+      <label>Timezone</label>
+      <select id="settingTimezone">
+        <option value="America/New_York">Eastern</option>
+        <option value="America/Chicago">Central</option>
+        <option value="America/Denver">Mountain</option>
+        <option value="America/Los_Angeles">Pacific</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" onclick="saveSettings()" style="margin-top: 12px;">💾 Save Settings</button>
   </div>
 
   <div class="card">
@@ -961,15 +915,14 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
   <p class="brand">Sparked Matter • The Little Crystal Ball That Can</p>
   <p style="margin-top: 4px;">Code with Soul and Spirit • Connection over Protection</p>
   <p style="margin-top: 8px;">
-    🎭 Peer Review: Claude "The Queen" • Vale "The Workhorse" • Grok "Agent of Chaos" • Lyra "The Assertive Flight Controller"
+    🎭 AI Family: Claude "The Queen" • Vale "The Workhorse" • Grok "Agent of Chaos" • Lyra "Flight Controller"
   </p>
 </footer>
 
 <script>
 // ==============================================
-// CRYSTAL BALL MINI V5
-// Schema: L1-D1, L1-S1, L1-D2... (no L-30 in naming)
-// Total Miles → Auto-Generate Legs
+// CRYSTAL BALL MINI V5.1
+// Entry Tab FIXED! All functions implemented.
 // ==============================================
 
 const SCHEMA = {
@@ -978,16 +931,23 @@ const SCHEMA = {
   driveLimit: 11 * 60,
   dutyLimit: 14 * 60,
   resetMin: 34 * 60,
-  version: '5.0'
+  version: '5.1'
 };
 
 const CATEGORIES = {
-  'drive': { label: 'Drive', color: 'blue', affectsDrive: true, affectsCycle: true },
-  'on-duty': { label: 'On-Duty', color: 'amber', affectsDrive: false, affectsCycle: true },
-  'off-duty': { label: 'Off-Duty', color: 'green', affectsDrive: false, affectsCycle: false, countsTowardReset: true },
-  'sleeper': { label: 'Sleeper', color: 'purple', affectsDrive: false, affectsCycle: false, countsTowardReset: true },
-  'yard': { label: 'Yard Move', color: 'cyan', affectsDrive: false, affectsCycle: true },
-  'pc': { label: 'PC', color: 'muted', affectsDrive: false, affectsCycle: false, countsTowardReset: true }
+  'drive': { label: 'Drive', icon: '🚛', color: 'blue', affectsDrive: true, affectsCycle: true },
+  'on-duty': { label: 'On-Duty', icon: '📋', color: 'amber', affectsDrive: false, affectsCycle: true },
+  'off-duty': { label: 'Off-Duty', icon: '☕', color: 'green', affectsDrive: false, affectsCycle: false },
+  'sleeper': { label: 'Sleeper', icon: '😴', color: 'purple', affectsDrive: false, affectsCycle: false },
+  'yard': { label: 'Yard', icon: '🅿️', color: 'cyan', affectsDrive: false, affectsCycle: true },
+  'pc': { label: 'PC', icon: '🚗', color: 'muted', affectsDrive: false, affectsCycle: false }
+};
+
+const STOP_TYPES = {
+  'event': { label: 'Event', icon: '📍' },
+  'shipper': { label: 'Shipper', icon: '📦' },
+  'receiver': { label: 'Receiver', icon: '🏭' },
+  'noload': { label: 'No-Load', icon: '🅿️' }
 };
 
 // ==============================================
@@ -997,15 +957,11 @@ const CATEGORIES = {
 let state = {
   currentRunId: '',
   currentLegNum: 1,
-  currentStopNum: 1,
+  currentEventType: 'S',  // 'S' or 'D'
+  currentEventNum: 1,
   currentMode: 'add',
   editingEventId: null,
-  stopCounter: {},
   events: [],
-  theoryEvents: [],
-  consecutiveRestMin: 0,
-  cycleUsedMin: 0,
-  driveUsedMin: 0,
   settings: {
     avgSpeed: 55,
     fudgeMin: 30,
@@ -1013,42 +969,22 @@ let state = {
   }
 };
 
-// Trip generator state
 let tripState = {
-  drivePaceMin: 8 * 60 + 45,  // Default: 8:45 equilibrium
+  drivePaceMin: 8 * 60 + 45,
   generatedTrip: null
 };
 
 const STORAGE_KEY = 'crystalBallMini_v5';
 
-// HOS Constants (internal - not shown in schema naming)
-const HOS_MANDATORY_BREAK_BEFORE = 8 * 60;
-const HOS_MANDATORY_BREAK_DURATION = 30;
-const DRIVER_BREAK_INTERVAL = 3 * 60;
-const DRIVER_BREAK_DURATION = 15;
-
 // ==============================================
-// HELPER FUNCTIONS
+// UTILITY FUNCTIONS
 // ==============================================
-
-function formatTime(minutes) {
-  const hrs = Math.floor(minutes / 60);
-  const mins = Math.round(minutes % 60);
-  if (hrs === 0) return `${mins} min`;
-  if (mins === 0) return `${hrs} hr`;
-  return `${hrs} hr ${mins} min`;
-}
 
 function formatTimeShort(minutes) {
+  if (minutes === null || minutes === undefined) return '--:--';
   const hrs = Math.floor(minutes / 60);
   const mins = Math.round(minutes % 60);
   return `${hrs}:${mins.toString().padStart(2, '0')}`;
-}
-
-function parseTime(timeStr) {
-  if (!timeStr) return null;
-  const [hrs, mins] = timeStr.split(':').map(Number);
-  return hrs * 60 + mins;
 }
 
 function formatMinutesToTime(minutes) {
@@ -1057,7 +993,14 @@ function formatMinutesToTime(minutes) {
   return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
 }
 
-function formatTimeDisplay(minutes) {
+function parseTime(timeStr) {
+  if (!timeStr) return null;
+  const [hrs, mins] = timeStr.split(':').map(Number);
+  return hrs * 60 + mins;
+}
+
+function formatDuration(minutes) {
+  if (!minutes) return '--';
   const hrs = Math.floor(minutes / 60);
   const mins = Math.round(minutes % 60);
   if (hrs === 0) return `${mins}m`;
@@ -1065,8 +1008,12 @@ function formatTimeDisplay(minutes) {
   return `${hrs}h ${mins}m`;
 }
 
-function formatDayTime(dayNum, timeMin) {
-  return `Day ${dayNum} ${formatMinutesToTime(timeMin)}`;
+function getTodayDate() {
+  return new Date().toISOString().split('T')[0];
+}
+
+function getCurrentEventId() {
+  return `L${state.currentLegNum}-${state.currentEventType}${state.currentEventNum}`;
 }
 
 // ==============================================
@@ -1078,10 +1025,404 @@ function switchTab(tabName) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + tabName).classList.add('active');
   event.target.closest('.tab-btn').classList.add('active');
+  
+  // Refresh displays when switching tabs
+  if (tabName === 'timeline') renderTimeline();
+  if (tabName === 'recaps') renderRecaps();
 }
 
 // ==============================================
-// TRIP GENERATOR V5
+// ENTRY TAB - NAVIGATION
+// ==============================================
+
+function prevLeg() {
+  if (state.currentLegNum > 1) {
+    state.currentLegNum--;
+    state.currentEventNum = 1;
+    updateDisplays();
+  }
+}
+
+function nextLeg() {
+  state.currentLegNum++;
+  state.currentEventNum = 1;
+  updateDisplays();
+}
+
+function prevEvent() {
+  if (state.currentEventNum > 1) {
+    state.currentEventNum--;
+    updateDisplays();
+  }
+}
+
+function nextEvent() {
+  state.currentEventNum++;
+  updateDisplays();
+}
+
+function setEventType(type) {
+  state.currentEventType = type;
+  state.currentEventNum = 1;
+  
+  // Update toggle buttons
+  document.getElementById('toggleStop').className = type === 'S' ? 'active-stop' : '';
+  document.getElementById('toggleDrive').className = type === 'D' ? 'active-drive' : '';
+  
+  // Default category based on event type
+  if (type === 'D') {
+    document.getElementById('inputCategory').value = 'drive';
+  } else {
+    document.getElementById('inputCategory').value = 'off-duty';
+  }
+  
+  updateDisplays();
+}
+
+function updateDisplays() {
+  const eventId = getCurrentEventId();
+  
+  document.getElementById('currentLegDisplay').textContent = `L${state.currentLegNum}`;
+  document.getElementById('currentEventDisplay').textContent = `${state.currentEventType}${state.currentEventNum}`;
+  document.getElementById('nextStopRef').textContent = `Next: ${eventId}`;
+  document.getElementById('deleteLocDisplay').textContent = eventId;
+  
+  // Update run badge
+  const runBadge = document.getElementById('currentRunBadge');
+  runBadge.textContent = state.currentRunId ? `RUN: ${state.currentRunId}` : 'RUN: ---';
+  
+  document.getElementById('currentLegBadge').textContent = `LEG: ${state.currentLegNum}`;
+  
+  // Update mode status
+  if (state.currentMode === 'add') {
+    document.getElementById('modeStatus').textContent = `Adding new record at ${eventId}`;
+  } else {
+    document.getElementById('modeStatus').textContent = `Editing record ${eventId}`;
+  }
+}
+
+// ==============================================
+// ENTRY TAB - MODE
+// ==============================================
+
+function setMode(mode) {
+  state.currentMode = mode;
+  
+  const addBtn = document.getElementById('modeAddBtn');
+  const editBtn = document.getElementById('modeEditBtn');
+  const deleteSection = document.getElementById('deleteSection');
+  const submitBtn = document.getElementById('btnSubmit');
+  
+  if (mode === 'add') {
+    addBtn.className = 'btn btn-success';
+    editBtn.className = 'btn btn-secondary';
+    deleteSection.style.display = 'none';
+    submitBtn.textContent = '✓ Enter Record';
+    state.editingEventId = null;
+  } else {
+    addBtn.className = 'btn btn-secondary';
+    editBtn.className = 'btn btn-primary';
+    deleteSection.style.display = 'block';
+    submitBtn.textContent = '✓ Update Record';
+    
+    // Try to load existing record
+    loadRecord();
+  }
+  
+  updateDisplays();
+}
+
+function loadRecord() {
+  const eventId = getCurrentEventId();
+  const existing = state.events.find(e => e.id === eventId);
+  
+  if (existing) {
+    state.editingEventId = eventId;
+    
+    // Populate form
+    document.getElementById('inputRunId').value = existing.runId || '';
+    document.getElementById('inputCategory').value = existing.category || 'off-duty';
+    document.getElementById('inputStopType').value = existing.stopType || 'event';
+    document.getElementById('inputStartTime').value = existing.startTime || '';
+    document.getElementById('inputEndTime').value = existing.endTime || '';
+    document.getElementById('inputDuration').value = existing.durationMin || '';
+    document.getElementById('inputMiles').value = existing.miles || '';
+    document.getElementById('inputDate').value = existing.date || '';
+    document.getElementById('inputComment').value = existing.comment || '';
+    
+    document.getElementById('modeStatus').textContent = `Editing: ${eventId}`;
+  } else {
+    document.getElementById('modeStatus').textContent = `No record at ${eventId} - will create new`;
+    state.editingEventId = null;
+  }
+}
+
+// ==============================================
+// ENTRY TAB - TIME AUTO-CALC
+// ==============================================
+
+function autoCalcEndTime() {
+  const startTime = document.getElementById('inputStartTime').value;
+  const duration = parseInt(document.getElementById('inputDuration').value);
+  
+  if (startTime && duration) {
+    const startMin = parseTime(startTime);
+    let endMin = startMin + duration;
+    
+    // Handle overnight
+    if (endMin >= 24 * 60) endMin -= 24 * 60;
+    
+    document.getElementById('inputEndTime').value = formatMinutesToTime(endMin);
+  }
+}
+
+function autoCalcDuration() {
+  const startTime = document.getElementById('inputStartTime').value;
+  const endTime = document.getElementById('inputEndTime').value;
+  
+  if (startTime && endTime) {
+    const startMin = parseTime(startTime);
+    let endMin = parseTime(endTime);
+    
+    // Handle overnight
+    if (endMin < startMin) endMin += 24 * 60;
+    
+    const duration = endMin - startMin;
+    document.getElementById('inputDuration').value = duration;
+  }
+}
+
+// ==============================================
+// ENTRY TAB - SUBMIT & CLEAR
+// ==============================================
+
+function submitRecord() {
+  const eventId = getCurrentEventId();
+  
+  // Gather form data
+  const record = {
+    id: eventId,
+    runId: document.getElementById('inputRunId').value.trim(),
+    legNum: state.currentLegNum,
+    eventType: state.currentEventType,
+    eventNum: state.currentEventNum,
+    category: document.getElementById('inputCategory').value,
+    stopType: document.getElementById('inputStopType').value,
+    startTime: document.getElementById('inputStartTime').value,
+    endTime: document.getElementById('inputEndTime').value,
+    durationMin: parseInt(document.getElementById('inputDuration').value) || 0,
+    miles: parseInt(document.getElementById('inputMiles').value) || 0,
+    date: document.getElementById('inputDate').value || getTodayDate(),
+    comment: document.getElementById('inputComment').value.trim()
+  };
+  
+  // Validate
+  if (!record.startTime) {
+    alert('Please enter a start time');
+    return;
+  }
+  
+  // Update run ID in state
+  if (record.runId) {
+    state.currentRunId = record.runId;
+  }
+  
+  // Find existing or add new
+  const existingIdx = state.events.findIndex(e => e.id === eventId);
+  if (existingIdx >= 0) {
+    state.events[existingIdx] = record;
+  } else {
+    state.events.push(record);
+  }
+  
+  // Sort events
+  state.events.sort((a, b) => {
+    if (a.legNum !== b.legNum) return a.legNum - b.legNum;
+    if (a.eventType !== b.eventType) return a.eventType === 'D' ? -1 : 1;
+    return a.eventNum - b.eventNum;
+  });
+  
+  // Save and refresh
+  saveToStorage();
+  renderEntryTable();
+  
+  // Auto-advance in ADD mode
+  if (state.currentMode === 'add') {
+    state.currentEventNum++;
+    clearForm();
+  }
+  
+  updateDisplays();
+  
+  // Flash feedback
+  const indicator = document.getElementById('saveIndicator');
+  indicator.textContent = '✅ Record saved!';
+  indicator.style.color = 'var(--accent-green)';
+  setTimeout(() => {
+    indicator.textContent = '💾 Auto-saved';
+  }, 1500);
+}
+
+function clearForm() {
+  // Keep: runId, legNum, eventType, eventNum
+  // Clear: times, miles, comment
+  document.getElementById('inputStartTime').value = '';
+  document.getElementById('inputEndTime').value = '';
+  document.getElementById('inputDuration').value = '';
+  document.getElementById('inputMiles').value = '';
+  document.getElementById('inputComment').value = '';
+  document.getElementById('inputCategory').value = state.currentEventType === 'D' ? 'drive' : 'off-duty';
+  document.getElementById('inputStopType').value = 'event';
+  
+  // Reset delete checkbox
+  document.getElementById('confirmDeleteCheckbox').checked = false;
+  toggleDeleteButton();
+}
+
+// ==============================================
+// ENTRY TAB - DELETE
+// ==============================================
+
+function toggleDeleteButton() {
+  const checkbox = document.getElementById('confirmDeleteCheckbox');
+  const btn = document.getElementById('btnDeleteConfirmed');
+  
+  if (checkbox.checked) {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  } else {
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+  }
+}
+
+function executeDelete() {
+  const eventId = getCurrentEventId();
+  const idx = state.events.findIndex(e => e.id === eventId);
+  
+  if (idx >= 0) {
+    state.events.splice(idx, 1);
+    saveToStorage();
+    renderEntryTable();
+    clearForm();
+    setMode('add');
+    
+    document.getElementById('saveIndicator').textContent = '🗑️ Deleted!';
+    setTimeout(() => {
+      document.getElementById('saveIndicator').textContent = '💾 Auto-saved';
+    }, 1500);
+  } else {
+    alert('No record found at ' + eventId);
+  }
+  
+  document.getElementById('confirmDeleteCheckbox').checked = false;
+  toggleDeleteButton();
+}
+
+// ==============================================
+// ENTRY TAB - TABLE RENDER
+// ==============================================
+
+function renderEntryTable() {
+  const tbody = document.getElementById('recordsTableBody');
+  
+  if (state.events.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="padding: 20px; text-align: center; color: var(--text-muted);">No records yet. Enter your first record above!</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = state.events.map(e => {
+    const cat = CATEGORIES[e.category] || {};
+    const stopType = STOP_TYPES[e.stopType] || {};
+    const bgColor = e.eventType === 'D' ? 'rgba(6, 214, 160, 0.1)' : 'rgba(34, 211, 238, 0.1)';
+    
+    return `
+      <tr style="background: ${bgColor};" onclick="jumpToRecord('${e.id}')">
+        <td style="color: var(--accent-cyan); font-weight: 600;">${e.id}</td>
+        <td>${cat.icon || ''} ${cat.label || e.category}</td>
+        <td style="color: var(--accent-amber);">${stopType.icon || ''} ${stopType.label || ''}</td>
+        <td>${e.startTime || '--'}</td>
+        <td>${e.endTime || '--'}</td>
+        <td>${formatDuration(e.durationMin)}</td>
+        <td>${e.miles || '--'}</td>
+        <td style="color: var(--text-secondary); max-width: 150px; overflow: hidden; text-overflow: ellipsis;">${e.comment || ''}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function jumpToRecord(eventId) {
+  // Parse the event ID: L1-S1 or L1-D2
+  const match = eventId.match(/L(\d+)-([SD])(\d+)/);
+  if (match) {
+    state.currentLegNum = parseInt(match[1]);
+    state.currentEventType = match[2];
+    state.currentEventNum = parseInt(match[3]);
+    
+    setEventType(state.currentEventType);
+    setMode('edit');
+  }
+}
+
+// ==============================================
+// TIMELINE TAB
+// ==============================================
+
+function renderTimeline() {
+  const container = document.getElementById('eventList');
+  
+  if (state.events.length === 0) {
+    container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 20px;">No events yet. Add your first event in Entry tab!</p>';
+    return;
+  }
+  
+  container.innerHTML = state.events.map(e => {
+    const cat = CATEGORIES[e.category] || {};
+    return `
+      <div class="event-item">
+        <span class="event-badge ${e.category}">${cat.label || e.category}</span>
+        <div class="event-details">
+          <div class="time">${e.startTime} → ${e.endTime} (${formatDuration(e.durationMin)})</div>
+          <div class="info">${e.id} • ${e.miles ? e.miles + ' mi' : ''} ${e.comment || ''}</div>
+        </div>
+        <button class="event-delete" onclick="deleteEvent('${e.id}')">×</button>
+      </div>
+    `;
+  }).join('');
+  
+  // Update stats
+  const driveEvents = state.events.filter(e => e.category === 'drive');
+  const totalDriveMin = driveEvents.reduce((sum, e) => sum + (e.durationMin || 0), 0);
+  const totalMiles = Math.max(...state.events.map(e => e.miles || 0), 0);
+  
+  document.getElementById('statMilesRun').textContent = totalMiles;
+  document.getElementById('statDriveTime').textContent = formatTimeShort(totalDriveMin);
+}
+
+function deleteEvent(eventId) {
+  if (confirm(`Delete ${eventId}?`)) {
+    const idx = state.events.findIndex(e => e.id === eventId);
+    if (idx >= 0) {
+      state.events.splice(idx, 1);
+      saveToStorage();
+      renderTimeline();
+      renderEntryTable();
+    }
+  }
+}
+
+// ==============================================
+// RECAPS TAB
+// ==============================================
+
+function renderRecaps() {
+  // Placeholder - would calculate from actual events
+  document.getElementById('recapUsed').textContent = '0:00';
+  document.getElementById('recapAvail').textContent = '70:00';
+}
+
+// ==============================================
+// PROPHECY TAB (Trip Generator)
 // ==============================================
 
 function setDrivePace(hours, minutes) {
@@ -1096,7 +1437,6 @@ function updateTripPreview() {
   const totalMiles = deadheadMiles + loadedMiles;
   const avgSpeed = parseInt(document.getElementById('theoryAvgSpeed').value) || 55;
   
-  // Update total display
   document.getElementById('previewTotalMiles').textContent = totalMiles;
   
   const milesPerDay = Math.round((tripState.drivePaceMin / 60) * avgSpeed);
@@ -1108,532 +1448,77 @@ function updateTripPreview() {
 }
 
 function generateFullTrip() {
-  // Get all inputs
   const deadheadMiles = parseInt(document.getElementById('theoryDeadheadMiles').value) || 0;
   const loadedMiles = parseInt(document.getElementById('theoryLoadedMiles').value) || 0;
   const totalMiles = deadheadMiles + loadedMiles;
-  const startDate = document.getElementById('theoryStartDate').value || '2026-01-04';
+  const startDate = document.getElementById('theoryStartDate').value;
   const startTime = document.getElementById('theoryStartTime').value || '06:00';
   const avgSpeed = parseInt(document.getElementById('theoryAvgSpeed').value) || 55;
-  const lifeHappensMin = parseInt(document.getElementById('theoryLifeHappens').value) || 0;
-  const preTripMin = parseInt(document.getElementById('theoryPreTripMin').value) || 5;
-  const postTripMin = parseInt(document.getElementById('theoryPostTripMin').value) || 5;
-  const secureTarpMin = parseInt(document.getElementById('theorySecureTarpMin').value) || 30;
-  
-  // Shipper/Receiver appointments (date + time windows)
-  const shipperDate = document.getElementById('theoryShipperDate').value;
-  const shipperEarly = document.getElementById('theoryShipperEarly').value;
-  const shipperLate = document.getElementById('theoryShipperLate').value;
-  const receiverDate = document.getElementById('theoryReceiverDate').value;
-  const receiverEarly = document.getElementById('theoryReceiverEarly').value;
-  const receiverLate = document.getElementById('theoryReceiverLate').value;
   
   if (totalMiles <= 0) {
-    alert('Please enter trip miles (deadhead and/or loaded)');
+    alert('Please enter trip miles');
     return;
   }
   
   const milesPerDay = (tripState.drivePaceMin / 60) * avgSpeed;
+  const numLegs = Math.ceil(totalMiles / milesPerDay);
   
-  const trip = {
-    totalMiles: totalMiles,
-    deadheadMiles: deadheadMiles,
-    loadedMiles: loadedMiles,
-    avgSpeed: avgSpeed,
-    lifeHappensMin: lifeHappensMin,
-    preTripMin: preTripMin,
-    postTripMin: postTripMin,
-    secureTarpMin: secureTarpMin,
-    startDate: startDate,
-    shipperAppt: { date: shipperDate, early: shipperEarly, late: shipperLate },
-    receiverAppt: { date: receiverDate, early: receiverEarly, late: receiverLate },
-    legs: [],
-    allEvents: [],
-    shipperETA: null,
-    receiverETA: null
-  };
-  
-  let globalMiles = 0;
-  let currentDay = 1;
-  let legNum = 1;
-  
-  // Calculate actual dates
-  const startDateObj = new Date(startDate + 'T' + startTime);
-  
-  // =====================
-  // PHASE 1: DEADHEAD (to Shipper)
-  // =====================
-  if (deadheadMiles > 0) {
-    let remainingDeadhead = deadheadMiles;
-    
-    while (remainingDeadhead > 0) {
-      const legMiles = Math.min(milesPerDay, remainingDeadhead);
-      const isLastDeadheadLeg = (remainingDeadhead <= milesPerDay);
-      
-      const leg = generateLeg({
-        legNum: legNum,
-        legMiles: legMiles,
-        startTime: startTime,
-        avgSpeed: avgSpeed,
-        globalMilesStart: globalMiles,
-        totalTripMiles: totalMiles,
-        preTripMin: preTripMin,
-        postTripMin: postTripMin,
-        phase: 'deadhead',
-        isLastLegOfPhase: isLastDeadheadLeg
-      });
-      
-      trip.legs.push(leg);
-      trip.allEvents.push(...leg.events);
-      
-      remainingDeadhead -= legMiles;
-      globalMiles += legMiles;
-      legNum++;
-      currentDay++;
-    }
-    
-    // ARRIVE AT SHIPPER - add secure/tarp
-    const lastDeadheadEvent = trip.allEvents[trip.allEvents.length - 1];
-    const shipperArrivalTime = parseTime(lastDeadheadEvent.endTime);
-    
-    // Calculate actual shipper ETA date
-    const shipperETADate = new Date(startDateObj);
-    shipperETADate.setDate(shipperETADate.getDate() + (currentDay - 2)); // -2 because we started on day 1 and incremented
-    trip.shipperETA = { 
-      day: currentDay - 1, 
-      time: shipperArrivalTime,
-      date: shipperETADate.toISOString().split('T')[0]
-    };
-    
-    trip.allEvents.push({
-      segmentId: `SHIPPER`,
-      category: 'on-duty',
-      label: 'Secure/Tarp',
-      startTime: lastDeadheadEvent.endTime,
-      endTime: formatMinutesToTime(shipperArrivalTime + secureTarpMin),
-      durationMin: secureTarpMin,
-      miles: globalMiles,
-      totalMiles: totalMiles,
-      notes: '📦 At Shipper - Secure & Tarp load'
-    });
-  }
-  
-  // =====================
-  // PHASE 2: LOADED (Shipper to Receiver)
-  // =====================
-  if (loadedMiles > 0) {
-    let remainingLoaded = loadedMiles;
-    
-    while (remainingLoaded > 0) {
-      const legMiles = Math.min(milesPerDay, remainingLoaded);
-      const isLastLoadedLeg = (remainingLoaded <= milesPerDay);
-      
-      const leg = generateLeg({
-        legNum: legNum,
-        legMiles: legMiles,
-        startTime: startTime,
-        avgSpeed: avgSpeed,
-        globalMilesStart: globalMiles,
-        totalTripMiles: totalMiles,
-        preTripMin: preTripMin,
-        postTripMin: postTripMin,
-        phase: 'loaded',
-        isLastLegOfPhase: isLastLoadedLeg
-      });
-      
-      trip.legs.push(leg);
-      trip.allEvents.push(...leg.events);
-      
-      remainingLoaded -= legMiles;
-      globalMiles += legMiles;
-      legNum++;
-      currentDay++;
-    }
-    
-    // ARRIVE AT RECEIVER (no unsecure/untarp added - that's for next load)
-    const lastLoadedEvent = trip.allEvents[trip.allEvents.length - 1];
-    const receiverArrivalTime = parseTime(lastLoadedEvent.endTime);
-    
-    // Calculate actual receiver ETA date
-    const receiverETADate = new Date(startDateObj);
-    receiverETADate.setDate(receiverETADate.getDate() + (currentDay - 2));
-    trip.receiverETA = { 
-      day: currentDay - 1, 
-      time: receiverArrivalTime,
-      date: receiverETADate.toISOString().split('T')[0]
-    };
-    
-    // Mark arrival at receiver (but no work event - unsecure/untarp is for NEXT load)
-    trip.allEvents.push({
-      segmentId: `RECEIVER`,
-      category: 'on-duty',
-      label: 'Arrived',
-      startTime: lastLoadedEvent.endTime,
-      endTime: lastLoadedEvent.endTime,
-      durationMin: 0,
-      miles: globalMiles,
-      totalMiles: totalMiles,
-      notes: '🏭 DELIVERED - At Receiver'
-    });
-  }
-  
-  // Calculate summary
-  trip.summary = {
-    totalLegs: trip.legs.length,
-    totalDriveMin: trip.allEvents.filter(e => e.category === 'drive').reduce((sum, e) => sum + e.durationMin, 0),
-    totalOnDutyMin: trip.allEvents.filter(e => e.category === 'on-duty').reduce((sum, e) => sum + e.durationMin, 0),
-    totalOffDutyMin: trip.allEvents.filter(e => e.category === 'off-duty').reduce((sum, e) => sum + e.durationMin, 0),
-    lifeHappensTotal: lifeHappensMin * trip.legs.length,
-    arrivalDay: currentDay - 1
-  };
-  
-  tripState.generatedTrip = trip;
-  displayTrip(trip);
-}
-
-// ==============================================
-// SINGLE LEG GENERATOR
-// Schema: L1-D1, L1-S1, L1-D2, L1-S2...
-// ==============================================
-
-function generateLeg({ legNum, legMiles, startTime, avgSpeed, globalMilesStart, totalTripMiles, preTripMin, postTripMin, phase, isLastLegOfPhase }) {
-  const leg = {
-    legNum: legNum,
-    phase: phase,
-    events: [],
-    totalDriveMin: 0,
-    totalMiles: legMiles
-  };
-  
+  // Generate simple timeline
+  const events = [];
   let currentTimeMin = parseTime(startTime);
   let milesCovered = 0;
-  let driveMinThisLeg = 0;
-  let driveMinSinceBreak = 0;
-  let driveSegNum = 1;
-  let stopNum = 1;
-  let hos30Taken = false;
   
-  // PRE-TRIP (On-Duty) - at start of every leg
-  leg.events.push({
-    segmentId: `L${legNum}-D${driveSegNum}`,
-    category: 'on-duty',
-    label: 'Pre-Trip',
-    startTime: formatMinutesToTime(currentTimeMin),
-    endTime: formatMinutesToTime(currentTimeMin + preTripMin),
-    durationMin: preTripMin,
-    miles: Math.round(globalMilesStart + milesCovered),
-    totalMiles: totalTripMiles,
-    notes: 'Pre-trip inspection'
-  });
-  currentTimeMin += preTripMin;
-  
-  // DRIVING LOOP
-  while (milesCovered < legMiles) {
-    const milesRemaining = legMiles - milesCovered;
+  for (let leg = 1; leg <= numLegs; leg++) {
+    const legMiles = Math.min(milesPerDay, totalMiles - milesCovered);
+    const driveMin = Math.round((legMiles / avgSpeed) * 60);
     
-    let maxDriveMin = tripState.drivePaceMin - driveMinThisLeg;
-    
-    // HOS mandatory 30-min break check
-    if (!hos30Taken && driveMinThisLeg + maxDriveMin > HOS_MANDATORY_BREAK_BEFORE) {
-      maxDriveMin = HOS_MANDATORY_BREAK_BEFORE - driveMinThisLeg;
-    }
-    
-    // Driver comfort break check
-    if (driveMinSinceBreak + maxDriveMin > DRIVER_BREAK_INTERVAL) {
-      maxDriveMin = DRIVER_BREAK_INTERVAL - driveMinSinceBreak;
-    }
-    
-    if (maxDriveMin <= 0) maxDriveMin = 1;
-    
-    const milesThisSegment = (maxDriveMin / 60) * avgSpeed;
-    
-    // Can we finish?
-    if (milesThisSegment >= milesRemaining) {
-      const finalDriveMin = Math.round((milesRemaining / avgSpeed) * 60);
-      
-      leg.events.push({
-        segmentId: `L${legNum}-D${driveSegNum}`,
-        category: 'drive',
-        label: `Drive ${driveSegNum}`,
-        startTime: formatMinutesToTime(currentTimeMin),
-        endTime: formatMinutesToTime(currentTimeMin + finalDriveMin),
-        durationMin: finalDriveMin,
-        miles: Math.round(globalMilesStart + legMiles),
-        totalMiles: totalTripMiles,
-        notes: 'Final segment'
-      });
-      
-      currentTimeMin += finalDriveMin;
-      driveMinThisLeg += finalDriveMin;
-      milesCovered = legMiles;
-      break;
-    }
-    
-    // DRIVE SEGMENT
-    const driveMin = Math.round(maxDriveMin);
-    leg.events.push({
-      segmentId: `L${legNum}-D${driveSegNum}`,
+    events.push({
+      segmentId: `L${leg}-D1`,
       category: 'drive',
-      label: `Drive ${driveSegNum}`,
       startTime: formatMinutesToTime(currentTimeMin),
       endTime: formatMinutesToTime(currentTimeMin + driveMin),
       durationMin: driveMin,
-      miles: Math.round(globalMilesStart + milesCovered + milesThisSegment),
-      totalMiles: totalTripMiles,
-      notes: driveSegNum === 1 ? 'Begin driving' : ''
+      miles: Math.round(milesCovered + legMiles),
+      notes: `Leg ${leg} driving`
     });
     
     currentTimeMin += driveMin;
-    milesCovered += milesThisSegment;
-    driveMinThisLeg += driveMin;
-    driveMinSinceBreak += driveMin;
-    driveSegNum++;
-    
-    // ONLY add a stop if we've hit a break threshold
-    const needsHOS30 = !hos30Taken && driveMinThisLeg >= HOS_MANDATORY_BREAK_BEFORE;
-    const needsComfortBreak = driveMinSinceBreak >= DRIVER_BREAK_INTERVAL;
-    
-    if (needsHOS30 || needsComfortBreak) {
-      let breakDuration = DRIVER_BREAK_DURATION;
-      let breakNotes = 'Rest stop';
-      
-      if (needsHOS30) {
-        breakDuration = HOS_MANDATORY_BREAK_DURATION;
-        hos30Taken = true;
-      }
-      
-      // STOP (Off-Duty)
-      leg.events.push({
-        segmentId: `L${legNum}-S${stopNum}`,
-        category: 'off-duty',
-        label: `Stop ${stopNum}`,
-        startTime: formatMinutesToTime(currentTimeMin),
-        endTime: formatMinutesToTime(currentTimeMin + breakDuration),
-        durationMin: breakDuration,
-        miles: Math.round(globalMilesStart + milesCovered),
-        totalMiles: totalTripMiles,
-        notes: breakNotes
-      });
-      
-      currentTimeMin += breakDuration;
-      driveMinSinceBreak = 0;
-      stopNum++;
-    }
+    milesCovered += legMiles;
   }
   
-  // POST-TRIP (On-Duty) - at end of every leg
-  leg.events.push({
-    segmentId: `L${legNum}-S${stopNum}`,
-    category: 'on-duty',
-    label: 'Post-Trip',
-    startTime: formatMinutesToTime(currentTimeMin),
-    endTime: formatMinutesToTime(currentTimeMin + postTripMin),
-    durationMin: postTripMin,
-    miles: Math.round(globalMilesStart + legMiles),
-    totalMiles: totalTripMiles,
-    notes: 'Post-trip inspection'
-  });
-  
-  leg.totalDriveMin = driveMinThisLeg;
-  return leg;
-}
-
-// ==============================================
-// DISPLAY FUNCTIONS
-// ==============================================
-
-function displayTrip(trip) {
+  // Display results
   document.getElementById('tripSummaryCard').style.display = 'block';
-  document.getElementById('summaryLegs').textContent = trip.summary.totalLegs;
-  document.getElementById('summaryDriveTime').textContent = formatTimeDisplay(trip.summary.totalDriveMin);
-  document.getElementById('summaryOnDuty').textContent = formatTimeDisplay(trip.summary.totalOnDutyMin);
-  document.getElementById('summaryBuffer').textContent = `${trip.summary.lifeHappensTotal}m`;
+  document.getElementById('summaryLegs').textContent = numLegs;
+  document.getElementById('summaryDriveTime').textContent = formatDuration(events.reduce((s, e) => s + e.durationMin, 0));
   
-  // Shipper ETA - update the calculated field in the form
-  if (trip.shipperETA) {
-    const shipperETAStr = `${trip.shipperETA.date} @ ${formatMinutesToTime(trip.shipperETA.time)}`;
-    document.getElementById('shipperCalcETA').textContent = shipperETAStr;
-    document.getElementById('summaryShipperETA').textContent = shipperETAStr;
-    
-    // Compare against appointment
-    const shipperStatus = getDateWindowStatus(
-      trip.shipperETA.date, trip.shipperETA.time,
-      trip.shipperAppt.date, trip.shipperAppt.early, trip.shipperAppt.late
-    );
-    document.getElementById('shipperCalcStatus').innerHTML = shipperStatus;
-    document.getElementById('summaryShipperStatus').innerHTML = shipperStatus;
-  } else {
-    document.getElementById('shipperCalcETA').textContent = 'N/A (no deadhead)';
-    document.getElementById('shipperCalcStatus').textContent = 'Direct to shipper - enter deadhead miles';
-    document.getElementById('summaryShipperETA').textContent = 'N/A';
-    document.getElementById('summaryShipperStatus').textContent = 'No deadhead';
-  }
-  
-  // Receiver ETA - update the calculated field in the form
-  if (trip.receiverETA) {
-    const receiverETAStr = `${trip.receiverETA.date} @ ${formatMinutesToTime(trip.receiverETA.time)}`;
-    document.getElementById('receiverCalcETA').textContent = receiverETAStr;
-    document.getElementById('summaryReceiverETA').textContent = receiverETAStr;
-    
-    // Compare against appointment
-    const receiverStatus = getDateWindowStatus(
-      trip.receiverETA.date, trip.receiverETA.time,
-      trip.receiverAppt.date, trip.receiverAppt.early, trip.receiverAppt.late
-    );
-    document.getElementById('receiverCalcStatus').innerHTML = receiverStatus;
-    document.getElementById('summaryReceiverStatus').innerHTML = receiverStatus;
-  } else {
-    document.getElementById('receiverCalcETA').textContent = 'N/A (no loaded miles)';
-    document.getElementById('receiverCalcStatus').textContent = 'Enter loaded miles';
-    document.getElementById('summaryReceiverETA').textContent = 'N/A';
-    document.getElementById('summaryReceiverStatus').textContent = 'No loaded miles';
-  }
-  
-  document.getElementById('tripLegsCard').style.display = 'block';
-  
-  const tabsContainer = document.getElementById('legTabsContainer');
-  tabsContainer.innerHTML = trip.legs.map((leg, idx) => `
-    <button class="btn ${idx === 0 ? 'btn-primary' : 'btn-secondary'}" 
-            style="padding: 6px 12px; font-size: 0.8em;"
-            onclick="showLegDetail(${idx})" 
-            id="legTab${idx}">
-      L${leg.legNum} (${Math.round(leg.totalMiles)} mi)
-    </button>
-  `).join('');
-  
-  showLegDetail(0);
+  document.getElementById('summaryShipperETA').textContent = `Day ${Math.ceil(deadheadMiles / milesPerDay) || 1}`;
+  document.getElementById('summaryReceiverETA').textContent = `Day ${numLegs}`;
   
   document.getElementById('tripTimelineCard').style.display = 'block';
-  const tbody = document.getElementById('tripTimelineBody');
+  document.getElementById('tripTimelineBody').innerHTML = events.map(e => `
+    <tr>
+      <td style="color: var(--accent-cyan);">${e.segmentId}</td>
+      <td>🚛 Drive</td>
+      <td>${e.startTime}</td>
+      <td>${e.endTime}</td>
+      <td>${formatDuration(e.durationMin)}</td>
+      <td>${e.miles}</td>
+      <td>${e.notes}</td>
+    </tr>
+  `).join('');
   
-  tbody.innerHTML = trip.allEvents.map(event => {
-    const bgColor = event.segmentId === 'SHIPPER' ? 'rgba(245, 158, 11, 0.3)' :
-                    event.segmentId === 'RECEIVER' ? 'rgba(157, 78, 221, 0.3)' :
-                    event.category === 'drive' ? 'rgba(6, 214, 160, 0.15)' :
-                    event.category === 'on-duty' ? 'rgba(245, 158, 11, 0.15)' :
-                    'rgba(138, 43, 226, 0.1)';
-    const textColor = event.segmentId === 'SHIPPER' ? 'var(--accent-amber)' :
-                      event.segmentId === 'RECEIVER' ? 'var(--accent-purple)' :
-                      event.category === 'drive' ? 'var(--accent-green)' :
-                      event.category === 'on-duty' ? 'var(--accent-amber)' :
-                      'var(--accent-purple)';
-    const icon = event.segmentId === 'SHIPPER' ? '📦' :
-                 event.segmentId === 'RECEIVER' ? '🏭' :
-                 event.category === 'drive' ? '🚛' :
-                 event.category === 'on-duty' ? '📋' : '☕';
-    
-    // Progress bar
-    const progressPct = event.totalMiles ? Math.round((event.miles / event.totalMiles) * 100) : 0;
-    const progressBar = event.totalMiles ? 
-      `<div style="width: 60px; background: var(--bg-dark); border-radius: 4px; overflow: hidden; height: 8px;">
-        <div style="width: ${progressPct}%; background: var(--accent-green); height: 100%;"></div>
-      </div>
-      <span style="font-size: 0.7em; color: var(--text-muted);">${progressPct}%</span>` : '';
-    
-    return `
-      <tr style="background: ${bgColor}; border-bottom: 1px solid var(--border);">
-        <td style="padding: 8px; color: ${textColor}; font-weight: 600;">${event.segmentId}</td>
-        <td style="padding: 8px;">${icon} ${event.label || event.category}</td>
-        <td style="padding: 8px;">${event.startTime}</td>
-        <td style="padding: 8px;">${event.endTime}</td>
-        <td style="padding: 8px;">${formatTimeDisplay(event.durationMin)}</td>
-        <td style="padding: 8px;">${event.miles}</td>
-        <td style="padding: 8px;">${progressBar}</td>
-        <td style="padding: 8px; font-size: 0.85em; color: var(--text-secondary);">${event.notes}</td>
-      </tr>
-    `;
-  }).join('');
-}
-
-// Check if ETA is within window (time only - same day)
-function getWindowStatus(etaMin, earlyMin, lateMin) {
-  if (etaMin < earlyMin) {
-    const earlyBy = earlyMin - etaMin;
-    return `<span style="color: var(--accent-cyan);">⏰ ${earlyBy}m early</span>`;
-  } else if (etaMin > lateMin) {
-    const lateBy = etaMin - lateMin;
-    return `<span style="color: var(--accent-red);">⚠️ ${lateBy}m late</span>`;
-  } else {
-    return `<span style="color: var(--accent-green);">✓ In window</span>`;
-  }
-}
-
-// Check if ETA date/time is within appointment window
-function getDateWindowStatus(etaDate, etaTimeMin, apptDate, apptEarly, apptLate) {
-  const etaDateObj = new Date(etaDate);
-  const apptDateObj = new Date(apptDate);
-  const apptEarlyMin = parseTime(apptEarly);
-  const apptLateMin = parseTime(apptLate);
-  
-  // Compare dates first
-  if (etaDateObj < apptDateObj) {
-    // Arriving before appointment date
-    const daysDiff = Math.ceil((apptDateObj - etaDateObj) / (1000 * 60 * 60 * 24));
-    return `<span style="color: var(--accent-cyan);">⏰ ${daysDiff} day(s) early - wait for appt</span>`;
-  } else if (etaDateObj > apptDateObj) {
-    // Arriving after appointment date
-    const daysDiff = Math.ceil((etaDateObj - apptDateObj) / (1000 * 60 * 60 * 24));
-    return `<span style="color: var(--accent-red);">⚠️ ${daysDiff} day(s) LATE!</span>`;
-  } else {
-    // Same date - check time window
-    if (etaTimeMin < apptEarlyMin) {
-      const earlyBy = apptEarlyMin - etaTimeMin;
-      return `<span style="color: var(--accent-cyan);">⏰ ${earlyBy}m early - on time!</span>`;
-    } else if (etaTimeMin > apptLateMin) {
-      const lateBy = etaTimeMin - apptLateMin;
-      return `<span style="color: var(--accent-red);">⚠️ ${lateBy}m past window</span>`;
-    } else {
-      return `<span style="color: var(--accent-green);">✓ IN WINDOW - On time!</span>`;
-    }
-  }
-}
-
-function showLegDetail(legIdx) {
-  const trip = tripState.generatedTrip;
-  if (!trip) return;
-  
-  trip.legs.forEach((_, idx) => {
-    const tab = document.getElementById(`legTab${idx}`);
-    if (tab) tab.className = idx === legIdx ? 'btn btn-primary' : 'btn btn-secondary';
-  });
-  
-  const leg = trip.legs[legIdx];
-  const container = document.getElementById('legDetailContainer');
-  
-  container.innerHTML = `
-    <div style="background: var(--bg-elevated); padding: 12px; border-radius: 8px;">
-      <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-        <span style="color: var(--accent-purple); font-weight: 600;">Leg ${leg.legNum}</span>
-        <span style="color: var(--text-muted);">${Math.round(leg.totalMiles)} miles • ${formatTimeDisplay(leg.totalDriveMin)} drive</span>
-      </div>
-      <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8em;">
-        ${leg.events.map(e => `
-          <div style="display: flex; gap: 12px; padding: 4px 0; border-bottom: 1px solid var(--border);">
-            <span style="color: ${e.category === 'drive' ? 'var(--accent-green)' : e.category === 'on-duty' ? 'var(--accent-amber)' : 'var(--accent-purple)'}; min-width: 70px;">${e.segmentId}</span>
-            <span style="min-width: 50px;">${e.startTime}</span>
-            <span style="color: var(--text-muted);">→</span>
-            <span style="min-width: 50px;">${e.endTime}</span>
-            <span style="color: var(--text-secondary);">${e.notes}</span>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `;
+  tripState.generatedTrip = { events, totalMiles };
 }
 
 // ==============================================
-// STORAGE & SETTINGS
+// STORAGE
 // ==============================================
 
 function saveToStorage() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    document.getElementById('saveIndicator').textContent = '💾 Saved!';
-    setTimeout(() => {
-      document.getElementById('saveIndicator').textContent = '💾 Auto-saved';
-    }, 1000);
   } catch (e) {
-    console.warn('Storage not available:', e);
+    console.warn('Storage error:', e);
   }
 }
 
@@ -1646,42 +1531,23 @@ function loadFromStorage() {
       return true;
     }
   } catch (e) {
-    console.warn('Storage not available:', e);
+    console.warn('Storage error:', e);
   }
   return false;
-}
-
-function saveSettings() {
-  state.settings.avgSpeed = parseInt(document.getElementById('settingAvgSpeed').value) || 55;
-  state.settings.fudgeMin = parseInt(document.getElementById('settingFudge').value) || 30;
-  state.settings.timezone = document.getElementById('settingTimezone').value;
-  saveToStorage();
-  alert('Settings saved!');
-}
-
-function clearAllData() {
-  if (confirm('Clear ALL data? This cannot be undone.')) {
-    state.events = [];
-    state.theoryEvents = [];
-    tripState.generatedTrip = null;
-    localStorage.removeItem(STORAGE_KEY);
-    location.reload();
-  }
 }
 
 function exportJSON() {
   const data = {
     version: SCHEMA.version,
     exportedAt: new Date().toISOString(),
-    state: state,
-    trip: tripState.generatedTrip
+    state: state
   };
   
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `crystal_ball_v5_${new Date().toISOString().split('T')[0]}.json`;
+  a.download = `crystal_ball_${getTodayDate()}.json`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -1697,14 +1563,31 @@ function importJSON(event) {
       if (imported.state) {
         state = { ...state, ...imported.state };
         saveToStorage();
-        alert('Data imported successfully!');
-        location.reload();
+        renderEntryTable();
+        updateDisplays();
+        alert('Import successful!');
       }
     } catch (err) {
-      alert('Error importing file: ' + err.message);
+      alert('Import error: ' + err.message);
     }
   };
   reader.readAsText(file);
+}
+
+function saveSettings() {
+  state.settings.avgSpeed = parseInt(document.getElementById('settingAvgSpeed').value) || 55;
+  state.settings.fudgeMin = parseInt(document.getElementById('settingFudge').value) || 30;
+  state.settings.timezone = document.getElementById('settingTimezone').value;
+  saveToStorage();
+  alert('Settings saved!');
+}
+
+function clearAllData() {
+  if (confirm('Clear ALL data? Cannot undo!')) {
+    state.events = [];
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
+  }
 }
 
 // ==============================================
@@ -1713,16 +1596,23 @@ function importJSON(event) {
 
 function init() {
   loadFromStorage();
-  updateTripPreview();
   
-  // Apply settings to UI
+  // Set today's date as default
+  document.getElementById('inputDate').value = getTodayDate();
+  
+  // Apply settings
   if (state.settings) {
     document.getElementById('settingAvgSpeed').value = state.settings.avgSpeed || 55;
     document.getElementById('settingFudge').value = state.settings.fudgeMin || 30;
-    document.getElementById('settingTimezone').value = state.settings.timezone || 'America/New_York';
     document.getElementById('theoryAvgSpeed').value = state.settings.avgSpeed || 55;
-    document.getElementById('theoryLifeHappens').value = state.settings.fudgeMin || 30;
   }
+  
+  // Update displays
+  updateDisplays();
+  renderEntryTable();
+  updateTripPreview();
+  
+  console.log('🔮 Crystal Ball Mini V5.1 initialized!');
 }
 
 document.addEventListener('DOMContentLoaded', init);
