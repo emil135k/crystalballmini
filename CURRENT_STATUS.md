@@ -2,107 +2,87 @@
 
 ## 📍 Crystal Ball Mini - Current Status
 
-**Last Updated:** 2026-01-14  
-**Session:** Emil recovering from H3N2, truck getting transmission in Louisville
+**Last Updated:** 2026-01-15  
+**Current Version:** 5.1 (V5.2 in progress)
 
 -----
 
-## ✅ WHAT’S WORKING
+# 🔥 SESSION: January 15, 2026
 
-### Prophecy Tab (Trip Generator)
+## V5.2 Fixes In Progress
 
-- [x] Distance inputs (deadhead + loaded)
-- [x] Shipper/Receiver appointment windows
-- [x] Secure/tarp time calculation
-- [x] Start date/time configuration
-- [x] Drive pace presets (8:45, 10:00, 11:00)
-- [x] Life Happens buffer per day
-- [x] Pre-trip/Post-trip time
-- [x] Full trip generation with legs
-- [x] ETA calculations with date comparison
-- [x] Appointment window status (early/on-time/late)
-- [x] Leg-by-leg breakdown display
-- [x] Complete timeline table
+### 1. 🔴 Mobile Field Sizing
 
-### Recaps Tab
+- Fields bunching up on phone (portrait mode)
+- Need better responsive CSS for small screens
+- Fix: `grid-template-columns` collapse to single column on narrow screens
 
-- [x] FIFO marble visualization concept
-- [x] Cycle used/available display
-- [x] 8-day window calculation
+### 2. 🔴 Simplify ADD/EDIT UI
 
-### Settings Tab
+- Remove “Event Entry” header with ADD/EDIT toggle at top - REDUNDANT
+- Already have “Enter Record” and “Clear” at bottom
+- Move EDIT to button row: `[✓ Enter Record] [Clear] [✏️ Edit]`
+- Or: Button text changes to “Update Record” when editing
 
-- [x] Average speed setting
-- [x] Fudge factor setting
-- [x] Timezone selection
-- [x] Save/load settings
+### 3. 🔴 Table Columns - Separate LEG from Event
 
-### Core Functions
+- Currently: `ID` shows `L1-S1` (leg embedded)
+- Should be: `LEG | Event | Category | Type | Start...`
+- Cleaner, sortable
 
-- [x] Tab switching
-- [x] localStorage persistence
-- [x] Export/Import JSON
-- [x] Time formatting utilities
+### 4. 🟡 Run ID Validation
+
+- Should be required (or warn if empty)
+- Data becomes orphaned without it
+- Need ability to update Run ID on existing records
+
+### 5. 🟡 Delete Section Escape
+
+- No way to cancel/escape once delete section shows
+- Add Cancel button
+- Switching to ADD mode should fully reset
 
 -----
 
-## ❌ WHAT’S BROKEN
+## ✅ V5.1 Completed This Session
 
-### Entry Tab - CRITICAL
-
-|Issue                   |Impact                            |
-|------------------------|----------------------------------|
-|`submitRecord()` missing|Enter button does nothing         |
-|`clearForm()` missing   |Clear button does nothing         |
-|Time auto-calc broken   |Can’t calculate Start/Duration/End|
-|Mode toggle missing     |Can’t switch ADD/EDIT             |
-|Navigation missing      |Can’t prev/next leg/stop          |
-
-### UI Issues
-
-|Issue                                   |Location          |
-|----------------------------------------|------------------|
-|“Theory” should be “Prophecy”           |Tab bar           |
-|“Current Stop” should be “Current Event”|Entry form        |
-|“— Regular” should be “Event”           |Stop Type dropdown|
-|No S/D toggle                           |Entry form        |
+- ✅ All Entry Tab functions implemented
+- ✅ `submitRecord()` working
+- ✅ `clearForm()` working
+- ✅ Time auto-calc (Start+Duration→End, handles overnight)
+- ✅ S/D toggle for Stop vs Drive events
+- ✅ Leg/Event navigation with ◀▶ buttons
+- ✅ Edit mode with `loadRecord()`
+- ✅ Delete with confirmation checkbox
+- ✅ Table renders entered records
+- ✅ Click row to edit
+- ✅ “Theory” → “Prophecy” renamed
+- ✅ “— Regular” → “Event” in Stop Type
 
 -----
 
-## 🎯 NEXT PRIORITIES
+## 🔮 GitHub Workflow CONFIRMED
 
-### Immediate (Session Goal)
+**Self-bootstrapping works!**
 
-1. [ ] Implement `submitRecord()`
-1. [ ] Implement time auto-calc functions
-1. [ ] Implement `clearForm()`
-1. [ ] Rename Theory → Prophecy
-
-### Short Term
-
-1. [ ] Add S/D (Stop/Drive) toggle to Entry
-1. [ ] Implement leg/stop navigation
-1. [ ] Implement `setMode()` for ADD/EDIT
-1. [ ] Connect Entry → Timeline display
-
-### Medium Term
-
-1. [ ] Biopsy feature (actual vs predicted comparison)
-1. [ ] PWA manifest and service worker
-1. [ ] Better mobile styling
+1. Paste: `https://raw.githubusercontent.com/emil135k/crystalballmini/main/CRYSTAL_BALL_INDEX.md`
+1. Claude fetches it
+1. All other URLs now in context
+1. Claude can fetch any file
 
 -----
 
-## 🔄 RECENT CHANGES
+# 📜 PREVIOUS SESSIONS
 
-### 2026-01-14
+## January 14, 2026
 
 - Documented missing Entry Tab functions
 - Created AI reference files for GitHub
 - Verified web_fetch works with raw GitHub URLs
-- Identified “Theory” → “Prophecy” rename needed
+- Identified “Theory” → “Prophecy” rename
+- Emil recovering from H3N2, truck getting transmission in Louisville
 
-### Previous Sessions
+## Earlier Sessions
 
 - Built complete Trip Generator (V5)
 - Fixed ETA calculation bugs
@@ -111,44 +91,38 @@
 
 -----
 
-## 🐛 KNOWN BUGS
+# 📊 TAB STATUS
 
-|Bug                          |Severity  |Notes                       |
-|-----------------------------|----------|----------------------------|
-|Entry buttons non-functional |🔴 Critical|Missing functions           |
-|Time fields don’t auto-calc  |🔴 Critical|Missing functions           |
-|Entered records don’t display|🟡 High    |`renderEntryTable()` missing|
-|Timeline tab mostly empty    |🟡 High    |No events to display        |
+|Tab     |Status             |Notes                          |
+|--------|-------------------|-------------------------------|
+|Entry   |🟡 V5.2 fixes needed|Functions work, UI needs polish|
+|Prophecy|✅ Working          |Trip generator functional      |
+|Timeline|⚠️ Basic            |Shows events, needs enhancement|
+|Recaps  |⚠️ Basic            |Placeholder, needs real calc   |
+|Settings|✅ Working          |Saves to localStorage          |
 
 -----
 
-## 💡 IDEAS/BACKLOG
+# 🐛 KNOWN BUGS
 
-- [ ] Voice input for hands-free entry while driving
+|Bug                   |Severity|Status  |
+|----------------------|--------|--------|
+|Mobile fields bunching|🔴 High  |V5.2 fix|
+|ADD/EDIT redundant    |🟡 Medium|V5.2 fix|
+|No delete escape      |🟡 Medium|V5.2 fix|
+|Run ID not required   |🟡 Medium|V5.2 fix|
+
+-----
+
+# 💡 BACKLOG
+
+- [ ] Voice input for hands-free entry
 - [ ] Integration with actual ELD data
 - [ ] Multi-run planning (chain loads)
 - [ ] Fuel stop optimization
-- [ ] Weather delay factors
-- [ ] Traffic pattern learning
+- [ ] PWA manifest and service worker
+- [ ] Biopsy feature (actual vs predicted)
 
 -----
 
-## 📝 SESSION NOTES
-
-**Emil’s Setup:**
-
-- Owner-operator flatbed, 7 years
-- Dog: Dakota (7 years old)
-- Currently in Louisville, snowing
-- Working from Hawk camper
-- Truck getting new transmission
-
-**Context:**
-
-- Recovering from H3N2 (nasty, 3 relapses)
-- Using voice interface extensively
-- Building for trucker friends to test
-
------
-
-*Update this file at end of each session*
+*See SESSION_2026-01-15.md for detailed session notes*
