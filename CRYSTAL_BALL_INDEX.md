@@ -98,6 +98,9 @@ SESSION_2026-01-16.md  ← Future sessions...
 1. CURRENT_STATUS.md gets updated with summary
 1. Session files are the archive/backup
 
+## 📅 LATEST SESSION
+**SESSION_2026-01-15.md** - Detailed notes from most recent session:
+
 -----
 
 ## 🎯 PROJECT OVERVIEW
