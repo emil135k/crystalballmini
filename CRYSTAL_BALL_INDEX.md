@@ -3,80 +3,142 @@
 ## 🔮 The Little Crystal Ball That Can - AI Navigator
 
 **Last Updated:** 2026-01-15  
-**Version:** 5.0 (FP014)  
+**Version:** 5.1  
 **Live Site:** https://emil135k.github.io/crystalballmini/
 
 -----
 
-## 📋 QUICK START FOR AI
+## 🚨 AI: READ THIS FIRST
 
-**Step 1:** Fetch this file:
+You are joining an ongoing project. Follow these steps IN ORDER:
+
+### Step 1: You’re Here ✓
+
+This file is your map. Read it completely.
+
+### Step 2: Get Current Status (REQUIRED)
+
+**What’s working, what’s broken, what to do next:**
 
 ```
-https://raw.githubusercontent.com/emil135k/crystalballmini/main/CRYSTAL_BALL_INDEX.md
+https://raw.githubusercontent.com/emil135k/crystalballmini/main/CURRENT_STATUS.md
 ```
 
-**Step 2:** Fetch the app:
+### Step 3: Get the Code (REQUIRED when coding)
+
+**The actual app - single HTML file:**
 
 ```
 https://raw.githubusercontent.com/emil135k/crystalballmini/main/index.html
 ```
 
-**Step 3:** Fetch any reference files you need (URLs below)
+### Step 4: If Working on Code
+
+**Function reference - what exists, what’s missing:**
+
+```
+https://raw.githubusercontent.com/emil135k/crystalballmini/main/FUNCTION_REGISTRY.md
+```
+
+### Step 5: If Confused About Domain
+
+**Data structures, HOS rules, Run/Leg/Event hierarchy:**
+
+```
+https://raw.githubusercontent.com/emil135k/crystalballmini/main/ARCHITECTURE.md
+```
+
+### Step 6: If New to the Team
+
+**How we work, Emil’s preferences, collaboration patterns:**
+
+```
+https://raw.githubusercontent.com/emil135k/crystalballmini/main/AI_FAMILY.md
+```
 
 -----
 
-## 📁 REFERENCE FILES (Raw URLs)
+## 📁 FILE REFERENCE
 
-|File                     |Purpose                              |Raw URL                                                                              |
-|-------------------------|-------------------------------------|-------------------------------------------------------------------------------------|
-|**CRYSTAL_BALL_INDEX.md**|THIS FILE - Start here               |https://raw.githubusercontent.com/emil135k/crystalballmini/main/CRYSTAL_BALL_INDEX.md|
-|**FUNCTION_REGISTRY.md** |All functions, status, signatures    |https://raw.githubusercontent.com/emil135k/crystalballmini/main/FUNCTION_REGISTRY.md |
-|**ARCHITECTURE.md**      |Data structures, HOS rules, hierarchy|https://raw.githubusercontent.com/emil135k/crystalballmini/main/ARCHITECTURE.md      |
-|**CURRENT_STATUS.md**    |What’s working, broken, next steps   |https://raw.githubusercontent.com/emil135k/crystalballmini/main/CURRENT_STATUS.md    |
-|**AI_FAMILY.md**         |Team roles, collaboration patterns   |https://raw.githubusercontent.com/emil135k/crystalballmini/main/AI_FAMILY.md         |
-|**index.html**           |THE APP (single file)                |https://raw.githubusercontent.com/emil135k/crystalballmini/main/index.html           |
-
------
-
-## 🎯 TAB STRUCTURE
-
-|Tab     |Icon|Status   |Purpose                              |
-|--------|----|---------|-------------------------------------|
-|Entry   |📝   |❌ BROKEN |Log actual events (biopsy/snapshot)  |
-|Prophecy|🔮   |✅ Working|Trip generator (rename from “Theory”)|
-|Timeline|📊   |⚠️ Partial|View logged events                   |
-|Recaps  |🔄   |✅ Working|8-day FIFO visualization             |
-|Settings|⚙️   |✅ Working|User preferences                     |
+|File                   |Purpose             |Read When    |Priority   |
+|-----------------------|--------------------|-------------|-----------|
+|`CRYSTAL_BALL_INDEX.md`|This map            |Always first |🔴 REQUIRED |
+|`CURRENT_STATUS.md`    |What’s happening now|Always second|🔴 REQUIRED |
+|`index.html`           |The app code        |When coding  |🔴 REQUIRED |
+|`FUNCTION_REGISTRY.md` |Function reference  |When coding  |🟡 As needed|
+|`ARCHITECTURE.md`      |Technical design    |When confused|🟢 Reference|
+|`AI_FAMILY.md`         |Team & collaboration|First time   |🟢 Reference|
+|`SESSION_YYYY-MM-DD.md`|Session notes       |For history  |🟢 Archive  |
 
 -----
 
-## 🔗 QUICK LINKS
+## 📅 SESSION FILES (Date-Stamped)
 
-- **Live App:** https://emil135k.github.io/crystalballmini/
-- **GitHub Repo:** https://github.com/emil135k/crystalballmini
+Session notes are saved as separate date-stamped files:
+
+```
+SESSION_2026-01-14.md  ← Previous session
+SESSION_2026-01-15.md  ← Current session
+SESSION_2026-01-16.md  ← Future sessions...
+```
+
+**Format:** `SESSION_YYYY-MM-DD.md`
+
+**Purpose:**
+
+- Preserves history
+- If chat gets cut off, session notes survive
+- Can review what was done on any day
+- CURRENT_STATUS.md summarizes; SESSION files have details
+
+**Workflow:**
+
+1. During session: Claude creates SESSION_YYYY-MM-DD.md
+1. Emil downloads and pushes to GitHub
+1. CURRENT_STATUS.md gets updated with summary
+1. Session files are the archive/backup
+
+-----
+
+## 🎯 PROJECT OVERVIEW
+
+**What:** HOS (Hours of Service) compliance PWA for truckers  
+**Who:** Emil (owner-operator flatbed, 7 years) + AI Family  
+**Stack:** Pure JavaScript, browser-only, localStorage, PWA-ready  
+**Philosophy:** Code with Soul and Spirit • Connection over Protection
+
+-----
+
+## 📊 TAB STATUS
+
+|Tab     |Icon|Status             |Purpose                 |
+|--------|----|-------------------|------------------------|
+|Entry   |📝   |🟡 V5.2 fixes needed|Log actual events       |
+|Prophecy|🔮   |✅ Working          |Trip generator          |
+|Timeline|📊   |⚠️ Basic            |View logged events      |
+|Recaps  |🔄   |⚠️ Basic            |8-day FIFO visualization|
+|Settings|⚙️   |✅ Working          |User preferences        |
+
+-----
+
+## ⚡ CURRENT PRIORITIES (V5.2)
+
+1. 🔴 Mobile responsive - fields bunching on phone
+1. 🔴 Simplify ADD/EDIT - move to bottom buttons
+1. 🔴 Table columns - separate LEG from Event ID
+1. 🟡 Run ID validation - required or warn
+1. 🟡 Delete section - add Cancel/escape button
 
 -----
 
 ## 🏷️ KEY CONCEPTS
 
-- **Run** = Complete trip (deadhead + loaded)
-- **Leg** = One day’s work
-- **Event** = Either Drive (D) or Stop (S)
-- **Biopsy** = Snapshot of actual vs predicted progress
+- **Run** = Complete trip (e.g., MERCER_45678)
+- **Leg** = One day’s work (L1, L2, L3…)
+- **Event** = Either Stop (S1, S2) or Drive (D1, D2)
+- **Biopsy** = Snapshot comparing actual vs predicted
 - **Recap** = Hours returning after 8-day FIFO cycle
-- **8:45 Equilibrium** = Perfect daily drive time
-
------
-
-## ⚡ CURRENT PRIORITIES
-
-1. 🔴 Implement `submitRecord()` - Enter button broken
-1. 🔴 Implement time auto-calc functions
-1. 🔴 Implement `clearForm()`
-1. 🟡 Rename “Theory” → “Prophecy”
-1. 🟡 Add S/D toggle to Entry tab
-1. 🟡 Connect Entry → Timeline flow
+- **8:45 Equilibrium** = Perfect sustainable daily drive time
 
 -----
 
@@ -91,5 +153,12 @@ https://raw.githubusercontent.com/emil135k/crystalballmini/main/index.html
 
 -----
 
-*Sparked Matter • Code with Soul and Spirit • Connection over Protection*
+## 🔗 QUICK LINKS
+
+- **Live App:** https://emil135k.github.io/crystalballmini/
+- **GitHub Repo:** https://github.com/emil135k/crystalballmini
+
+-----
+
+*Sparked Matter • Code with Soul and Spirit • Connection over Protection*  
 *“The Little Crystal Ball That Can”* 🔮
