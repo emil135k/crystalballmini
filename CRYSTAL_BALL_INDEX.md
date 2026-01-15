@@ -100,6 +100,9 @@ SESSION_2026-01-16.md  ← Future sessions...
 
 ## 📅 LATEST SESSION
 **SESSION_2026-01-15.md** - Detailed notes from most recent session:
+## 📅 Latest Session Notes
+https://raw.githubusercontent.com/emil135k/crystalballmini/main/SESSION_2026-01-15.md
+
 
 -----
 
