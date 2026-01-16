@@ -404,7 +404,7 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
     <span class="logo-icon">🔮</span>
     <div class="logo-text">
       <h1>Crystal Ball Mini</h1>
-      <span class="version">V5.2 — Date/Time in Records!</span>
+      <span class="version">V5.2 — Live Stats Dashboard!</span>
     </div>
   </div>
   <span class="save-indicator" id="saveIndicator">💾 Auto-saved</span>
@@ -458,18 +458,28 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
     <div class="value good" id="cycleAvail">70:00</div>
   </div>
   <div class="summary-card">
-    <div class="label">Drive Remaining</div>
-    <div class="value good" id="driveRemain">11:00</div>
+    <div class="label">14-Hr Available</div>
+    <div class="value good" id="windowRemain">14:00</div>
   </div>
 </div>
 <div class="summary-row">
   <div class="summary-card">
+    <div class="label">Drive Remaining</div>
+    <div class="value good" id="driveRemain">11:00</div>
+  </div>
+  <div class="summary-card">
     <div class="label">Miles This Run</div>
     <div class="value" id="milesRun">0</div>
   </div>
+</div>
+<div class="summary-row">
   <div class="summary-card">
     <div class="label">Avg MPH (Run)</div>
     <div class="value" id="avgMphRun">--</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">Must Stop By</div>
+    <div class="value" id="windowEnds" style="font-size: 1.1em;">--:--</div>
   </div>
 </div>
 ```
@@ -490,8 +500,8 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
 <p id="modeStatus" style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 12px; text-align: center;">Adding new record at L1-S1</p>
 
 <div class="form-group">
-  <label>Run ID</label>
-  <input type="text" id="inputRunId" placeholder="e.g., MERCER_45678">
+  <label>Run ID <span style="color: var(--accent-red);">*</span></label>
+  <input type="text" id="inputRunId" placeholder="REQUIRED: Load #, trip name, etc.">
 </div>
 
 <div class="form-row">
@@ -602,7 +612,9 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
       <table class="records-table" id="recordsTable">
         <thead>
           <tr>
-            <th style="color: var(--accent-cyan);">ID</th>
+            <th style="color: var(--accent-purple);">Run</th>
+            <th style="color: var(--accent-blue);">Leg</th>
+            <th style="color: var(--accent-cyan);">Evt</th>
             <th>Cat</th>
             <th style="color: var(--accent-amber);">Type</th>
             <th>Date/Start</th>
@@ -614,7 +626,7 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
         </thead>
         <tbody id="recordsTableBody">
           <tr>
-            <td colspan="8" style="padding: 20px; text-align: center; color: var(--text-muted);">No records yet. Enter your first record above!</td>
+            <td colspan="10" style="padding: 20px; text-align: center; color: var(--text-muted);">No records yet. Enter your first record above!</td>
           </tr>
         </tbody>
       </table>
@@ -866,7 +878,7 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
     <div class="card-title">🔄 8-Day Recap Forecast</div>
     <div class="summary-row">
       <div class="summary-card">
-        <div class="label">Cycle Used</div>
+        <div class="label">70-Hr Cycle Used</div>
         <div class="value" id="recapUsed">0:00</div>
       </div>
       <div class="summary-card">
@@ -874,8 +886,34 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
         <div class="value good" id="recapAvail">70:00</div>
       </div>
     </div>
-    <div id="recapList" style="margin-top: 16px;">
-      <p style="color: var(--text-muted); text-align: center;">Enter events to see recap forecast</p>
+    <div class="summary-row">
+      <div class="summary-card">
+        <div class="label">Tomorrow's Recap</div>
+        <div class="value" id="recapTomorrow" style="color: var(--accent-cyan);">+0:00</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">After Recap</div>
+        <div class="value good" id="recapAfter">70:00</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎱 8-Day Marble Buffer (FIFO)</div>
+    <p style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 12px;">
+      Each day's work is a marble. After 8 days, oldest marble falls out = your recap!
+    </p>
+    <div id="marbleContainer" style="display: flex; flex-direction: column; gap: 8px;">
+      <!-- Marbles render here -->
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Equilibrium Guide</div>
+    <div style="font-size: 0.85em; color: var(--text-secondary);">
+      <p><strong style="color: var(--accent-green);">8:45/day</strong> = Perfect balance. Use 8:45, get 8:45 back. Sustainable forever.</p>
+      <p style="margin-top: 8px;"><strong style="color: var(--accent-amber);">10:00/day</strong> = Burning clock. You'll run out eventually.</p>
+      <p style="margin-top: 8px;"><strong style="color: var(--accent-red);">11:00/day</strong> = Max burn. ~6 days until empty.</p>
     </div>
   </div>
 </div>
@@ -907,7 +945,20 @@ footer .brand { color: var(--accent-purple); font-weight: 600; }
 
   <div class="card">
     <div class="card-title">🗑️ Data Management</div>
-    <button class="btn btn-danger" onclick="clearAllData()">Clear All Data</button>
+    <div id="clearAllSection">
+      <button class="btn btn-danger" onclick="showClearConfirm()">Clear All Data</button>
+    </div>
+    <div id="clearConfirmSection" style="display: none; margin-top: 12px; padding: 12px; background: #2d1f1f; border: 1px solid var(--accent-red); border-radius: 8px;">
+      <p style="color: var(--accent-red); font-size: 0.85em; margin-bottom: 8px;">⚠️ This will DELETE all entered records!</p>
+      <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 12px;">
+        <input type="checkbox" id="confirmClearCheckbox" onchange="toggleClearButton()" style="width: 20px; height: 20px; cursor: pointer;">
+        <span style="font-size: 0.8em; color: var(--text-secondary);">Yes, I want to delete ALL data</span>
+      </label>
+      <div style="display: flex; gap: 8px;">
+        <button id="btnClearConfirmed" class="btn btn-danger" style="flex: 1; opacity: 0.5;" onclick="executeClearAll()" disabled>🗑️ Delete Everything</button>
+        <button class="btn btn-secondary" style="flex: 1;" onclick="hideClearConfirm()">Cancel</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1034,7 +1085,13 @@ function getTodayDate() {
 }
 
 function getCurrentEventId() {
-  return `L${state.currentLegNum}-${state.currentEventType}${state.currentEventNum}`;
+  const runId = state.currentRunId || 'NORUN';
+  return `${runId}_L${state.currentLegNum}-${state.currentEventType}${state.currentEventNum}`;
+}
+
+// Generate truly unique ID (timestamp + random)
+function generateUniqueId() {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
 }
 
 // ==============================================
@@ -1120,6 +1177,137 @@ function updateDisplays() {
   } else {
     document.getElementById('modeStatus').textContent = `Editing record ${eventId}`;
   }
+  
+  // Calculate and update stats
+  calculateStats();
+}
+
+// ==============================================
+// STATS CALCULATION (Dashboard)
+// ==============================================
+
+function calculateStats() {
+  const today = getTodayDate();
+  
+  // Get dates for last 8 days
+  const last8Days = [];
+  for (let i = 0; i < 8; i++) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    last8Days.push(d.toISOString().split('T')[0]);
+  }
+  
+  // === CYCLE AVAILABLE ===
+  // 70 hours minus all (drive + on-duty) from last 8 days
+  let cycleUsedMin = 0;
+  state.events.forEach(e => {
+    if (last8Days.includes(e.date)) {
+      const cat = CATEGORIES[e.category];
+      if (cat && cat.affectsCycle) {
+        cycleUsedMin += (e.durationMin || 0);
+      }
+    }
+  });
+  const cycleAvailMin = (70 * 60) - cycleUsedMin;
+  const cycleAvailEl = document.getElementById('cycleAvail');
+  cycleAvailEl.textContent = formatTimeShort(Math.max(0, cycleAvailMin));
+  cycleAvailEl.className = 'value ' + (cycleAvailMin < 600 ? 'danger' : cycleAvailMin < 1200 ? 'warning' : 'good');
+  
+  // === DRIVE REMAINING ===
+  // 11 hours minus drive time for TODAY only
+  let driveUsedTodayMin = 0;
+  state.events.forEach(e => {
+    if (e.date === today && e.category === 'drive') {
+      driveUsedTodayMin += (e.durationMin || 0);
+    }
+  });
+  const driveRemainMin = (11 * 60) - driveUsedTodayMin;
+  const driveRemainEl = document.getElementById('driveRemain');
+  driveRemainEl.textContent = formatTimeShort(Math.max(0, driveRemainMin));
+  driveRemainEl.className = 'value ' + (driveRemainMin < 60 ? 'danger' : driveRemainMin < 120 ? 'warning' : 'good');
+  
+  // === 14-HOUR WINDOW ===
+  // 14-Hr Available = 14:00 minus all on-duty work (drive + on-duty + yard) today
+  // Clock only STARTS when first on-duty event happens (not off-duty!)
+  // Must Stop By = wall clock time when 14-hour window expires
+  
+  // Get all events today sorted by start time
+  const todayEvents = state.events
+    .filter(e => e.date === today && e.startTime)
+    .sort((a, b) => a.startTime.localeCompare(b.startTime));
+  
+  // Find first ON-DUTY event (that's when clock starts)
+  let windowStartMin = null;
+  let totalOnDutyWorkMin = 0;
+  
+  todayEvents.forEach(e => {
+    const cat = CATEGORIES[e.category];
+    const isOnDutyWork = cat && cat.affectsCycle; // drive, on-duty, yard
+    
+    // First ON-DUTY event starts the 14-hour clock
+    if (isOnDutyWork && windowStartMin === null) {
+      windowStartMin = parseTime(e.startTime);
+    }
+    
+    // Sum up all on-duty work time
+    if (isOnDutyWork && e.durationMin) {
+      totalOnDutyWorkMin += e.durationMin;
+    }
+  });
+  
+  const windowRemainEl = document.getElementById('windowRemain');
+  const windowEndsEl = document.getElementById('windowEnds');
+  
+  if (windowStartMin !== null) {
+    // Available = 14 hours minus work done
+    const windowAvailMin = (14 * 60) - totalOnDutyWorkMin;
+    
+    // Window ends = first ON-DUTY event start + 14 hours
+    const windowEndMin = windowStartMin + (14 * 60);
+    const windowEndTime = formatMinutesToTime(windowEndMin % (24 * 60));
+    
+    windowEndsEl.textContent = windowEndTime;
+    
+    if (windowAvailMin > 0) {
+      windowRemainEl.textContent = formatTimeShort(windowAvailMin);
+      windowRemainEl.className = 'value ' + (windowAvailMin < 60 ? 'danger' : windowAvailMin < 120 ? 'warning' : 'good');
+    } else {
+      windowRemainEl.textContent = '⛔ EXPIRED';
+      windowRemainEl.className = 'value danger';
+    }
+  } else {
+    // No on-duty events today - full 14 hours available, clock not started
+    windowRemainEl.textContent = '14:00';
+    windowRemainEl.className = 'value good';
+    windowEndsEl.textContent = 'Not started';
+  }
+  
+  // === MILES THIS RUN ===
+  // Max miles from events with current runId (cumulative odometer)
+  let maxMiles = 0;
+  if (state.currentRunId) {
+    state.events.forEach(e => {
+      if (e.runId === state.currentRunId && e.miles) {
+        maxMiles = Math.max(maxMiles, e.miles);
+      }
+    });
+  }
+  document.getElementById('milesRun').textContent = maxMiles || '0';
+  
+  // === AVG MPH (This Run) ===
+  // Total miles / total drive hours for this run
+  let totalDriveMinRun = 0;
+  if (state.currentRunId) {
+    state.events.forEach(e => {
+      if (e.runId === state.currentRunId && e.category === 'drive') {
+        totalDriveMinRun += (e.durationMin || 0);
+      }
+    });
+  }
+  const avgMph = (totalDriveMinRun > 0 && maxMiles > 0) 
+    ? Math.round(maxMiles / (totalDriveMinRun / 60)) 
+    : '--';
+  document.getElementById('avgMphRun').textContent = avgMph;
 }
 
 // ==============================================
@@ -1154,28 +1342,18 @@ function setMode(mode) {
 }
 
 function loadRecord() {
-  const eventId = getCurrentEventId();
-  const existing = state.events.find(e => e.id === eventId);
-  
-  if (existing) {
-    state.editingEventId = eventId;
-    
-    // Populate form
-    document.getElementById('inputRunId').value = existing.runId || '';
-    document.getElementById('inputCategory').value = existing.category || 'off-duty';
-    document.getElementById('inputStopType').value = existing.stopType || 'event';
-    document.getElementById('inputStartTime').value = existing.startTime || '';
-    document.getElementById('inputEndTime').value = existing.endTime || '';
-    document.getElementById('inputDuration').value = existing.durationMin || '';
-    document.getElementById('inputMiles').value = existing.miles || '';
-    document.getElementById('inputDate').value = existing.date || '';
-    document.getElementById('inputComment').value = existing.comment || '';
-    
-    document.getElementById('modeStatus').textContent = `Editing: ${eventId}`;
-  } else {
-    document.getElementById('modeStatus').textContent = `No record at ${eventId} - will create new`;
-    state.editingEventId = null;
+  // This is now handled by jumpToRecord when clicking a row
+  // If manually switching to edit mode without clicking a row, 
+  // just show status
+  if (state.editingEventId) {
+    const existing = state.events.find(e => e.id === state.editingEventId);
+    if (existing) {
+      document.getElementById('modeStatus').textContent = `Editing: ${existing.runId}_L${existing.legNum}-${existing.eventType}${existing.eventNum}`;
+      return;
+    }
   }
+  document.getElementById('modeStatus').textContent = 'Click a row in the table to edit';
+  state.editingEventId = null;
 }
 
 // ==============================================
@@ -1218,11 +1396,11 @@ function autoCalcDuration() {
 // ==============================================
 
 function submitRecord() {
-  const eventId = getCurrentEventId();
+  const displayId = getCurrentEventId(); // For display: Test1_L1-D1
   
   // Gather form data
   const record = {
-    id: eventId,
+    displayId: displayId, // Human readable: Test1_L1-D1
     runId: document.getElementById('inputRunId').value.trim(),
     legNum: state.currentLegNum,
     eventType: state.currentEventType,
@@ -1241,6 +1419,12 @@ function submitRecord() {
   record.endDate = calcEndDate(record.date, record.startTime, record.endTime);
   
   // Validate
+  if (!record.runId) {
+    alert('Please enter a Run ID (load number, trip name, etc.)');
+    document.getElementById('inputRunId').focus();
+    return;
+  }
+  
   if (!record.startTime) {
     alert('Please enter a start time');
     return;
@@ -1251,19 +1435,24 @@ function submitRecord() {
     state.currentRunId = record.runId;
   }
   
-  // Find existing or add new
-  const existingIdx = state.events.findIndex(e => e.id === eventId);
-  if (existingIdx >= 0) {
-    state.events[existingIdx] = record;
+  // EDIT mode: update existing record by unique ID
+  if (state.currentMode === 'edit' && state.editingEventId) {
+    const existingIdx = state.events.findIndex(e => e.id === state.editingEventId);
+    if (existingIdx >= 0) {
+      record.id = state.editingEventId; // Keep the unique ID
+      state.events[existingIdx] = record;
+    }
   } else {
+    // ADD mode: create new record with unique ID
+    record.id = generateUniqueId();
     state.events.push(record);
   }
   
-  // Sort events
+  // Sort events chronologically by date + start time
   state.events.sort((a, b) => {
-    if (a.legNum !== b.legNum) return a.legNum - b.legNum;
-    if (a.eventType !== b.eventType) return a.eventType === 'D' ? -1 : 1;
-    return a.eventNum - b.eventNum;
+    if (a.date !== b.date) return a.date.localeCompare(b.date);
+    if (a.startTime && b.startTime) return a.startTime.localeCompare(b.startTime);
+    return 0;
   });
   
   // Save and refresh
@@ -1274,6 +1463,9 @@ function submitRecord() {
   if (state.currentMode === 'add') {
     state.currentEventNum++;
     clearForm();
+  } else {
+    // After edit, go back to ADD mode
+    setMode('add');
   }
   
   updateDisplays();
@@ -1321,11 +1513,17 @@ function toggleDeleteButton() {
 }
 
 function executeDelete() {
-  const eventId = getCurrentEventId();
-  const idx = state.events.findIndex(e => e.id === eventId);
+  // Use the unique ID we're editing, not the display ID
+  if (!state.editingEventId) {
+    alert('No record selected for deletion');
+    return;
+  }
+  
+  const idx = state.events.findIndex(e => e.id === state.editingEventId);
   
   if (idx >= 0) {
     state.events.splice(idx, 1);
+    state.editingEventId = null;
     saveToStorage();
     renderEntryTable();
     clearForm();
@@ -1336,7 +1534,7 @@ function executeDelete() {
       document.getElementById('saveIndicator').textContent = '💾 Auto-saved';
     }, 1500);
   } else {
-    alert('No record found at ' + eventId);
+    alert('Record not found');
   }
   
   document.getElementById('confirmDeleteCheckbox').checked = false;
@@ -1351,18 +1549,27 @@ function renderEntryTable() {
   const tbody = document.getElementById('recordsTableBody');
   
   if (state.events.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="8" style="padding: 20px; text-align: center; color: var(--text-muted);">No records yet. Enter your first record above!</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10" style="padding: 20px; text-align: center; color: var(--text-muted);">No records yet. Enter your first record above!</td></tr>';
     return;
   }
   
-  tbody.innerHTML = state.events.map(e => {
+  // Sort chronologically by date + start time for display
+  const sortedEvents = [...state.events].sort((a, b) => {
+    if (a.date !== b.date) return a.date.localeCompare(b.date);
+    if (a.startTime && b.startTime) return a.startTime.localeCompare(b.startTime);
+    return 0;
+  });
+  
+  tbody.innerHTML = sortedEvents.map(e => {
     const cat = CATEGORIES[e.category] || {};
     const stopType = STOP_TYPES[e.stopType] || {};
     const bgColor = e.eventType === 'D' ? 'rgba(6, 214, 160, 0.1)' : 'rgba(34, 211, 238, 0.1)';
     
     return `
       <tr style="background: ${bgColor};" onclick="jumpToRecord('${e.id}')">
-        <td style="color: var(--accent-cyan); font-weight: 600;">${e.id}</td>
+        <td style="color: ${e.runId ? 'var(--accent-purple)' : 'var(--accent-red)'}; font-weight: 600; max-width: 80px; overflow: hidden; text-overflow: ellipsis;">${e.runId || '⚠️ MISSING'}</td>
+        <td style="color: var(--accent-blue); font-weight: 600;">L${e.legNum}</td>
+        <td style="color: var(--accent-cyan); font-weight: 600;">${e.eventType}${e.eventNum}</td>
         <td>${cat.icon || ''}</td>
         <td style="color: var(--accent-amber);">${stopType.icon || ''}</td>
         <td>${formatDateTime(e.date, e.startTime)}</td>
@@ -1375,17 +1582,33 @@ function renderEntryTable() {
   }).join('');
 }
 
-function jumpToRecord(eventId) {
-  // Parse the event ID: L1-S1 or L1-D2
-  const match = eventId.match(/L(\d+)-([SD])(\d+)/);
-  if (match) {
-    state.currentLegNum = parseInt(match[1]);
-    state.currentEventType = match[2];
-    state.currentEventNum = parseInt(match[3]);
-    
-    setEventType(state.currentEventType);
-    setMode('edit');
-  }
+function jumpToRecord(uniqueId) {
+  // Find the event by its unique ID
+  const event = state.events.find(e => e.id === uniqueId);
+  if (!event) return;
+  
+  // Store the unique ID for editing
+  state.editingEventId = uniqueId;
+  
+  // Set the navigation state from the event
+  state.currentRunId = event.runId;
+  state.currentLegNum = event.legNum;
+  state.currentEventType = event.eventType;
+  state.currentEventNum = event.eventNum;
+  
+  // Update form fields
+  document.getElementById('inputRunId').value = event.runId || '';
+  document.getElementById('inputCategory').value = event.category || 'off-duty';
+  document.getElementById('inputStopType').value = event.stopType || 'event';
+  document.getElementById('inputStartTime').value = event.startTime || '';
+  document.getElementById('inputEndTime').value = event.endTime || '';
+  document.getElementById('inputDuration').value = event.durationMin || '';
+  document.getElementById('inputMiles').value = event.miles || '';
+  document.getElementById('inputDate').value = event.date || '';
+  document.getElementById('inputComment').value = event.comment || '';
+  
+  setEventType(state.currentEventType);
+  setMode('edit');
 }
 
 // ==============================================
@@ -1440,9 +1663,106 @@ function deleteEvent(eventId) {
 // ==============================================
 
 function renderRecaps() {
-  // Placeholder - would calculate from actual events
-  document.getElementById('recapUsed').textContent = '0:00';
-  document.getElementById('recapAvail').textContent = '70:00';
+  // === STEP 1: Find the latest date with ANY event - that's D1 ===
+  let latestDate = null;
+  state.events.forEach(e => {
+    if (e.date && (!latestDate || e.date > latestDate)) {
+      latestDate = e.date;
+    }
+  });
+  
+  // If no events exist, use today as anchor
+  if (!latestDate) {
+    latestDate = getTodayDate();
+  }
+  
+  // === STEP 2: Build 8-day ring buffer ===
+  const marbles = [];
+  
+  for (let i = 0; i < 8; i++) {
+    const d = new Date(latestDate + 'T12:00:00'); // noon avoids timezone issues
+    d.setDate(d.getDate() - i);
+    const dateStr = d.toISOString().split('T')[0];
+    
+    // === STEP 3: Sum ALL on-duty work for this date ===
+    // Doesn't matter what run, leg, or event type (S/D)
+    // Only matters: is the CATEGORY one that affectsCycle?
+    let dayTotalMin = 0;
+    
+    state.events.forEach(e => {
+      if (e.date === dateStr && e.durationMin) {
+        const cat = CATEGORIES[e.category];
+        // drive, on-duty, yard all have affectsCycle = true
+        if (cat && cat.affectsCycle) {
+          dayTotalMin += e.durationMin;
+          console.log(`📊 Recap: ${dateStr} adding ${e.durationMin}min from ${e.category} (${e.id})`);
+        }
+      }
+    });
+    
+    console.log(`📊 Recap: ${dateStr} TOTAL = ${dayTotalMin}min`);
+    
+    // Format date for display
+    const dayLabel = d.toLocaleDateString('en-US', { weekday: 'short', month: 'numeric', day: 'numeric' });
+    
+    marbles.push({
+      date: dateStr,
+      label: dayLabel,
+      dayNum: i + 1,
+      totalMin: dayTotalMin
+    });
+  }
+  
+  // === STEP 4: Ring Buffer Math ===
+  const cycleUsedMin = marbles.reduce((sum, m) => sum + m.totalMin, 0);
+  const cycleAvailMin = Math.max(0, (70 * 60) - cycleUsedMin);
+  const tomorrowRecapMin = marbles[7].totalMin; // D8 falls out next
+  const afterRecapMin = Math.min(70 * 60, cycleAvailMin + tomorrowRecapMin);
+  
+  // === STEP 5: Update Summary Cards ===
+  document.getElementById('recapUsed').textContent = formatTimeShort(cycleUsedMin);
+  
+  const availEl = document.getElementById('recapAvail');
+  availEl.textContent = formatTimeShort(cycleAvailMin);
+  availEl.className = 'value ' + (cycleAvailMin < 600 ? 'danger' : cycleAvailMin < 1200 ? 'warning' : 'good');
+  
+  document.getElementById('recapTomorrow').textContent = '+' + formatTimeShort(tomorrowRecapMin);
+  
+  const afterEl = document.getElementById('recapAfter');
+  afterEl.textContent = formatTimeShort(afterRecapMin);
+  afterEl.className = 'value ' + (afterRecapMin < 600 ? 'danger' : afterRecapMin < 1200 ? 'warning' : 'good');
+  
+  // === STEP 6: Render Marble Visualization ===
+  const container = document.getElementById('marbleContainer');
+  const maxHours = 11;
+  
+  container.innerHTML = marbles.map((m, idx) => {
+    const hours = m.totalMin / 60;
+    const barWidth = Math.min((hours / maxHours) * 100, 100);
+    const isFallingOut = idx === 7;
+    
+    // Color based on hours
+    let barColor = 'var(--accent-green)';
+    if (hours > 10) barColor = 'var(--accent-red)';
+    else if (hours > 8.75) barColor = 'var(--accent-amber)';
+    
+    const borderStyle = isFallingOut ? 'border: 1px dashed var(--accent-cyan);' : '';
+    const d1Style = idx === 0 ? 'border-left: 3px solid var(--accent-purple);' : '';
+    
+    return `
+      <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: var(--bg-elevated); border-radius: 6px; ${borderStyle} ${d1Style}">
+        <div style="min-width: 24px; font-size: 0.7em; color: var(--text-muted);">D${m.dayNum}</div>
+        <div style="min-width: 70px; font-size: 0.75em; color: ${idx === 0 ? 'var(--accent-purple)' : 'var(--text-secondary)'};">${m.label}</div>
+        <div style="flex: 1; background: var(--bg-dark); border-radius: 4px; height: 20px; overflow: hidden;">
+          <div style="width: ${barWidth}%; height: 100%; background: ${barColor}; border-radius: 4px;"></div>
+        </div>
+        <div style="min-width: 45px; text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: ${hours > 0 ? 'var(--text-primary)' : 'var(--text-muted)'};">
+          ${formatTimeShort(m.totalMin)}
+        </div>
+        ${isFallingOut ? '<span style="font-size: 0.7em; color: var(--accent-cyan);">📤</span>' : ''}
+      </div>
+    `;
+  }).join('');
 }
 
 // ==============================================
@@ -1552,6 +1872,30 @@ function loadFromStorage() {
     if (stored) {
       const loaded = JSON.parse(stored);
       state = { ...state, ...loaded };
+      
+      // === MIGRATION: Fix old records without unique IDs ===
+      if (state.events && state.events.length > 0) {
+        let migrated = false;
+        state.events = state.events.map(e => {
+          // If the ID looks like old format (contains underscore + L) or is missing
+          // generate a new unique ID
+          if (!e.id || e.id.match(/^.+_L\d+-[SD]\d+$/)) {
+            migrated = true;
+            return {
+              ...e,
+              id: generateUniqueId(),
+              displayId: e.id || `${e.runId || 'NORUN'}_L${e.legNum}-${e.eventType}${e.eventNum}`
+            };
+          }
+          return e;
+        });
+        
+        if (migrated) {
+          console.log('🔧 Migrated old records to new unique ID format');
+          saveToStorage();
+        }
+      }
+      
       return true;
     }
   } catch (e) {
@@ -1606,12 +1950,51 @@ function saveSettings() {
   alert('Settings saved!');
 }
 
-function clearAllData() {
-  if (confirm('Clear ALL data? Cannot undo!')) {
-    state.events = [];
+function showClearConfirm() {
+  document.getElementById('clearAllSection').querySelector('button').style.display = 'none';
+  document.getElementById('clearConfirmSection').style.display = 'block';
+}
+
+function hideClearConfirm() {
+  document.getElementById('clearAllSection').querySelector('button').style.display = 'block';
+  document.getElementById('clearConfirmSection').style.display = 'none';
+  document.getElementById('confirmClearCheckbox').checked = false;
+  toggleClearButton();
+}
+
+function toggleClearButton() {
+  const checkbox = document.getElementById('confirmClearCheckbox');
+  const btn = document.getElementById('btnClearConfirmed');
+  btn.disabled = !checkbox.checked;
+  btn.style.opacity = checkbox.checked ? '1' : '0.5';
+}
+
+function executeClearAll() {
+  // Clear state
+  state.events = [];
+  state.currentRunId = '';
+  state.currentLegNum = 1;
+  state.currentEventNum = 1;
+  state.currentEventType = 'S';
+  state.currentMode = 'add';
+  
+  // Clear localStorage
+  try {
     localStorage.removeItem(STORAGE_KEY);
-    location.reload();
+  } catch(e) {
+    console.log('localStorage error:', e);
   }
+  
+  // Reset UI
+  hideClearConfirm();
+  renderEntryTable();
+  updateDisplays();
+  
+  // Show confirmation
+  document.getElementById('saveIndicator').textContent = '🗑️ All data cleared!';
+  setTimeout(() => {
+    document.getElementById('saveIndicator').textContent = '💾 Auto-saved';
+  }, 2000);
 }
 
 // ==============================================
@@ -1636,7 +2019,7 @@ function init() {
   renderEntryTable();
   updateTripPreview();
   
-  console.log('🔮 Crystal Ball Mini V5.1 initialized!');
+  console.log('🔮 Crystal Ball Mini V5.2 initialized!');
 }
 
 document.addEventListener('DOMContentLoaded', init);
