@@ -1,4 +1,4 @@
-# CRYSTAL_BALL_INDEX.md
+# README.md
 
 ## 🔮 The Little Crystal Ball That Can - AI Navigator
 
