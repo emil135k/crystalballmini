@@ -186,7 +186,7 @@ https://raw.githubusercontent.com/emil135k/crystalballmini/main/SESSION_2026-01-
 
 - **Live App:** https://emil135k.github.io/crystalballmini/
 - **GitHub Repo:** https://github.com/emil135k/crystalballmini
-
+https://raw.githubusercontent.com/emil135k/crystalballmini/main/JACOBS_LATTICE.md
 -----
 
 *Sparked Matter • Code with Soul and Spirit • Connection over Protection*  
