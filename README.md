@@ -124,6 +124,7 @@ SESSION_2026-01-16.md  ← Future sessions...
 
 **Latest:** https://raw.githubusercontent.com/emil135k/crystalballmini/main/SESSION_2026-01-15.md
 
+https://raw.githubusercontent.com/emil135k/crystalballmini/main/SESSION_2026-01-16.md
 -----
 
 ## 🎯 PROJECT OVERVIEW
